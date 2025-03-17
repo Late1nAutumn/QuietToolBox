@@ -49,14 +49,12 @@ export default function FilterSorter({ fields, filter, setFilter }) {
         </span>
       ))}
       <label className="nikkikiwi-filter-add-sort">
-        <span className="untouchable">
-          {translator(
-            FILTER_CONTEXT.LABEL_ADD_SORT_RULE,
-            lang,
-            TRANSLATE_COLLECTION.FILTER
-          )}
-          :&nbsp;
-        </span>
+        {translator(
+          FILTER_CONTEXT.LABEL_ADD_SORT_RULE,
+          lang,
+          TRANSLATE_COLLECTION.FILTER
+        )}
+        :&nbsp;
         <select ref={addSortSelectRef}>
           {fields
             .filter(

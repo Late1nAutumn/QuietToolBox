@@ -8,6 +8,7 @@ import {
   REGION,
   COMPENDIUM,
   COMPENDIUM_SUB,
+  TAG,
 } from "../model/enums.js";
 import {
   clothesOGData,
@@ -159,7 +160,11 @@ export default function ItemTable({ tableMode }) {
             if (obj[field] !== val) return;
             break;
           case DATA_FIELD.TAGS:
-            if (!(val in obj[field])) return;
+            if (
+              !(val in obj[field]) &&
+              !(val === TAG.NONE && !Object.keys(obj[field]).length)
+            )
+              return;
             break;
           case DATA_FIELD.MAIN_STAT:
             let [main] = mainStatType(obj[DATA_FIELD.STAT]);
@@ -195,6 +200,7 @@ export default function ItemTable({ tableMode }) {
     }));
     let sortedData = sortData(filteredData, sortFieldMap);
 
+    console.log(`[log]: table updated, ${sortedData.length} items listed.`);
     setTableData(sortedData);
   };
 

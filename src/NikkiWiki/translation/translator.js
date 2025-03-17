@@ -1,5 +1,5 @@
 import { EN_PACK } from "./EN";
-import { CN_PACK, mapSetNameToCN, mapItemNameToCN } from "./CN";
+import { CN_PACK, mapSetNameToCN, mapItemNameToCN, mapTagNameToCN } from "./CN";
 
 import { LANG } from "../../utils/enums";
 import { TABLE_MODE } from "../model/enums";
@@ -30,8 +30,22 @@ export function itemNameMapper(itemType, lang) {
       return (a) => a;
     default:
       console.log(
-        "[ERROR]: Translate mapper not imported for current language"
+        "[ERROR]: Item translate mapper not imported for current language"
       );
       return (a) => a;
+  }
+}
+
+export function tagNameMapper(tagName, lang) {
+  switch (lang) {
+    case LANG.CN:
+      return mapTagNameToCN(tagName);
+    case LANG.EN:
+      return tagName;
+    default:
+      console.log(
+        "[ERROR]: Tag translate mapper not imported for current language"
+      );
+      return tagName;
   }
 }

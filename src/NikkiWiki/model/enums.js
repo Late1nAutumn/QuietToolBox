@@ -84,6 +84,15 @@ export const COMPENDIUM_SUB = {
 export const REGION = {
   FLORAWISH: 1,
 };
+
+export const SET = {
+  NONE: "-",
+};
+
+export const TAG = {
+  NONE: "-",
+};
+
 // #endregion
 
 // #region app

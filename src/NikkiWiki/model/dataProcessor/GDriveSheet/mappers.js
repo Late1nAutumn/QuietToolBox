@@ -7,15 +7,19 @@ import {
   leveledStat,
   scoreSimulation,
 } from "../../utils";
-import { DATA_FIELD, STYLE, STYLES, TABLE_MODE } from "../../enums";
-import { itemNameMapper, translator } from "../../../translation/translator";
+import { DATA_FIELD, SET, STYLE, STYLES, TABLE_MODE, TAG } from "../../enums";
+import {
+  itemNameMapper,
+  tagNameMapper,
+  translator,
+} from "../../../translation/translator";
 import { TRANSLATE_COLLECTION } from "../../../translation/context";
 import { mapSetToCompendium } from "../../manualData/manualData";
 
 export function clothesOGData() {
-  let allTags = {};
+  let allTags = { [TAG.NONE]: true };
   let allObtainFrom = {};
-  let allSets = {};
+  let allSets = { [SET.NONE]: true };
   let collection = rawData
     .split("\n")
     .slice(2)
@@ -55,7 +59,7 @@ export function clothesOGData() {
           [DATA_FIELD.STAT]: stat,
           [DATA_FIELD.SLOT]: slotTextToType(slot),
           [DATA_FIELD.RARITY]: Number(rarity),
-          [DATA_FIELD.SET]: tempSet || "",
+          [DATA_FIELD.SET]: tempSet || SET.NONE,
           [DATA_FIELD.TAGS]: tagSet,
           [DATA_FIELD.OBTAIN_FROM]: tempObtainFrom,
           [DATA_FIELD.COMPENDIUM]: 0, // TODO
@@ -154,8 +158,8 @@ export function mapFieldsToRowValues(
       case DATA_FIELD.TAGS:
         let strs = [];
         for (let tag in rowData[field])
-          strs.push(`${tag} × ${rowData[field][tag]}`);
-        return strs.join(", ");
+          strs.push(`${tagNameMapper(tag, lang)} × ${rowData[field][tag]}`);
+        return strs.join(", ") || "-";
 
       case DATA_FIELD.STAT_EL:
         return leveledStat(

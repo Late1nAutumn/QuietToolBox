@@ -16,6 +16,7 @@ export default function DataTable({ originData, data, fields }) {
   const cellClassName = (value, i, j) => {
     let className = "";
     let [main, sec] = mainStatType(originData[i][DATA_FIELD.STAT]);
+    if (value === "?") className += CLASS_NAMES.WARNING_CELL + " ";
     switch (fields[j]) {
       case DATA_FIELD.COUNT_ACCESSORY:
         if (value > DUEL_ACCESORY_LIMIT)
@@ -98,7 +99,10 @@ export default function DataTable({ originData, data, fields }) {
                   switch (fields[j]) {
                     case DATA_FIELD.NAME:
                       return (
-                        <a href={FANDOM_URL + value.replace(" ", "_")} target="_blank">
+                        <a
+                          href={FANDOM_URL + value.replace(" ", "_")}
+                          target="_blank"
+                        >
                           {value}
                         </a>
                       );

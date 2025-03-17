@@ -1,6 +1,6 @@
 import React, { useRef } from "react";
-import { DATA_FIELD, STYLE, STYLES } from "../model/enums";
-import { translator } from "../translation/translator";
+import { DATA_FIELD, STYLE, STYLES, TAG } from "../model/enums";
+import { tagNameMapper, translator } from "../translation/translator";
 import { useGlobal } from "../../context/GlobalContext";
 import { TAG_MULTIPLIERS } from "../model/constants";
 import { FILTER_CONTEXT, TRANSLATE_COLLECTION } from "../translation/context";
@@ -129,7 +129,7 @@ export default function FilterSimulator({ tags, filter, setFilter }) {
             lang,
             TRANSLATE_COLLECTION.FILTER
           )}
-          : {tag}
+          : {tagNameMapper(tag, lang)}
         </label>
       ))}
       <label>
@@ -140,11 +140,14 @@ export default function FilterSimulator({ tags, filter, setFilter }) {
         )}
         <select ref={addTagSelectRef}>
           {tags
-            .filter((tag) => filter.simulator.tags.indexOf(tag) < 0)
+            .filter(
+              (tag) =>
+                filter.simulator.tags.indexOf(tag) < 0 && tag !== TAG.NONE
+            )
             .sort()
             .map((tag, i) => (
               <option value={tag} key={i}>
-                {tag}
+                {tagNameMapper(tag, lang)}
               </option>
             ))}
         </select>

@@ -44,7 +44,7 @@ export default function Filter({
   };
 
   return (
-    <div className="nikkikiwi-filter">
+    <div className="nikkikiwi-filter untouchable">
       <div className="nikkikiwi-filter-tabs">
         {Object.values(FILTER_TAB).map((t, i) => (
           <div
@@ -65,7 +65,7 @@ export default function Filter({
               return (
                 <>
                   <div>
-                    <b className="untouchable">
+                    <b>
                       {translator(
                         FILTER_CONTEXT.TITLE_CONFIGURATION,
                         lang,
@@ -75,14 +75,12 @@ export default function Filter({
                     </b>
                   </div>
                   <div className="nikkikiwi-filter-config">
-                    <span className="untouchable">
-                      {translator(
-                        FILTER_CONTEXT.LABEL_STAT_MODE,
-                        lang,
-                        TRANSLATE_COLLECTION.FILTER
-                      )}
-                      :
-                    </span>
+                    {translator(
+                      FILTER_CONTEXT.LABEL_STAT_MODE,
+                      lang,
+                      TRANSLATE_COLLECTION.FILTER
+                    )}
+                    :
                     {Object.values(STAT_MODE).map((statMode, i) => (
                       <label className="nikkikiwi-filter-radio-group" key={i}>
                         <input
@@ -101,14 +99,12 @@ export default function Filter({
                     ))}
                   </div>
                   <div className="nikkikiwi-filter-config">
-                    <span className="untouchable">
-                      {translator(
-                        FILTER_CONTEXT.LABEL_ITEM_LV,
-                        lang,
-                        TRANSLATE_COLLECTION.FILTER
-                      )}
-                      :
-                    </span>
+                    {translator(
+                      FILTER_CONTEXT.LABEL_ITEM_LV,
+                      lang,
+                      TRANSLATE_COLLECTION.FILTER
+                    )}
+                    :
                     <select
                       value={filter.config.itemLv}
                       onChange={onItemLvChange}
@@ -164,7 +160,7 @@ export default function Filter({
               return (
                 <>
                   <div>
-                    <b className="untouchable">
+                    <b>
                       {translator(
                         FILTER_CONTEXT.TITLE_COLUMNS,
                         lang,
@@ -197,7 +193,7 @@ export default function Filter({
               return (
                 <>
                   <div>
-                    <b className="untouchable">
+                    <b>
                       {translator(
                         FILTER_CONTEXT.TITLE_SORT,
                         lang,

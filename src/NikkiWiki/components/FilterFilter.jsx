@@ -6,8 +6,13 @@ import {
   SLOT,
   STYLE,
   STYLES,
+  TABLE_MODE,
 } from "../model/enums";
-import { translator } from "../translation/translator";
+import {
+  itemNameMapper,
+  tagNameMapper,
+  translator,
+} from "../translation/translator";
 import { useGlobal } from "../../context/GlobalContext";
 import { FILTER_CONTEXT, TRANSLATE_COLLECTION } from "../translation/context";
 import { compendiumEnumToText } from "../model/utils";
@@ -69,7 +74,7 @@ export default function FilterFilter({
         obj.val = ranges[field][0];
         break;
       default:
-        console.log(`[ERROR]: filter handler missing for ${field}`)
+        console.log(`[ERROR]: filter handler missing for ${field}`);
         break;
     }
     if (obj.min !== undefined) obj.low = obj.min;
@@ -134,9 +139,7 @@ export default function FilterFilter({
           >
             ×
           </button>
-          <span className="untouchable">
-            {translator(field, lang, TRANSLATE_COLLECTION.TABLE_HEADERS)}:
-          </span>
+          {translator(field, lang, TRANSLATE_COLLECTION.TABLE_HEADERS)}:
           {(() => {
             let options;
             switch (field) {
@@ -155,7 +158,19 @@ export default function FilterFilter({
                 ));
                 break;
               case DATA_FIELD.SET:
+                options = ranges[field].map((value, i) => (
+                  <option value={value} key={i}>
+                    {itemNameMapper(TABLE_MODE.SET, lang)(value)}
+                  </option>
+                ));
+                break;
               case DATA_FIELD.TAGS:
+                options = ranges[field].map((value, i) => (
+                  <option value={value} key={i}>
+                    {tagNameMapper(value, lang)}
+                  </option>
+                ));
+                break;
               case DATA_FIELD.OBTAIN_FROM:
                 options = ranges[field].map((value, i) => (
                   <option value={value} key={i}>
@@ -214,9 +229,9 @@ export default function FilterFilter({
                           onUpdateFilter(e, field, FILTER_INPUT_VALUE_TYPE.UP)
                         }
                       />
-                      <span className="untouchable">&nbsp;</span>
+                      &nbsp;
                     </div>
-                    <span className="untouchable">{`${low} - ${up}`}</span>
+                    {`${low} - ${up}`}
                   </>
                 );
             }
@@ -229,14 +244,12 @@ export default function FilterFilter({
         </div>
       ))}
       <label className="nikkikiwi-filter-filter">
-        <span className="untouchable">
-          {translator(
-            FILTER_CONTEXT.LABEL_ADD_FILTER,
-            lang,
-            TRANSLATE_COLLECTION.FILTER
-          )}
-          :
-        </span>
+        {translator(
+          FILTER_CONTEXT.LABEL_ADD_FILTER,
+          lang,
+          TRANSLATE_COLLECTION.FILTER
+        )}
+        :
         <select ref={addFilterSelectRef}>
           {FILTABLE_FIELDS_INPUT_TYPE.filter(
             (dataField) =>

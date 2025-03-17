@@ -1,20 +1,22 @@
 # Nikki Kiwi
 
 ## Assuming:
-- items won't have duplicated tags
-- items only have one main stat
-- player have all bonus specs
-- item stat greater than 0
-- compendium pages won't have 99+ sub pages
-- set names never include '('
-### OG Raw data:
-- Item set always end with " (n)"
+### Game data logic
+- Items won't have duplicated tags
+- Items only have one main stat
+- Player have all bonus specs
+- Item stat greater than 0
+- Compendium pages won't have 99+ sub pages
+- Set names never include `(`
+### OG raw data
+- Item set always end with ` (n)`
+- Set evolutions are not included
 
-## Check list:
+## Check list
 - Cursor style check
 - Translation check
 - Clear unused imports
-- Button trigger area && pointer style in <label/>s
+- Button trigger area & pointer style in `<label/>`
 
 ## More to update:
 ### Feature
@@ -26,5 +28,3 @@
 - Translate obtain info
 ### Fix
 - Filters (especially range input limits) are not updated when config is changed
-
-tag  translation

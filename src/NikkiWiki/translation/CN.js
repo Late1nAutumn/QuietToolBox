@@ -216,7 +216,7 @@ export const mapSetNameToCN = (setName) => {
     case "Dreamy Glitter":
       return "梦泽流光";
     case "Endless Longing":
-      return "";
+      return "长相思";
     case "Enduring Bond":
       return "恒久羁绊";
     case "Fairytale Swan":
@@ -326,9 +326,13 @@ export const mapSetNameToCN = (setName) => {
     case "Woolfruit Siesta":
       return "树荫午憩";
     // #endregion
+    case "-":
+      return "-";
     default:
-      if (setName)
+      if (setName) {
         console.log(`[WARNING]: Chinese name missing for set [${setName}]`);
+        return "?";
+      }
       return "-";
   }
 };
@@ -924,6 +928,65 @@ export const mapItemNameToCN = (name) => {
     // #endregion
     default:
       // console.log(`[WARNING]: Chinese name missing for item [${name}]`);
+      return "-";
+  }
+};
+
+export const mapTagNameToCN = (tagName) => {
+  switch (tagName) {
+    // #region tags
+    case "Adventure":
+      return "冒险";
+    case "Ballroom":
+      return "舞会";
+    case "Cute":
+      return "甜心";
+    case "Fairy":
+      return "精灵";
+    case "Fantasy":
+      return "幻想";
+    case "Fashion":
+      return "时尚";
+    case "Formal":
+      return "礼服";
+    case "Home":
+      return "居家";
+    case "Intellectual":
+      return "知性";
+    case "Light":
+      return "发光";
+    case "Linlang":
+      return "琳琅";
+    case "More Light":
+      return "发亮";
+    case "Pastoral":
+      return "田园";
+    case "Playful":
+      return "童趣";
+    case "Retro":
+      return "复古";
+    case "Romance":
+      return "浪漫";
+    case "Royal":
+      return "宫廷";
+    case "Simple":
+      return "简约";
+    case "Summer":
+      return "清凉";
+    case "Trendy":
+      return "超酷";
+    case "Uniform":
+      return "制服";
+    case "Warm":
+      return "保暖";
+    // #endregion
+    case "-":
+      return "-";
+    default:
+      if (tagName) {
+        console.log(`[WARNING]: Chinese name missing for tag [${tagName}]`);
+        return "?";
+      }
       return "-";
   }
 };
