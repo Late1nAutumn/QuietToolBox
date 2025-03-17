@@ -80,7 +80,7 @@ export function clothesOGData() {
 export function mapSetData(rawData) {
   let sets = {};
   rawData.forEach(({ name, stat, slot, rarity, set, tags, obtainFrom }, i) => {
-    if (!set) return;
+    if (set === SET.NONE) return;
     if (!sets[set])
       sets[set] = {
         [DATA_FIELD.RARITY]: rarity,
@@ -126,6 +126,9 @@ export function mapSetData(rawData) {
     let [page, subPage] = mapSetToCompendium(set);
     sets[set][DATA_FIELD.COMPENDIUM] = page * 100 + subPage;
   });
+  console.log(
+    `[log]: outfit data parsed, ${Object.keys(sets).length} sets detected`
+  );
   return sets;
 }
 

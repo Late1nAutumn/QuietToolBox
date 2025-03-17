@@ -173,5 +173,7 @@ export const EN_PACK = {
   [APP_MISC]: {
     [APP_MISC_CONTEXT.APP_TITLE]: "Nikki Kiwi",
     [APP_MISC_CONTEXT.TABLE_NO_DATA]: "No Available Data",
+    [APP_MISC_CONTEXT.FOOTNOTE_DATE]: "Data imported by",
+    [APP_MISC_CONTEXT.FOOTNOTE_VERSION]: ". Sheet version",
   },
 };

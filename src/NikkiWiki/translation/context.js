@@ -36,4 +36,9 @@ export const FILTER_CONTEXT = {
   OPTION_ITEM_LV: 403,
 };
 
-export const APP_MISC_CONTEXT = { APP_TITLE: 1, TABLE_NO_DATA: 2 };
+export const APP_MISC_CONTEXT = {
+  APP_TITLE: 1,
+  TABLE_NO_DATA: 2,
+  FOOTNOTE_DATE: 3,
+  FOOTNOTE_VERSION: 4,
+};

@@ -1,5 +1,5 @@
 # Nikki Kiwi
-
+- Data source: https://docs.google.com/spreadsheets/d/1Q5yjX8roIyIRvaddOEI24hEBq4JZtSQ-7x61rFvyrds
 ## Assuming:
 ### Game data logic
 - Items won't have duplicated tags

@@ -1,8 +1,9 @@
 // #region flags
+export const DEBOUNCE_DATA_UPDATE = true;
 // #endregion
 
 // #region app
-export const FANDOM_URL = "https://infinity-nikki.fandom.com/wiki/"
+export const FANDOM_URL = "https://infinity-nikki.fandom.com/wiki/";
 // #endregion
 
 // #region calculation:

@@ -173,6 +173,8 @@ export const CN_PACK = {
   [APP_MISC]: {
     [APP_MISC_CONTEXT.APP_TITLE]: "暖暖惟碁",
     [APP_MISC_CONTEXT.TABLE_NO_DATA]: "无适用数据",
+    [APP_MISC_CONTEXT.FOOTNOTE_DATE]: "数据导入",
+    [APP_MISC_CONTEXT.FOOTNOTE_VERSION]: " 数据版本",
   },
 };
 

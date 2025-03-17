@@ -25,12 +25,16 @@ import {
 import { useGlobal } from "../../context/GlobalContext.jsx";
 import Filter from "./Filter.jsx";
 import DataTable from "./DataTable.jsx";
-import { TAG_MULTIPLIERS } from "../model/constants.js";
+import { DEBOUNCE_DATA_UPDATE, TAG_MULTIPLIERS } from "../model/constants.js";
 import { translator } from "../translation/translator.js";
 import {
   APP_MISC_CONTEXT,
   TRANSLATE_COLLECTION,
 } from "../translation/context.js";
+import {
+  LAST_UPDATE,
+  SHEET_VERSION,
+} from "../model/rawData/GDriveSheet/ClothesOG.js";
 
 export default function ItemTable({ tableMode }) {
   let { lang } = useGlobal();
@@ -88,11 +92,8 @@ export default function ItemTable({ tableMode }) {
     let { collection, ranges } = clothesOGData();
     setItemCollection(collection);
     let tags = ranges[DATA_FIELD.TAGS];
-    console.log(
-      `[log]: raw data parsed, ${tags.length} tags detected: ${JSON.stringify(
-        tags
-      )}`
-    );
+    console.log(`[log]: raw data parsed, ${collection.length} items detected`);
+    console.log(`[log]: ${tags.length} tags detected: ${JSON.stringify(tags)}`);
     let data = [];
     switch (tableMode) {
       case TABLE_MODE.RAW:
@@ -104,8 +105,6 @@ export default function ItemTable({ tableMode }) {
       case TABLE_MODE.SET:
         let sets = mapSetData(collection);
         for (let name in sets) data.push({ name, ...sets[name] });
-        break;
-      default:
         break;
     }
 
@@ -128,6 +127,11 @@ export default function ItemTable({ tableMode }) {
 
   // update calculated data
   useEffect(() => {
+    if (DEBOUNCE_DATA_UPDATE) {
+      updateCalculatedData();
+      return;
+    }
+    
     if (updateDebounceTimeoutRef.current)
       clearTimeout(updateDebounceTimeoutRef.current);
 
@@ -222,6 +226,17 @@ export default function ItemTable({ tableMode }) {
         tableData={tableData}
       />
       <DataTable originData={itemData} data={tableData} fields={activeFields} />
+      <div className="nikkikiwi-footnote">
+        {`${translator(
+          APP_MISC_CONTEXT.FOOTNOTE_DATE,
+          lang,
+          TRANSLATE_COLLECTION.APP_MISC
+        )}: ${LAST_UPDATE}${translator(
+          APP_MISC_CONTEXT.FOOTNOTE_VERSION,
+          lang,
+          TRANSLATE_COLLECTION.APP_MISC
+        )}: ${SHEET_VERSION}`}
+      </div>
     </>
   );
 }
