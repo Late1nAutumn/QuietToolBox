@@ -1,0 +1,21 @@
+html {
+  font-family: sans-serif;
+}
+body {
+  margin: 0;
+}
+
+.text-align-center {
+  text-align: center;
+}
+
+.text-align-right {
+  text-align: right;
+}
+
+.untouchable {
+  -webkit-user-select: none; /* Safari & Chrome */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* IE/Edge */
+  user-select: none;
+}

@@ -1,0 +1,32 @@
+{
+  "name": "quitetoolbox",
+  "version": "1.0.0",
+  "description": "A collection of my tools as a static page",
+  "main": "index.js",
+  "scripts": {
+    "build": "webpack",
+    "building": "webpack -w",
+    "start": "node server/index.js",
+    "starting": "nodemon server/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Forest",
+  "license": "GPL",
+  "dependencies": {
+    "react-dom": "^19.0.0",
+    "react-router-dom": "^7.1.5"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.3.4",
+    "@babel/preset-env": "^7.3.4",
+    "@babel/preset-react": "^7.0.0",
+    "babel-loader": "^9.2.1",
+    "babel-polyfill": "^6.26.0",
+    "express": "^4.21.2",
+    "nodemon": "^3.1.9",
+    "react": "^19.0.0",
+    "webpack": "^5.97.1",
+    "webpack-cli": "^6.0.1"
+  }
+}

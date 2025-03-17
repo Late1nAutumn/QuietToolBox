@@ -1,0 +1,78 @@
+.nikkikiwi-datatable {
+  background-color: #f1f1f1;
+  border-collapse: collapse;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.nikkikiwi-datatable thead {
+  background: linear-gradient(
+    145deg,
+    var(--nikkikiwi-color-primary),
+    var(--nikkikiwi-color-primary-deep)
+  );
+  color: var(--nikkikiwi-color-primary-darker);
+}
+
+.nikkikiwi-datatable th {
+  padding: 15px;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 14px;
+}
+
+.nikkikiwi-datatable tbody tr {
+  transition: background-color 0.3s ease;
+}
+
+.nikkikiwi-datatable tbody tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.nikkikiwi-datatable tbody tr:hover {
+  background-color: var(--nikkikiwi-color-fade);
+}
+
+.nikkikiwi-datatable td {
+  padding: 12px;
+  border-bottom: 1px solid #e0e0e0;
+  font-size: 14px;
+  color: var(--nikkikiwi-color-deep-dark);
+}
+
+.nikkikiwi-datatable tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.nikkikiwi-datatable td.nikkiwiki-cell-warning {
+  background-color: var(--nikkikiwi-color-table-warning-background);
+  font-weight: bold;
+  color: white;
+}
+.nikkikiwi-datatable td.nikkiwiki-cell-elegant {
+  background-color: var(--nikkikiwi-color-elegant);
+}
+.nikkikiwi-datatable td.nikkiwiki-cell-fresh {
+  background-color: var(--nikkikiwi-color-fresh);
+}
+.nikkikiwi-datatable td.nikkiwiki-cell-sweet {
+  background-color: var(--nikkikiwi-color-sweet);
+}
+.nikkikiwi-datatable td.nikkiwiki-cell-sexy {
+  background-color: var(--nikkikiwi-color-sexy);
+}
+.nikkikiwi-datatable td.nikkiwiki-cell-cool {
+  background-color: var(--nikkikiwi-color-cool);
+}
+
+.nikkikiwi-datatable td.nikkiwiki-cell-main-stat {
+  font-weight: bold;
+}
+
+.nikkikiwi-datatable-nodata {
+  text-align: center;
+}
+
+.nikkikiwi-datatable a {
+  color: var(--nikkikiwi-color-deep-dark);
+}
