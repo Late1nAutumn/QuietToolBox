@@ -1,0 +1,3 @@
+export const CANVAS_MARGIN = 10;
+export const DEFAULT_NOTIFICATION_DURATION = 1500;
+export const DEFAULT_NOTIFICATION_TRANSITION = 500; // check css

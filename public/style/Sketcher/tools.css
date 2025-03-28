@@ -1,0 +1,50 @@
+.sketcher-tools {
+  position: fixed;
+  top: 0;
+  right: 0;
+  z-index: 200;
+  border: 3px solid white;
+  padding: 5px;
+  margin: 10px;
+}
+.sketcher-tools-imgLink {
+  width: 200px;
+  word-wrap: break-word;
+}
+.sketcher-tools-file-picker {
+  cursor: pointer;
+}
+.sketcher-tools-file-picker > input[type="file"] {
+  display: none;
+}
+.sketcher-tools input[type="range"] {
+  appearance: none;
+  width: 100%;
+  height: 6px;
+  background: #ccc;
+  border-radius: 5px;
+  outline: none;
+  position: relative;
+  box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+.sketcher-tools input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  background: purple;
+  border: 2px solid #ccc;
+  border-radius: 50%;
+  cursor: pointer;
+}
+/* input[type="range"]::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  background: #fff;
+  border-radius: 50%;
+  border: 2px solid #999;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  cursor: pointer;
+} */
+.sketcher-tools input[type="number"] {
+  width: 50px;
+}

@@ -26,15 +26,6 @@ export const DUEL_ACCESORY_LIMIT = 5;
 // #endregion
 
 // #region styling:
-// export const STYLE_COLOR = {
-//   // r g b
-//   [STYLE.ELEGANT]: [226, 186, 134],
-//   [STYLE.FRESH]: [166, 190, 155],
-//   [STYLE.SWEET]: [249, 182, 184],
-//   [STYLE.SEXY]: [195, 161, 202],
-//   [STYLE.COOL]: [152, 179, 209],
-// };
-
 export const CLASS_NAMES = {
   TEXT_CENTER: "text-align-center",
   TEXT_RIGHT: "text-align-right",

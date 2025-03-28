@@ -28,3 +28,5 @@
 - Translate obtain info
 ### Fix
 - Filters (especially range input limits) are not updated when config is changed
+
+- secondary header too long in EN

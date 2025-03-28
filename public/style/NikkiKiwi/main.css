@@ -23,6 +23,19 @@
   --nikkikiwi-filter-range-track-height: 6px;
 }
 
+.nikkikiwi-home {
+  position: absolute;
+  top: 5px;
+  left: 10px;
+}
+.nikkikiwi-home svg {
+  fill: var(--nikkikiwi-color-primary-darker);
+  height: 40px;
+}
+.nikkikiwi-home:hover svg {
+  fill: var(--nikkikiwi-color-primary-dark);
+}
+
 .nikkikiwi,
 .nikkikiwi-footer {
   display: flex;

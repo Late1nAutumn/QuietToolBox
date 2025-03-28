@@ -1,0 +1,121 @@
+:root {
+  --home-app-grid-size: 300px;
+  --home-chatbox-background: rgba(128, 128, 128, 0.4);
+
+  --portrait-height: 70vh;
+  --portrait-viewbox-width: 617;
+  --portrait-viewbox-height: 800;
+}
+.home {
+  width: 100vw;
+}
+.home-home {
+  display: none;
+}
+
+@keyframes home-content-portrait-stroke-offset {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.home-content-head {
+  position: fixed;
+  z-index: 110;
+  left: calc(50vw - 5vw);
+  transform: translateX(-100%);
+  display: flex;
+  flex-direction: column;
+  justify-content: end;
+  align-items: center;
+  height: 100vh;
+  width: calc(
+    var(--portrait-height) / var(--portrait-viewbox-height) *
+      var(--portrait-viewbox-width)
+  );
+}
+.home-content-chatbox {
+  /* text will overflow if word is too long */
+  position: relative;
+  margin-bottom: 30px;
+  padding: 20px 30px;
+  width: max-content;
+  max-width: 100%;
+  border-left: 2px solid white;
+  border-right: 2px solid white;
+  background-color: var(--home-chatbox-background);
+  color: white;
+  font-size: 20px;
+  text-align: center;
+}
+.home-content-chatbox::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translate(-50%, 100%) scaleX(0.7);
+  border-width: 20px;
+  border-style: solid;
+  border-color: var(--home-chatbox-background) transparent transparent
+    transparent;
+}
+.home-content-portrait {
+  bottom: 0;
+  height: var(--portrait-height);
+}
+.home-content-apps {
+  position: absolute;
+  z-index: 200;
+  left: calc(50vw + 5vw);
+  padding: calc(50vh - var(--home-app-grid-size) / 2) 0;
+}
+.home-content-apps table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+.home-content-apps td {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: var(--home-app-grid-size);
+  height: var(--home-app-grid-size);
+  padding: 0;
+}
+/* .home-content-apps tr:nth-child(even) td {
+  background-color: blue;
+}
+.home-content-apps tr:nth-child(odd) td {
+  background-color: red;
+} */
+
+.home-icon-background {
+  position: fixed;
+  z-index: 100;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: black;
+  /* background-color: #222; */
+}
+
+.home-icon-background svg {
+  fill: #222;
+  max-width: 80vw;
+  max-height: 80vh;
+}
+
+.home-content-app {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  /* -webkit-box-reflect: below 5px
+    linear-gradient(
+      to bottom,
+      rgba(255, 255, 255, 0) 30%,
+      rgba(255, 255, 255, 0.2) 100%
+    ); */
+}

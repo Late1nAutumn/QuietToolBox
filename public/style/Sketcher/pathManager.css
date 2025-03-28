@@ -1,0 +1,61 @@
+.sketcher-pathManager {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  z-index: 200;
+  border: 3px solid white;
+  padding: 5px;
+  margin: 10px;
+}
+.sketcher-pathManager-tools {
+  display: flex;
+  justify-content: space-around;
+}
+.sketcher-pathManager-tools > button {
+  width: 80px;
+}
+.sketcher-pathManager-path {
+  display: flex;
+  justify-content: space-between;
+  margin: 3px 5px 0 5px;
+  border-top: 1px solid white;
+  padding: 2px 0;
+}
+.sketcher-pathManager-path-sample {
+  display: inline-block;
+  border: 3px solid;
+  padding: 5px;
+  margin-right: 5px;
+  vertical-align: text-bottom;
+}
+.sketcher-pathManager-path svg,
+.sketcher-pathManager-path-edit-button svg,
+.sketcher-pathManager-path-arrow-button svg,
+.sketcher-pathManager-path-trash-button svg,
+.sketcher-pathManager-path-copy-button svg {
+  cursor: pointer;
+  vertical-align: bottom;
+  fill: white;
+}
+.sketcher-pathManager-path-eye-button:hover svg,
+.sketcher-pathManager-path-edit-button:hover svg,
+.sketcher-pathManager-path-arrow-button:hover svg,
+.sketcher-pathManager-path-trash-button:hover svg,
+.sketcher-pathManager-path-copy-button:hover svg {
+  fill: #ccc;
+}
+.sketcher-pathManager-path-eye-button svg,
+.sketcher-pathManager-path-edit-button svg,
+.sketcher-pathManager-path-trash-button svg,
+.sketcher-pathManager-path-copy-button svg {
+  height: 16px;
+  padding: 2px;
+}
+.sketcher-pathManager-path-arrow-button svg {
+  height: 20px;
+  margin-left: 3px;
+}
+.sketcher-pathManager-property {
+  width: 100%;
+  text-align: right;
+}

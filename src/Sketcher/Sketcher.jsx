@@ -1,0 +1,285 @@
+import React, { useEffect, useRef, useState } from "react";
+import { CANVAS_MARGIN } from "./constants";
+import Tools from "./components/Tools";
+import { EDITOR_INDEX, LINE_COMMAND } from "./enum";
+import PathManager from "./components/PathManager";
+import { rgbToHex } from "../utils/functions";
+import Modal from "./components/Modal";
+import Notification from "./components/Notification";
+import { pointsToPathD } from "./utils";
+
+export default function Sketcher() {
+  const imgRef = useRef(null);
+  const colorPickerRef = useRef(null);
+  const colorPickerContextRef = useRef(null);
+  const keyEventCallback = useRef({});
+
+  const [paths, setPaths] = useState([
+    {},
+    // {
+    //   display: true,
+    //   points: [{ cmd: "L", x: 0, y: 0 }],
+    //   closing: false,
+    //   stroke: "#ffffff",
+    //   fill: "transparent",
+    //   fillEven: false,
+    //   pointCount: 0,
+    // },
+  ]);
+  const [imgUrl, setImgUrl] = useState("https://picsum.photos/id/477/1000/600"); // null
+  const [imgSize, setImgSize] = useState({ width: 0, height: 0 });
+  const [imgZoom, setImgZoom] = useState(100);
+  const [cursorCoord, setCurorCoord] = useState({ x: 0, y: 0 });
+  const [cursorColor, setCursorColor] = useState("#ffffff");
+  const [showCursor, setShowCursor] = useState(true);
+
+  const [editorIndex, setEditorIndex] = useState(EDITOR_INDEX.IDLE);
+  const [pathCommand, setPathCommand] = useState("L");
+
+  const [modalComponent, setModalComponent] = useState(null);
+  const [notificationContent, setNotificationContent] = useState("");
+
+  const onImgLoad = () => {
+    let { width, height } = imgRef.current;
+    // console.log(width, height);
+    colorPickerContextRef.current = colorPickerRef.current.getContext("2d");
+    colorPickerRef.current.width = width;
+    colorPickerRef.current.height = height;
+    colorPickerContextRef.current.drawImage(
+      imgRef.current,
+      0,
+      0,
+      width,
+      height
+    );
+    setImgSize({ width, height });
+    setImgZoom(100);
+    URL.revokeObjectURL(imgUrl);
+  };
+
+  const onCursorMove = (e) => {
+    let zoomRatio = imgZoom / 100;
+    let x = Math.round(((e.clientX - CANVAS_MARGIN) / zoomRatio) * 1000) / 1000,
+      y = Math.round(((e.clientY - CANVAS_MARGIN) / zoomRatio) * 1000) / 1000;
+    setCurorCoord({ x, y });
+  };
+
+  const onCanvasClick = () => {
+    if (editorIndex === EDITOR_INDEX.IDLE) return;
+    let { x, y } = cursorCoord;
+    let temp = paths.slice();
+    // TODO: l or L
+    let point = {};
+    switch (pathCommand) {
+      case LINE_COMMAND.LINE_TO_ABSOLUTE:
+        point = { cmd: pathCommand, x, y };
+        break;
+      case LINE_COMMAND.LINE_TO_RELATIVE:
+        point = {
+          cmd: pathCommand,
+          x: x - editingPathLastCoord.x,
+          y: y - editingPathLastCoord.y,
+        };
+        break;
+    }
+    temp[editorIndex].points.push(point);
+    if (temp[editorIndex].pointCount !== "?") temp[editorIndex].pointCount++;
+    setPaths(temp);
+  };
+
+  const getPixelColor = () => {
+    if (
+      cursorCoord.x < 0 ||
+      cursorCoord.x > imgSize.width ||
+      cursorCoord.y < 0 ||
+      cursorCoord.y > imgSize.height
+    )
+      return "";
+    let output = "";
+    if (colorPickerContextRef.current) {
+      let pixel = colorPickerContextRef.current.getImageData(
+        cursorCoord.x,
+        cursorCoord.y,
+        1,
+        1
+      ).data;
+      if (pixel) {
+        output += rgbToHex(...pixel);
+        if (pixel[3] !== 255) output += ` ${Math.round(pixel[3] / 2.55)}%`;
+        return output;
+      }
+    }
+  };
+
+  const pendingPathD = () => {
+    if (paths[editorIndex]?.points?.length) {
+      let lastPoint =
+        paths[editorIndex].points[paths[editorIndex].points.length - 1];
+      let d = `M${lastPoint.x} ${lastPoint.y}L${cursorCoord.x} ${cursorCoord.y}`;
+      // if (paths[editorIndex].closing) {
+      //   let startPoint = paths[editorIndex].points[0];
+      //   d += `L${startPoint.x} ${startPoint.y}`;
+      // }
+      return d;
+    }
+    return "";
+  };
+
+  const onKey = (e) => {
+    const tagName = e.target.tagName.toLowerCase();
+    if (tagName === "input" || tagName === "textarea") return;
+    let func = keyEventCallback.current[e.key];
+    if (func) {
+      func();
+    }
+  };
+
+  useEffect(() => {
+    window.onkeydown = onKey;
+    return () => {
+      window.onkeydown = null;
+    };
+  }, []);
+
+  return (
+    <div className="sketcher">
+      <Modal component={modalComponent} />
+      <Notification
+        content={notificationContent}
+        setNotificationContent={setNotificationContent}
+      />
+      <Tools
+        keyEventCallback={keyEventCallback}
+        imgUrl={imgUrl}
+        setImgUrl={setImgUrl}
+        setImgSize={setImgSize}
+        imgZoom={imgZoom}
+        setImgZoom={setImgZoom}
+        cursorColor={cursorColor}
+        setCursorColor={setCursorColor}
+        showCursor={showCursor}
+        setShowCursor={setShowCursor}
+      />
+      <PathManager
+        keyEventCallback={keyEventCallback}
+        paths={paths}
+        setPaths={setPaths}
+        editorIndex={editorIndex}
+        setEditorIndex={setEditorIndex}
+        setModalComponent={setModalComponent}
+        setNotificationContent={setNotificationContent}
+        imgSize={imgSize}
+      />
+
+      <div
+        className="sketcher-image"
+        style={{
+          transform: `scale(${imgZoom / 100})`,
+          top: `${CANVAS_MARGIN}px`,
+          left: `${CANVAS_MARGIN}px`,
+          transformOrigin: "0 0",
+        }}
+      >
+        {imgUrl ? (
+          <img
+            ref={imgRef}
+            src={imgUrl}
+            onLoad={onImgLoad}
+            alt="image load fail"
+            crossOrigin="anonymous"
+          />
+        ) : (
+          <b>no image loaded</b>
+        )}
+      </div>
+
+      <div
+        className="sketcher-paths"
+        style={{
+          transform: `scale(${imgZoom / 100})`,
+          top: "0",
+          left: "0",
+          transformOrigin: `${CANVAS_MARGIN}px ${CANVAS_MARGIN}px`,
+        }}
+      >
+        <svg
+          width={imgSize.width + 2 * CANVAS_MARGIN}
+          height={imgSize.height + 2 * CANVAS_MARGIN}
+          viewBox={`${0 - CANVAS_MARGIN} ${0 - CANVAS_MARGIN} ${
+            imgSize.width + 2 * CANVAS_MARGIN
+          } ${imgSize.height + 2 * CANVAS_MARGIN}`}
+          onMouseMove={onCursorMove}
+          onClick={onCanvasClick}
+        >
+          {paths
+            .map(({ display, points, closing, stroke, fill, fillEven }, i) =>
+              display && i !== editorIndex && i !== EDITOR_INDEX.NEW ? (
+                <path
+                  d={pointsToPathD(points, closing)}
+                  stroke={stroke}
+                  fill={fill}
+                  fillRule={fillEven ? "evenodd" : "nonzero"}
+                  key={i}
+                />
+              ) : (
+                <path key={i} />
+              )
+            )
+            .reverse()}
+          {editorIndex !== EDITOR_INDEX.IDLE && (
+            <>
+              <path
+                d={pointsToPathD(
+                  paths[editorIndex].points,
+                  paths[editorIndex].closing
+                )}
+                stroke={paths[editorIndex].stroke}
+                fill={paths[editorIndex].fill}
+                fillRule={paths[editorIndex].fillEven ? "evenodd" : "nonzero"}
+              />
+              <path
+                d={pendingPathD()}
+                stroke={paths[editorIndex].stroke}
+                fill={paths[editorIndex].fill}
+                fillRule={paths[editorIndex].fillEven ? "evenodd" : "nonzero"}
+              />
+            </>
+          )}
+          {/* <rect
+            width={imgSize.width}
+            height={imgSize.height}
+            x="0"
+            y="0"
+            fill="transparent"
+            stroke="red"
+          /> */}
+          {showCursor && imgUrl && (
+            <>
+              <line
+                y1={0 - CANVAS_MARGIN}
+                y2={imgSize.height + CANVAS_MARGIN}
+                x1={cursorCoord.x - 0.5}
+                x2={cursorCoord.x - 0.5}
+                stroke={cursorColor}
+              />
+              <line
+                x1={0 - CANVAS_MARGIN}
+                x2={imgSize.width + CANVAS_MARGIN}
+                y1={cursorCoord.y - 0.5}
+                y2={cursorCoord.y - 0.5}
+                stroke={cursorColor}
+              />
+            </>
+          )}
+        </svg>
+      </div>
+      <div className="sketcher-coord">
+        <b>
+          ({cursorCoord.x},{cursorCoord.y})
+        </b>
+        &nbsp;{getPixelColor()}
+      </div>
+      <canvas ref={colorPickerRef} className="sketcher-colorPicker" />
+    </div>
+  );
+}
