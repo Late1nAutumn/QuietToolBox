@@ -1,4 +1,3 @@
-
 const path = require("path");
 
 module.exports = {
@@ -11,8 +10,13 @@ module.exports = {
   module: {
     rules: [
       {
+        type:"json",
+        test: /\.json$/,
+        exclude: /node_modules/,
+      },
+      {
         loader: "babel-loader",
-        test: /\.js[x]?/,
+        test: /\.(js|jsx)$/,
         exclude: /node_modules/,
         options: {
           presets: ["@babel/preset-env", "@babel/preset-react"],
@@ -21,6 +25,6 @@ module.exports = {
     ],
   },
   resolve: {
-    extensions: [".js", ".jsx"],
+    extensions: [".js", ".jsx", ".json"],
   },
 };

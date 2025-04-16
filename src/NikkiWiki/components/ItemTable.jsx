@@ -1,4 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useGlobal } from "../../context/GlobalContext.jsx";
+
+import Filter from "./Filter.jsx";
+import DataTable from "./DataTable.jsx";
+
+import { NexusIcon } from "../../svg/NexusIcon.jsx";
 
 import {
   TABLE_MODE,
@@ -22,9 +29,6 @@ import {
   tableFieldsOfMode,
 } from "../model/utils.js";
 
-import { useGlobal } from "../../context/GlobalContext.jsx";
-import Filter from "./Filter.jsx";
-import DataTable from "./DataTable.jsx";
 import { DEBOUNCE_DATA_UPDATE, TAG_MULTIPLIERS } from "../model/constants.js";
 import { translator } from "../translation/translator.js";
 import {
@@ -37,6 +41,7 @@ import {
 } from "../model/rawData/GDriveSheet/ClothesOG.js";
 
 export default function ItemTable({ tableMode }) {
+  const navigate = useNavigate();
   let { lang } = useGlobal();
   const updateDebounceTimeoutRef = useRef(null);
 
@@ -131,7 +136,7 @@ export default function ItemTable({ tableMode }) {
       updateCalculatedData();
       return;
     }
-    
+
     if (updateDebounceTimeoutRef.current)
       clearTimeout(updateDebounceTimeoutRef.current);
 
@@ -210,13 +215,20 @@ export default function ItemTable({ tableMode }) {
 
   return (
     <>
-      <h1>
-        {translator(
-          APP_MISC_CONTEXT.APP_TITLE,
-          lang,
-          TRANSLATE_COLLECTION.APP_MISC
-        )}
-      </h1>
+      <div className="nikkikiwi-title">
+        <span className="nikkikiwi-title-nexus">
+          <span className="nikkikiwi-title-home" onClick={() => navigate("/")}>
+            <NexusIcon />
+          </span>
+        </span>
+        <h1>
+          {translator(
+            APP_MISC_CONTEXT.APP_TITLE,
+            lang,
+            TRANSLATE_COLLECTION.APP_MISC
+          )}
+        </h1>
+      </div>
       <Filter
         fields={fields}
         activeFields={activeFields}

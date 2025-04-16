@@ -5,6 +5,7 @@ import ItemTable from "./components/ItemTable.jsx";
 import Footer from "./components/Footer.jsx";
 
 import { TABLE_MODE } from "./model/enums.js";
+import { NexusIcon } from "../svg/NexusIcon.jsx";
 
 export default function NikkiKiwi() {
   // useEffect(() => {});
@@ -19,7 +20,7 @@ export default function NikkiKiwi() {
         />
         <Route path="/" element={<ItemTable tableMode={TABLE_MODE.RAW} />} />
       </Routes>
-      <div className="nikkikiwi-whiteSpace"/>
+      <div className="nikkikiwi-whiteSpace" />
       <Footer />
     </div>
   );

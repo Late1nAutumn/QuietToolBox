@@ -1,3 +1,11 @@
+export const request = async (url) => {
+  let data = await fetch(url);
+  let json = await data.json();
+  return json;
+};
+
+export const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
 export const sortByProperty = (arr, property, reverse) => {
   let temp = arr.slice();
   for (let i = 0; i < arr.length - 1; i++)
@@ -25,3 +33,5 @@ export const copyToClipboard = async (content) =>
     .writeText(content)
     .then(() => console.log("[log]: content copied to clipboard"))
     .catch((err) => console.log("[ERROR]: copy failed:", err));
+
+export const toISODate = (date) => new Date(date).toISOString().split("T")[0];

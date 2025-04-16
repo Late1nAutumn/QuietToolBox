@@ -12,7 +12,7 @@ import Chatbox from "./Portrait/Chatbox";
 const apps = [
   { link: "/nikki", text: "nikki kiwi" },
   { link: "/sketcher", text: "Sketcher" },
-  { link: "/", text: "3" },
+  { link: "/steamster", text: "Steamster" },
   { link: "/", text: "4" },
   { link: "/", text: "5" },
   { link: "/", text: "6" },

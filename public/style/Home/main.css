@@ -9,9 +9,6 @@
 .home {
   width: 100vw;
 }
-.home-home {
-  display: none;
-}
 
 @keyframes home-content-portrait-stroke-offset {
   to {

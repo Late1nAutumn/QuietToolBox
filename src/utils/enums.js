@@ -4,3 +4,9 @@ export const LANG = {
   EN: 0,
   CN: 1,
 };
+
+export const LOAD_STATUS = {
+  UNLOAD: 1,
+  LOADING: 2,
+  LOADED: 3,
+};

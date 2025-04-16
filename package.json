@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "A collection of my tools as a static page",
   "main": "index.js",
+  "engines": {
+    "node": ">=18.0.0"
+  },
   "scripts": {
     "build": "webpack",
     "building": "webpack -w",
