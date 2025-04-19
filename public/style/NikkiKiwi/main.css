@@ -49,22 +49,28 @@
 .nikkikiwi-title {
   position: relative;
   text-align: center;
-  vertical-align: top;
+  margin-top: 5px;
 }
 
 .nikkikiwi-title-nexus {
   position: absolute;
-  top: 5px;
-  left: 10px;
+  top: 5%;
+  right: 10px;
+  height: 100%;
+  height: 90%;
 }
-.nikkikiwi-title-home {
-  cursor: pointer;
-}
-.nikkikiwi-title-home svg {
+.nikkikiwi .nexusButton-icon svg {
   fill: var(--nikkikiwi-color-primary-darker);
-  height: 40px;
 }
-.nikkikiwi-title-home:hover svg {
+.nikkikiwi .nexusButton-icon:hover svg {
+  fill: var(--nikkikiwi-color-primary-dark);
+}
+.nikkikiwi .nexusButton-menu-button svg {
+  stroke: var(--nikkikiwi-color-primary-darker);
+  fill: var(--nikkikiwi-color-primary-darker);
+}
+.nikkikiwi .nexusButton-menu-button:hover svg {
+  stroke: var(--nikkikiwi-color-primary-dark);
   fill: var(--nikkikiwi-color-primary-dark);
 }
 

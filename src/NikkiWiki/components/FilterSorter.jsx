@@ -4,7 +4,7 @@ import { useGlobal } from "../../context/GlobalContext";
 import { FILTER_CONTEXT, TRANSLATE_COLLECTION } from "../translation/context";
 
 export default function FilterSorter({ fields, filter, setFilter }) {
-  let { lang } = useGlobal();
+  const { lang } = useGlobal();
   const addSortSelectRef = useRef(null);
 
   const onAddSortRule = (order) => {

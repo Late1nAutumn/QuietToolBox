@@ -1,8 +1,4 @@
 .sketcher-tools {
-  position: fixed;
-  top: 0;
-  right: 0;
-  z-index: 200;
   border: 3px solid white;
   padding: 5px;
   margin: 10px;

@@ -1,4 +1,7 @@
 import React, { useEffect, useRef } from "react";
+import { translator } from "../translation/translator";
+import { useGlobal } from "../../context/GlobalContext";
+import { TOOLBOX_CONTEXT, TRANSLATE_COLLECTION } from "../translation/context";
 
 export default function Tools({
   keyEventCallback,
@@ -12,6 +15,7 @@ export default function Tools({
   showCursor,
   setShowCursor,
 }) {
+  const { lang } = useGlobal();
   const importImageRef = useRef(null);
 
   const onAddImage = () => {
@@ -51,32 +55,64 @@ export default function Tools({
   return (
     <div className="sketcher-tools">
       <div>
-        <b>-</b>&nbsp;<b>Tools</b>
+        <b>-</b>&nbsp;
+        <b>
+          {translator(
+            TOOLBOX_CONTEXT.TITLE,
+            lang,
+            TRANSLATE_COLLECTION.TOOLBOX
+          )}
+        </b>
       </div>
       <div>
         {imgUrl ? (
           <>
             <div className="sketcher-tools-imgLink">{imgUrl}</div>
-            <button onClick={onClearImage}>Clear Image</button>
+            <button onClick={onClearImage}>
+              {translator(
+                TOOLBOX_CONTEXT.BUTTON_CLEAR_IMAGE,
+                lang,
+                TRANSLATE_COLLECTION.TOOLBOX
+              )}
+            </button>
           </>
         ) : (
           <>
-            Add Image:
+            {translator(
+              TOOLBOX_CONTEXT.LABEL_ADD_IMAGE,
+              lang,
+              TRANSLATE_COLLECTION.TOOLBOX
+            )}
             <br />
             <input ref={importImageRef} placeholder="Image URL here:" />
             <br />
             <button>
               <label className="sketcher-tools-file-picker">
-                Choose file
+                {translator(
+                  TOOLBOX_CONTEXT.LABEL_CHOOSE_FILE,
+                  lang,
+                  TRANSLATE_COLLECTION.TOOLBOX
+                )}
                 <input type="file" accept="image/*" onChange={onUploadImage} />
               </label>
             </button>
-            <button onClick={onAddImage}>Use link</button>
+            <button onClick={onAddImage}>
+              {translator(
+                TOOLBOX_CONTEXT.BUTTON_USE_LINK,
+                lang,
+                TRANSLATE_COLLECTION.TOOLBOX
+              )}
+            </button>
           </>
         )}
       </div>
       <div>
-        Image zoom:&nbsp;
+        {translator(
+          TOOLBOX_CONTEXT.LABEL_ZOOM_IMAGE,
+          lang,
+          TRANSLATE_COLLECTION.TOOLBOX
+        )}
+        :&nbsp;
         <input
           type="number"
           min="10"
@@ -84,6 +120,7 @@ export default function Tools({
           value={imgZoom}
           onChange={onImageZoom}
         />
+        %
         <br />
         <input
           type="range"
@@ -95,7 +132,12 @@ export default function Tools({
       </div>
       <div>
         <label>
-          [C] Show cursor
+          [C]&nbsp;
+          {translator(
+            TOOLBOX_CONTEXT.LABEL_SHOW_CURSOR,
+            lang,
+            TRANSLATE_COLLECTION.TOOLBOX
+          )}
           <input
             type="checkbox"
             checked={showCursor}
@@ -104,7 +146,12 @@ export default function Tools({
         </label>
         <br />
         <label>
-          Cursor Color:&nbsp;
+          {translator(
+            TOOLBOX_CONTEXT.LABEL_CURSOR_COLOR,
+            lang,
+            TRANSLATE_COLLECTION.TOOLBOX
+          )}
+          :&nbsp;
           <input
             type="color"
             value={cursorColor}

@@ -5,6 +5,7 @@ import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 // components
 import { GlobalProvider } from "./context/GlobalContext.jsx";
 import Home from "./Home/Home.jsx";
+import NotFound from "./Home/NotFound.jsx";
 import Dashboard from "./Dashboard/Dashboard.jsx";
 import NikkiKiwi from "./NikkiWiki/NikkiKiwi.jsx";
 import Sketcher from "./Sketcher/Sketcher.jsx";
@@ -20,7 +21,8 @@ const App = () => {
           <Route path="/nikki/*" element={<NikkiKiwi />} />
           <Route path="/sketcher/*" element={<Sketcher />} />
           <Route path="/steamster/*" element={<Steamster />} />
-          <Route path="/*" element={<Home />} />
+          <Route path="/" element={<Home />} />
+          <Route path="/*" element={<NotFound />} />
         </Routes>
       </Router>
     </GlobalProvider>

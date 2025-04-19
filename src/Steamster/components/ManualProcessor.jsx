@@ -22,7 +22,7 @@ const HIDE_APP_LEVEL = {
 };
 
 export default function ManualProcessor({}) {
-  let { lang } = useGlobal();
+  const { lang } = useGlobal();
 
   const dataRef = useRef(Object.keys(STORED_APP_DETAIL));
   const resultRef = useRef({

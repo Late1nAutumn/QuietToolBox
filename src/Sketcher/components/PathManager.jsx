@@ -10,6 +10,13 @@ import { Trash } from "../../svg/Trash";
 import { Copy } from "../../svg/Copy";
 import { copyToClipboard } from "../../utils/functions";
 import ModalPathDeleteConfirm from "./ModalPathDeleteConfirm";
+import { translator } from "../translation/translator";
+import { useGlobal } from "../../context/GlobalContext";
+import {
+  NOTIFICATION_CONTEXT,
+  PATH_MANAGER_CONTEXT,
+  TRANSLATE_COLLECTION,
+} from "../translation/context";
 
 export default function PathManager({
   keyEventCallback,
@@ -21,6 +28,7 @@ export default function PathManager({
   setNotificationContent,
   imgSize,
 }) {
+  const { lang } = useGlobal();
   const pathInputRef = useRef(null);
   const editingPathBackup = useRef(null);
 
@@ -31,7 +39,13 @@ export default function PathManager({
     console.log(`[OUTPUT]: ${str}`);
 
     copyToClipboard(str).then(() =>
-      setNotificationContent("Svg data copied!")
+      setNotificationContent(
+        translator(
+          NOTIFICATION_CONTEXT.EXPORT_SVG,
+          lang,
+          TRANSLATE_COLLECTION.NOTIFICATION
+        )
+      )
     );
   };
 
@@ -105,7 +119,13 @@ export default function PathManager({
   };
   const onPathCopy = () => {
     copyToClipboard(pathInputRef.current.value).then(() =>
-      setNotificationContent("Path data copied!")
+      setNotificationContent(
+        translator(
+          NOTIFICATION_CONTEXT.EXPORT_PATH,
+          lang,
+          TRANSLATE_COLLECTION.NOTIFICATION
+        )
+      )
     );
   };
   const onRemoveLastPoint = () => {
@@ -154,12 +174,30 @@ export default function PathManager({
           case EDITOR_INDEX.IDLE:
             return (
               <>
-                <b>-</b>&nbsp;<b>Paths</b>
+                <b>-</b>&nbsp;
+                <b>
+                  {translator(
+                    PATH_MANAGER_CONTEXT.TITLE_MANAGER,
+                    lang,
+                    TRANSLATE_COLLECTION.PATH_MANAGER
+                  )}
+                </b>
                 <div className="sketcher-pathManager-tools">
                   <button onClick={() => onEditClick(EDITOR_INDEX.NEW)}>
-                    + New
+                    +&nbsp;
+                    {translator(
+                      PATH_MANAGER_CONTEXT.BUTTON_NEW_PATH,
+                      lang,
+                      TRANSLATE_COLLECTION.PATH_MANAGER
+                    )}
                   </button>
-                  <button onClick={onExportClick}>Export</button>
+                  <button onClick={onExportClick}>
+                    {translator(
+                      PATH_MANAGER_CONTEXT.BUTTON_EXPORT_SVG,
+                      lang,
+                      TRANSLATE_COLLECTION.PATH_MANAGER
+                    )}
+                  </button>
                 </div>
                 <div className="sketcher-pathManager-paths">
                   {paths.map(({ display, stroke, fill, pointCount }, i) =>
@@ -196,7 +234,14 @@ export default function PathManager({
                           />
                         </span>
                         <span>
-                          <span>{pointCount} nodes</span>
+                          <span>
+                            {pointCount}&nbsp;
+                            {translator(
+                              PATH_MANAGER_CONTEXT.LABEL_NODES,
+                              lang,
+                              TRANSLATE_COLLECTION.PATH_MANAGER
+                            )}
+                          </span>
                           <span
                             className="sketcher-pathManager-path-arrow-button"
                             onClick={() => onArrowClick(i, -1)}
@@ -228,16 +273,39 @@ export default function PathManager({
           default:
             return (
               <>
-                <b>-</b>&nbsp;<b>Edit Path</b>
+                <b>-</b>&nbsp;
+                <b>
+                  {translator(
+                    PATH_MANAGER_CONTEXT.TITLE_EDITOR,
+                    lang,
+                    TRANSLATE_COLLECTION.PATH_MANAGER
+                  )}
+                </b>
                 <div className="sketcher-pathManager-tools">
-                  <button onClick={onSaveEditClick}>Save</button>
-                  <button onClick={onCancelEditClick}>Cancel</button>
+                  <button onClick={onSaveEditClick}>
+                    {translator(
+                      PATH_MANAGER_CONTEXT.BUTTON_SAVE,
+                      lang,
+                      TRANSLATE_COLLECTION.PATH_MANAGER
+                    )}
+                  </button>
+                  <button onClick={onCancelEditClick}>
+                    {translator(
+                      PATH_MANAGER_CONTEXT.BUTTON_CANCEL,
+                      lang,
+                      TRANSLATE_COLLECTION.PATH_MANAGER
+                    )}
+                  </button>
                 </div>
                 <div>
                   <div>
                     <input
                       ref={pathInputRef}
-                      placeholder="Paste path here"
+                      placeholder={translator(
+                        PATH_MANAGER_CONTEXT.PLACEHOLDER_PATH_INPUT,
+                        lang,
+                        TRANSLATE_COLLECTION.PATH_MANAGER
+                      )}
                       value={pointsToPathD(
                         paths[editorIndex].points,
                         paths[editorIndex].closing
@@ -253,16 +321,31 @@ export default function PathManager({
                   </div>
                   {pathError ? (
                     <div className="sketcher-warning">
-                      Invalid path. Features might fail
+                      {translator(
+                        PATH_MANAGER_CONTEXT.WARNING_INVALID_PATH,
+                        lang,
+                        TRANSLATE_COLLECTION.PATH_MANAGER
+                      )}
                     </div>
                   ) : (
-                    <div>{paths[editorIndex].points.length} nodes</div>
+                    <div>
+                      {paths[editorIndex].points.length}&nbsp;
+                      {translator(
+                        PATH_MANAGER_CONTEXT.LABEL_NODES,
+                        lang,
+                        TRANSLATE_COLLECTION.PATH_MANAGER
+                      )}
+                    </div>
                   )}
                   <div>
                     <label>
                       [Z]
                       <button onClick={onRemoveLastPoint}>
-                        Remove last node
+                        {translator(
+                          PATH_MANAGER_CONTEXT.BUTTON_REMOVE_NODE,
+                          lang,
+                          TRANSLATE_COLLECTION.PATH_MANAGER
+                        )}
                       </button>
                     </label>
                   </div>
@@ -274,14 +357,25 @@ export default function PathManager({
                         checked={paths[editorIndex].closing}
                         onChange={onCheckClosingPath}
                       />
-                      Closing path
+                      {translator(
+                        PATH_MANAGER_CONTEXT.LABEL_CLOSE_PATH,
+                        lang,
+                        TRANSLATE_COLLECTION.PATH_MANAGER
+                      )}
                     </label>
                   </div>
                   <table className="sketcher-pathManager-property">
                     <tbody>
                       <tr>
                         <td>
-                          <span>Stroke:</span>
+                          <span>
+                            {translator(
+                              PATH_MANAGER_CONTEXT.LABEL_STROKE,
+                              lang,
+                              TRANSLATE_COLLECTION.PATH_MANAGER
+                            )}
+                            :
+                          </span>
                         </td>
                         <td>
                           <input
@@ -299,7 +393,11 @@ export default function PathManager({
                         </td>
                         <td>
                           <label>
-                            none
+                            {translator(
+                              PATH_MANAGER_CONTEXT.LABEL_NO_COLOR,
+                              lang,
+                              TRANSLATE_COLLECTION.PATH_MANAGER
+                            )}
                             <input
                               type="checkbox"
                               checked={
@@ -312,7 +410,14 @@ export default function PathManager({
                       </tr>
                       <tr>
                         <td>
-                          <span>Fill:</span>
+                          <span>
+                            {translator(
+                              PATH_MANAGER_CONTEXT.LABEL_FILL,
+                              lang,
+                              TRANSLATE_COLLECTION.PATH_MANAGER
+                            )}
+                            :
+                          </span>
                         </td>
                         <td>
                           <input
@@ -328,7 +433,11 @@ export default function PathManager({
                         </td>
                         <td>
                           <label>
-                            none
+                            {translator(
+                              PATH_MANAGER_CONTEXT.LABEL_NO_COLOR,
+                              lang,
+                              TRANSLATE_COLLECTION.PATH_MANAGER
+                            )}
                             <input
                               type="checkbox"
                               checked={
@@ -341,10 +450,21 @@ export default function PathManager({
                       </tr>
                       {paths[editorIndex].fill !== "transparent" && (
                         <tr>
-                          <td>Fill rule:</td>
+                          <td>
+                            {translator(
+                              PATH_MANAGER_CONTEXT.LABEL_FILL_RULE,
+                              lang,
+                              TRANSLATE_COLLECTION.PATH_MANAGER
+                            )}
+                            :
+                          </td>
                           <td colSpan={2}>
                             <label>
-                              Even-odd
+                              {translator(
+                                PATH_MANAGER_CONTEXT.LABEL_EVEN_ODD,
+                                lang,
+                                TRANSLATE_COLLECTION.PATH_MANAGER
+                              )}
                               <input
                                 type="checkbox"
                                 checked={paths[editorIndex].fillEven}

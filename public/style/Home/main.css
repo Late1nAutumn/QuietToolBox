@@ -16,6 +16,28 @@
   }
 }
 
+/* #region content */
+.home-content-nexus {
+  position: fixed;
+  bottom: 10px;
+  left: 20px;
+  height: 40px;
+  z-index: 111;
+}
+.home .nexusButton-icon svg {
+  fill: darkred;
+}
+.home .nexusButton-icon:hover svg {
+  fill: red;
+}
+.home .nexusButton-menu-button svg {
+  stroke: darkred;
+  fill: darkred;
+}
+.home .nexusButton-menu-button:hover svg {
+  stroke: red;
+  fill: red;
+}
 .home-content-head {
   position: fixed;
   z-index: 110;
@@ -86,29 +108,13 @@
   background-color: red;
 } */
 
-.home-icon-background {
-  position: fixed;
-  z-index: 100;
-  width: 100vw;
-  height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: black;
-  /* background-color: #222; */
-}
-
-.home-icon-background svg {
-  fill: #222;
-  max-width: 80vw;
-  max-height: 80vh;
-}
-
 .home-content-app {
   display: flex;
   align-items: center;
   justify-content: center;
   background-color: white;
+  transition: box-shadow 0.3s;
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.7);
   /* -webkit-box-reflect: below 5px
     linear-gradient(
       to bottom,
@@ -116,3 +122,144 @@
       rgba(255, 255, 255, 0.2) 100%
     ); */
 }
+.home-content-app:hover {
+  box-shadow: 0 0 10px rgba(255, 255, 255, 1);
+}
+
+.home-content-app img {
+  width: 100%;
+}
+/* #endregion */
+
+/* #region background */
+.home-background {
+  position: fixed;
+  z-index: 100;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  /* justify-content: center; */
+  justify-content: start;
+  flex-direction: row-reverse;
+  /* background-color: black; */
+  background-color: #111;
+  overflow: hidden;
+}
+
+.home-background-title,
+.home-background-title-focus {
+  writing-mode: vertical-rl;
+  text-orientation: sideways-right;
+  font-weight: bold;
+  font-size: 180px;
+  white-space: nowrap;
+  color: white;
+  margin: 0 20px;
+  opacity: 0.1;
+  transition: margin 0.5s, font-size 0.5s;
+}
+.home-background-title-focus {
+  text-orientation: sideways;
+  margin-top: 20vh;
+  font-size: 230px;
+  color: red;
+}
+.home-background-focused-title {
+  position: fixed;
+  bottom: 30px;
+  right: 50px;
+  font-size: 300px;
+  font-weight: bold;
+  white-space: nowrap;
+  color: white;
+  opacity: 0.5;
+}
+/* #endregion */
+
+/* #region nexus button basic */
+.nexusButton {
+  position: relative;
+  cursor: pointer;
+}
+.nexusButton,
+.nexusButton-icon,
+.nexusButton-icon svg {
+  height: 100%;
+}
+
+.nexusButton-menu-close,
+.nexusButton-menu-open {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  transition: 0.2s;
+}
+
+.nexusButton-menu-close {
+  visibility: hidden;
+  opacity: 0;
+}
+.nexusButton-menu-open {
+  visibility: visible;
+  opacity: 1;
+}
+
+.nexusButton-menu-right,
+.nexusButton-menu-left {
+  flex-direction: row;
+  height: 90%;
+  top: 50%;
+  transform: translateY(-50%);
+}
+.nexusButton-menu-top,
+.nexusButton-menu-bottom {
+  flex-direction: column;
+  width: 90%;
+  left: 50%;
+  transform: translateX(-50%);
+}
+.nexusButton-menu-right .nexusButton-menu-button,
+.nexusButton-menu-left .nexusButton-menu-button {
+  height: 70%;
+}
+.nexusButton-menu-right .nexusButton-menu-button svg,
+.nexusButton-menu-left .nexusButton-menu-button svg {
+  height: 100%;
+}
+.nexusButton-menu-top .nexusButton-menu-button,
+.nexusButton-menu-bottom .nexusButton-menu-button {
+  width: 70%;
+}
+.nexusButton-menu-top .nexusButton-menu-button svg,
+.nexusButton-menu-bottom .nexusButton-menu-button svg {
+  width: 100%;
+}
+/* .nexusButton-menu-top {
+  padding-bottom: 5px;
+  bottom: 100%;
+} */
+.nexusButton-menu-right {
+  padding-left: 5px;
+  left: 100%;
+}
+.nexusButton-menu-bottom {
+  padding-top: 5px;
+  top: 100%;
+}
+.nexusButton-menu-left {
+  padding-right: 5px;
+  right: 100%;
+}
+/* .nexusButton-menu-close.nexusButton-menu-top {
+  bottom: 50%;
+} */
+.nexusButton-menu-close.nexusButton-menu-right {
+  left: 50%;
+}
+.nexusButton-menu-close.nexusButton-menu-bottom {
+  top: 50%;
+}
+.nexusButton-menu-close.nexusButton-menu-left {
+  right: 50%;
+}
+/* #endregion */

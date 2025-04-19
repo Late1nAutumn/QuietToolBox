@@ -1,6 +1,7 @@
 /* #region global */
 :root {
   --sketcher-blueprint-blue: #08306b;
+  --sketcher-light-grey: #ccc;
 }
 .sketcher-warning {
   color: red;
@@ -15,6 +16,10 @@
   border: 1px solid white;
   border-radius: 3px;
   background-color: transparent;
+}
+.sketcher button:hover {
+  color: var(--sketcher-light-grey);
+  border-color: var(--sketcher-light-grey);
 }
 .sketcher-notification {
   position: fixed;
@@ -47,6 +52,7 @@
   border: 3px solid white;
   padding: 0 50px;
   text-align: center;
+  white-space: pre-line;
 }
 .sketcher-model-content-buttons {
   display: flex;
@@ -86,6 +92,38 @@
   );
   transform: translateX(-50%);
   pointer-events: none;
+}
+.sketcher-top-right-container {
+  position: fixed;
+  top: 0;
+  right: 0;
+  z-index: 200;
+}
+.sketcher-bottom-right-container {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  z-index: 200;
+}
+
+.sketcher-nexus {
+  width: 40px;
+  float: right;
+  margin-right:10px;
+}
+.sketcher .nexusButton-icon svg {
+  fill: white;
+}
+.sketcher .nexusButton-icon:hover svg {
+  fill: var(--sketcher-light-grey);
+}
+.sketcher .nexusButton-menu-button svg {
+  stroke: white;
+  fill: white;
+}
+.sketcher .nexusButton-menu-button:hover svg {
+  stroke: var(--sketcher-light-grey);
+  fill: var(--sketcher-light-grey);
 }
 
 /* #region canvas */

@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { CANVAS_MARGIN } from "./constants";
+import { CANVAS_MARGIN, DEFAULT_IMG_LINK } from "./constants";
 import Tools from "./components/Tools";
 import { EDITOR_INDEX, LINE_COMMAND } from "./enum";
 import PathManager from "./components/PathManager";
@@ -7,8 +7,15 @@ import { rgbToHex } from "../utils/functions";
 import Modal from "./components/Modal";
 import Notification from "./components/Notification";
 import { pointsToPathD } from "./utils";
+import NexusButton from "../Home/NexusButton/NexusButton";
+import { DIRECTION } from "../utils/enums";
+import { translator } from "./translation/translator";
+import { useGlobal } from "../context/GlobalContext";
+import { TRANSLATE_COLLECTION, WORK_AREA_CONTEXT } from "./translation/context";
 
 export default function Sketcher() {
+  const { lang } = useGlobal();
+
   const imgRef = useRef(null);
   const colorPickerRef = useRef(null);
   const colorPickerContextRef = useRef(null);
@@ -26,7 +33,7 @@ export default function Sketcher() {
     //   pointCount: 0,
     // },
   ]);
-  const [imgUrl, setImgUrl] = useState("https://picsum.photos/id/477/1000/600"); // null
+  const [imgUrl, setImgUrl] = useState(DEFAULT_IMG_LINK); // null
   const [imgSize, setImgSize] = useState({ width: 0, height: 0 });
   const [imgZoom, setImgZoom] = useState(100);
   const [cursorCoord, setCurorCoord] = useState({ x: 0, y: 0 });
@@ -128,7 +135,7 @@ export default function Sketcher() {
   const onKey = (e) => {
     const tagName = e.target.tagName.toLowerCase();
     if (tagName === "input" || tagName === "textarea") return;
-    let func = keyEventCallback.current[e.key];
+    let func = keyEventCallback.current[e.key.toLowerCase()];
     if (func) {
       func();
     }
@@ -148,28 +155,37 @@ export default function Sketcher() {
         content={notificationContent}
         setNotificationContent={setNotificationContent}
       />
-      <Tools
-        keyEventCallback={keyEventCallback}
-        imgUrl={imgUrl}
-        setImgUrl={setImgUrl}
-        setImgSize={setImgSize}
-        imgZoom={imgZoom}
-        setImgZoom={setImgZoom}
-        cursorColor={cursorColor}
-        setCursorColor={setCursorColor}
-        showCursor={showCursor}
-        setShowCursor={setShowCursor}
-      />
-      <PathManager
-        keyEventCallback={keyEventCallback}
-        paths={paths}
-        setPaths={setPaths}
-        editorIndex={editorIndex}
-        setEditorIndex={setEditorIndex}
-        setModalComponent={setModalComponent}
-        setNotificationContent={setNotificationContent}
-        imgSize={imgSize}
-      />
+
+      <div className="sketcher-top-right-container">
+        <Tools
+          keyEventCallback={keyEventCallback}
+          imgUrl={imgUrl}
+          setImgUrl={setImgUrl}
+          setImgSize={setImgSize}
+          imgZoom={imgZoom}
+          setImgZoom={setImgZoom}
+          cursorColor={cursorColor}
+          setCursorColor={setCursorColor}
+          showCursor={showCursor}
+          setShowCursor={setShowCursor}
+        />
+        <div className="sketcher-nexus">
+          <NexusButton menuDirection={DIRECTION.BOTTOM} />
+        </div>
+      </div>
+
+      <div className="sketcher-bottom-right-container">
+        <PathManager
+          keyEventCallback={keyEventCallback}
+          paths={paths}
+          setPaths={setPaths}
+          editorIndex={editorIndex}
+          setEditorIndex={setEditorIndex}
+          setModalComponent={setModalComponent}
+          setNotificationContent={setNotificationContent}
+          imgSize={imgSize}
+        />
+      </div>
 
       <div
         className="sketcher-image"
@@ -189,7 +205,13 @@ export default function Sketcher() {
             crossOrigin="anonymous"
           />
         ) : (
-          <b>no image loaded</b>
+          <b>
+            {translator(
+              WORK_AREA_CONTEXT.NO_IMG_ALT,
+              lang,
+              TRANSLATE_COLLECTION.WORK_AREA
+            )}
+          </b>
         )}
       </div>
 
@@ -273,6 +295,7 @@ export default function Sketcher() {
           )}
         </svg>
       </div>
+
       <div className="sketcher-coord">
         <b>
           ({cursorCoord.x},{cursorCoord.y})

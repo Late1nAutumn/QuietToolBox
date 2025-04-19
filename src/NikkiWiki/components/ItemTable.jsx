@@ -1,11 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { useGlobal } from "../../context/GlobalContext.jsx";
 
 import Filter from "./Filter.jsx";
 import DataTable from "./DataTable.jsx";
-
-import { NexusIcon } from "../../svg/NexusIcon.jsx";
+import NexusButton from "../../Home/NexusButton/NexusButton.jsx";
 
 import {
   TABLE_MODE,
@@ -39,10 +37,10 @@ import {
   LAST_UPDATE,
   SHEET_VERSION,
 } from "../model/rawData/GDriveSheet/ClothesOG.js";
+import { DIRECTION } from "../../utils/enums.js";
 
 export default function ItemTable({ tableMode }) {
-  const navigate = useNavigate();
-  let { lang } = useGlobal();
+  const { lang } = useGlobal();
   const updateDebounceTimeoutRef = useRef(null);
 
   // processed item data, for set score simulator to track original items
@@ -217,9 +215,7 @@ export default function ItemTable({ tableMode }) {
     <>
       <div className="nikkikiwi-title">
         <span className="nikkikiwi-title-nexus">
-          <span className="nikkikiwi-title-home" onClick={() => navigate("/")}>
-            <NexusIcon />
-          </span>
+          <NexusButton menuDirection={DIRECTION.LEFT}/>
         </span>
         <h1>
           {translator(

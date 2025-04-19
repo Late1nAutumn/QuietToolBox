@@ -8,14 +8,24 @@ import {
 } from "../utils/constants";
 import Portrait from "./Portrait";
 import Chatbox from "./Portrait/Chatbox";
+import NexusButton from "./NexusButton/NexusButton";
+import { DIRECTION } from "../utils/enums";
 
-const apps = [
-  { link: "/nikki", text: "nikki kiwi" },
-  { link: "/sketcher", text: "Sketcher" },
-  { link: "/steamster", text: "Steamster" },
-  { link: "/", text: "4" },
-  { link: "/", text: "5" },
-  { link: "/", text: "6" },
+const APPS = [
+  { link: "/nikki", text: "Nikki Kiwi", cover: "./asset/nikkikiwiCover.png" },
+  { link: "/sketcher", text: "Sketcher", cover: "./asset/sketcherCover.png" },
+  {
+    link: "/steamster",
+    text: "Steamster",
+    cover: "./asset/steamsterCover.png",
+  },
+  {
+    link: "/",
+    text: "Diver Trainer",
+    cover: "./asset/underConstructionCover.png",
+  },
+  { link: "/", text: "Dashboard", cover: "./asset/underConstructionCover.png" },
+  // { link: "/", text: "6" },
 ];
 
 export default function Home() {
@@ -30,8 +40,8 @@ export default function Home() {
     };
   }, []);
 
-  const appImgSize = () => {
-    let sizes = [];
+  const appImgGrids = () => {
+    let grids = [];
     let middleY = window.innerHeight / 2;
     let a = window.innerHeight / 2 + scrollY,
       b = window.innerHeight * SCREEN_THRESHOLD.FULL_ZOOM_OUT,
@@ -41,33 +51,45 @@ export default function Home() {
       threshold2 = a - c,
       threshold3 = a + c,
       threshold4 = a + b;
-    apps.forEach(() => {
+    APPS.forEach(() => {
       switch (true) {
         case middleY > threshold4:
-          sizes.push(APP_IMG_SIZE.MIN);
+          grids.push({ size: APP_IMG_SIZE.MIN });
           break;
         case middleY > threshold3:
-          sizes.push(APP_IMG_SIZE.MIN + (threshold4 - middleY) * d);
+          grids.push({ size: APP_IMG_SIZE.MIN + (threshold4 - middleY) * d });
           break;
         case middleY > threshold2:
-          sizes.push(APP_IMG_SIZE.MAX);
+          grids.push({ size: APP_IMG_SIZE.MAX, focus: true });
           break;
         case middleY > threshold1:
-          sizes.push(APP_IMG_SIZE.MIN + (middleY - threshold1) * d);
+          grids.push({ size: APP_IMG_SIZE.MIN + (middleY - threshold1) * d });
           break;
         default:
-          sizes.push(APP_IMG_SIZE.MIN);
+          grids.push({ size: APP_IMG_SIZE.MIN });
           break;
       }
       middleY += APP_IMG_GRID_SIZE;
     });
-    return sizes;
+    return grids;
   };
 
+  const grids = appImgGrids();
+
   return (
-    <div className="home">
-      <div className="home-icon-background">
-        <NexusIcon />
+    <div className="home untouchable">
+      <div className="home-background">
+        {grids.map(({ focus }, i) => (
+          <div
+            className={"home-background-title" + (focus ? "-focus" : "")}
+            key={i}
+          >
+            {APPS[i].text}
+          </div>
+        ))}
+        <div className="home-background-focused-title">
+          {APPS[grids.findIndex(({ focus }) => focus)]?.text || ""}
+        </div>
       </div>
       <div className="home-content">
         <div className="home-content-head">
@@ -83,10 +105,10 @@ export default function Home() {
         <div className="home-content-apps">
           <table>
             <tbody>
-              {appImgSize().map((size, i) => (
+              {grids.map(({ size, focus }, i) => (
                 <tr key={i}>
                   <td>
-                    <Link to={apps[i].link}>
+                    <Link to={APPS[i].link}>
                       <div
                         className="home-content-app"
                         style={{
@@ -94,7 +116,11 @@ export default function Home() {
                           height: `${Math.floor(size)}px`,
                         }}
                       >
-                        {apps[i].text}
+                        {APPS[i].cover ? (
+                          <img src={APPS[i].cover} />
+                        ) : (
+                          APPS[i].text
+                        )}
                       </div>
                     </Link>
                   </td>
@@ -102,6 +128,9 @@ export default function Home() {
               ))}
             </tbody>
           </table>
+        </div>
+        <div className="home-content-nexus">
+          <NexusButton menuDirection={DIRECTION.RIGHT} />
         </div>
       </div>
     </div>

@@ -31,7 +31,7 @@ export const EN_PACK = {
     [DATA_FIELD.RARITY]: "Rarity",
     [DATA_FIELD.SET]: "Set",
     [DATA_FIELD.MAIN_STAT]: "Main",
-    [DATA_FIELD.SEC_STAT]: "Secondary",
+    [DATA_FIELD.SEC_STAT]: "Sub", // Secondary
     [DATA_FIELD.STAT_EL]: "EL",
     [DATA_FIELD.STAT_FR]: "FR",
     [DATA_FIELD.STAT_SW]: "SW",

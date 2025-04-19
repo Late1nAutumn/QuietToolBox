@@ -11,7 +11,7 @@ import {
 import { APP_MISC_CONTEXT, TRANSLATE_COLLECTION } from "../translation/context";
 
 export default function DataTable({ originData, data, fields }) {
-  let { lang } = useGlobal();
+  const { lang } = useGlobal();
 
   const cellClassName = (value, i, j) => {
     let className = "";

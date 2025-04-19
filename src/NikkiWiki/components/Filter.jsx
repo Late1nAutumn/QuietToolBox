@@ -18,7 +18,7 @@ export default function Filter({
   ranges,
   tableData,
 }) {
-  let { lang } = useGlobal();
+  const { lang } = useGlobal();
   const [tab, setTab] = useState(FILTER_TAB.FILTER);
 
   const onTabClick = (val) => {

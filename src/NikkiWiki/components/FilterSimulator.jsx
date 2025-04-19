@@ -6,7 +6,7 @@ import { TAG_MULTIPLIERS } from "../model/constants";
 import { FILTER_CONTEXT, TRANSLATE_COLLECTION } from "../translation/context";
 
 export default function FilterSimulator({ tags, filter, setFilter }) {
-  let { lang } = useGlobal();
+  const { lang } = useGlobal();
   const addTagSelectRef = useRef(null);
 
   const onSimulatorStatChange = (e, level) => {

@@ -4,7 +4,7 @@ import { translator } from "../translation/translator";
 import { APP_MISC_CONTEXT, TRANSLATE_COLLECTION } from "../translation/context";
 
 export default function LoadingThrobber() {
-  let { lang } = useGlobal();
+  const { lang } = useGlobal();
   return (
     <div className="steamster-loading">
       <div className="steamster-loading-throbber">

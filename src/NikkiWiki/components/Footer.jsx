@@ -4,7 +4,7 @@ import { translator } from "../translation/translator";
 import { TRANSLATE_COLLECTION } from "../translation/context";
 
 export default function Footer() {
-  let { lang } = useGlobal();
+  const { lang } = useGlobal();
 
   const text = (context) =>
     translator(context, lang, TRANSLATE_COLLECTION.APP_FOOTER);

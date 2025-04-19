@@ -1,0 +1,53 @@
+.not-found {
+  width: 100vw;
+  height: 100vh;
+}
+.not-found-background {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background-color: #111;
+}
+
+.not-found-background,
+.not-found-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.not-found-background svg {
+  max-width: 80vw;
+  max-height: 80vh;
+  fill: #444;
+}
+
+.not-found-content {
+  position: fixed;
+  flex-direction: column;
+  top: 50%;
+  left: 46.5%;
+  transform: translate(-50%, -50%);
+}
+.not-found-content h1 {
+  margin: 0;
+  font-size: 130px;
+  color: #111;
+}
+.not-found-content h5 {
+  margin: 0;
+  font-size: 70px;
+  color: #111;
+  text-shadow: -1px -1px 0 #666, 1px -1px 0 #666, -1px 1px 0 #666,
+    1px 1px 0 #666;
+}
+
+.not-found-content-spinner {
+  height: 15vh;
+  width: 15vw;
+  text-align: center;
+}
+.not-found-content-spinner svg {
+  max-width: 100%;
+  max-height: 100%;
+}

@@ -22,7 +22,3 @@ A page listing my Steam game collections
   - Apps I get by free
   - Apps I clouded
   - Apps I recommend (/ against)
-
-
-
-- language button

@@ -24,7 +24,7 @@ export default function FilterFilter({
   activeFields,
   tableData,
 }) {
-  let { lang } = useGlobal();
+  const { lang } = useGlobal();
   const addFilterSelectRef = useRef(null);
 
   const onAddFilter = () => {

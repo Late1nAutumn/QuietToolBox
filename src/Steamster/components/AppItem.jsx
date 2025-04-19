@@ -32,7 +32,7 @@ export default function AppItem({ data, referrer, sortMode }) {
     requiredAge,
   } = data;
 
-  let { lang } = useGlobal();
+  const { lang } = useGlobal();
 
   const tipValue = (() => {
     switch (sortMode) {

@@ -71,13 +71,24 @@
   align-items: center;
   padding: 20px 0;
 }
-.steamster-nav-home {
-  cursor: pointer;
-}
-.steamster-nav-home svg {
-  fill: var(--steam-light-grey);
+.steamster-nav-nexus {
   height: 40px;
 }
+.steamster .nexusButton-icon svg {
+  fill: var(--steam-light-grey);
+}
+.steamster .nexusButton-icon:hover svg {
+  fill: white;
+}
+.steamster .nexusButton-menu-button svg {
+  stroke: var(--steam-light-grey);
+  fill: var(--steam-light-grey);
+}
+.steamster .nexusButton-menu-button:hover svg {
+  stroke: white;
+  fill: white;
+}
+
 .steamster-nav-filters {
   flex-grow: 1;
   display: flex;
@@ -89,7 +100,7 @@
   margin: 0 20px;
 }
 
-.steamster-nav-filters input{
+.steamster-nav-filters input {
   width: 120px;
 }
 .steamster-nav-filters input,

@@ -2,7 +2,6 @@
 A collection of my tools as a static page
 
 ## TODO
-- diff icon & tab title for app / languages
 - detect system lang
 
 ## Checklist
@@ -11,23 +10,27 @@ A collection of my tools as a static page
 ## Dependencies
 - React Router
 ### Dev
-- Express Server: for test purpose
+- Express Server
+  - To walk around CORS issue for some public API
+  - For testing React Router
 - Webpack
 - Nodemon
 
 
-start animation only when active
+
+
+phone / 4k style for portrait
 
 changing favicon & title
 
-random chat
-app chat
-chat translation
-
-phone / 4k style for portrait
-switch lang
+start animation only when active
 skip animation
-404 page
 
-maybe?:
-multiple lists with random order and opacity as decoration
+- random chat
+- app chat
+- chat translation
+- switch lang chat
+
+- sketcher on leave warning
+  - send callback for final actions
+- sketcher use img link warning

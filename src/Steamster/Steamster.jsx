@@ -1,9 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
 
 import AppGrid from "./components/AppGrid";
 import LoadingThrobber from "./components/LoadingThrobber";
-import { NexusIcon } from "../svg/NexusIcon";
 
 import {
   ITEM_REFILL_AMOUNT,
@@ -11,7 +9,7 @@ import {
   LAST_DATA_UPDATE,
   SEARCH_DEBOUNCE_COOLDOWN,
 } from "./constants";
-import { LOAD_STATUS } from "../utils/enums";
+import { DIRECTION, LOAD_STATUS } from "../utils/enums";
 import { request, wait } from "../utils/functions";
 import { GROUP_MODE, SORT_MODE } from "./dataProcess/enums";
 import { collectionGrouper, collectionSorter } from "./utils";
@@ -24,10 +22,10 @@ import { NAVBAR_CONTEXT, TRANSLATE_COLLECTION } from "./translation/context";
 import { useGlobal } from "../context/GlobalContext";
 import { ArrowUpWide } from "../svg/ArrowUpWide";
 import ManualProcessor from "./components/ManualProcessor";
+import NexusButton from "../Home/NexusButton/NexusButton";
 
 export default function Steamster() {
-  const navigate = useNavigate();
-  let { lang } = useGlobal();
+  const { lang } = useGlobal();
   const toTopButtonRef = useRef(null);
   const lastElementRefs = useRef([]);
   const searchDebounceRef = useRef(null);
@@ -130,7 +128,7 @@ export default function Steamster() {
     collections = collectionSorter(collections, sortMode);
     setCollections(collections);
     window.scrollTo(0, 0);
-  }, [groupMode, sortMode, hideNSFW, searchWord]);
+  }, [groupMode, sortMode, hideNSFW, searchWord, lang]);
 
   useEffect(() => {
     if (collections?.length) setLoading(LOAD_STATUS.LOADED);
@@ -174,9 +172,7 @@ export default function Steamster() {
       <div className="steamster-nav">
         <div className="steamster-navContent">
           <span className="steamster-nav-nexus">
-            <span className="steamster-nav-home" onClick={() => navigate("/")}>
-              <NexusIcon />
-            </span>
+            <NexusButton menuDirection={DIRECTION.RIGHT} />
           </span>
           <span className="steamster-nav-filters">
             <label>
