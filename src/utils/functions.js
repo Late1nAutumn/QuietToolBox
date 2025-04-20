@@ -6,6 +6,12 @@ export const request = async (url) => {
 
 export const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
+// browser default event "beforeunload" handler
+export const onLeavePage = (e) => {
+  e.preventDefault();
+  e.returnValue = "反正没人会看到这行字";
+};
+
 export const sortByProperty = (arr, property, reverse) => {
   let temp = arr.slice();
   for (let i = 0; i < arr.length - 1; i++)

@@ -12,6 +12,43 @@ export const IDLE_TIMEOUT = {
 // #endregion
 
 // #region app list
+// defined here instead of enum to avoid looping import
+export const APP = {
+  NIKKI_KIWI: 1,
+  SKETCHER: 2,
+  STEAMSTER: 3,
+  DIVER_TRAINER: 4,
+  DASHBOARD: 5,
+};
+
+export const APPS = {
+  [APP.NIKKI_KIWI]: {
+    link: "/nikki",
+    text: "Nikki Kiwi",
+    cover: "./asset/nikkikiwiCover.png",
+  },
+  [APP.SKETCHER]: {
+    link: "/sketcher",
+    text: "Sketcher",
+    cover: "./asset/sketcherCover.png",
+  },
+  [APP.STEAMSTER]: {
+    link: "/steamster",
+    text: "Steamster",
+    cover: "./asset/steamsterCover.png",
+  },
+  [APP.DIVER_TRAINER]: {
+    link: "/",
+    text: "Diver Trainer",
+    cover: "./asset/underConstructionCover.png",
+  },
+  [APP.DASHBOARD]: {
+    link: "/",
+    text: "Dashboard",
+    cover: "./asset/underConstructionCover.png",
+  },
+};
+
 export const SCREEN_THRESHOLD = {
   FULL_ZOOM_IN: 0.15,
   FULL_ZOOM_OUT: 0.55,

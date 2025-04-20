@@ -15,7 +15,7 @@ export default function Notification({ content, setNotificationContent }) {
     setTimeout(() => {
       setActive(false);
       setTimeout(() => {
-        setNotificationContent("");
+        setNotificationContent(null);
       }, DEFAULT_NOTIFICATION_TRANSITION);
     }, DEFAULT_NOTIFICATION_TRANSITION + DEFAULT_NOTIFICATION_DURATION);
   }, [content]);
@@ -28,7 +28,7 @@ export default function Notification({ content, setNotificationContent }) {
         (active ? " sketcher-notification-active" : "")
       }
     >
-      {content}
+      {content?.msg}
     </div>
   );
 }

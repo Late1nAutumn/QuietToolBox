@@ -24,6 +24,7 @@ export const EN_PACK = {
     [TOOLBOX_CONTEXT.LABEL_ZOOM_IMAGE]: "Image zoom",
     [TOOLBOX_CONTEXT.LABEL_SHOW_CURSOR]: "Show cursor",
     [TOOLBOX_CONTEXT.LABEL_CURSOR_COLOR]: "Cursor Color",
+    [TOOLBOX_CONTEXT.PLACEHOLDER_IMG_LINK]: "Image URL here",
   },
   [PATH_MANAGER]: {
     [PATH_MANAGER_CONTEXT.TITLE_MANAGER]: "Paths",
@@ -36,6 +37,8 @@ export const EN_PACK = {
     [PATH_MANAGER_CONTEXT.WARNING_INVALID_PATH]:
       "Invalid path. Features might fail",
     [PATH_MANAGER_CONTEXT.BUTTON_REMOVE_NODE]: "Remove last node",
+    [PATH_MANAGER_CONTEXT.BUTTON_COLOR_TO_SROKE]: "Copy to stroke",
+    [PATH_MANAGER_CONTEXT.BUTTON_COLOR_TO_FILL]: "Copy to fill",
     [PATH_MANAGER_CONTEXT.LABEL_CLOSE_PATH]: "Closing path",
     [PATH_MANAGER_CONTEXT.LABEL_STROKE]: "Stroke",
     [PATH_MANAGER_CONTEXT.LABEL_NO_COLOR]: "none",
@@ -50,10 +53,14 @@ export const EN_PACK = {
     [MODAL_CONTEXT.TITLE_DELETE_PATH]: "Deleting Path",
     [MODAL_CONTEXT.CONTENT_DELETE_PATH]:
       "This path will be removed permanently\nAll content will be lost",
+    [MODAL_CONTEXT.TITLE_EXIT]: "Leaving",
+    [MODAL_CONTEXT.CONTENT_EXIT]:
+      "You are leaving the editor\nAll content will be lost",
   },
   [NOTIFICATION]: {
     [NOTIFICATION_CONTEXT.EXPORT_SVG]: "Svg data copied!",
     [NOTIFICATION_CONTEXT.EXPORT_PATH]: "Path data copied!",
+    [NOTIFICATION_CONTEXT.IMG_ERROR]: "Image load failed!",
   },
   [APP_MISC]: {},
 };

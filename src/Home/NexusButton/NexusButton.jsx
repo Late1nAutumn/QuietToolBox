@@ -6,7 +6,7 @@ import { NexusIcon } from "../../svg/NexusIcon";
 import { DIRECTION } from "../../utils/enums";
 import { useGlobal } from "../../context/GlobalContext";
 
-export default function NexusButton({ menuDirection }) {
+export default function NexusButton({ menuDirection, onHoming }) {
   const navigate = useNavigate();
 
   const { nextLanguage } = useGlobal();
@@ -14,6 +14,13 @@ export default function NexusButton({ menuDirection }) {
   const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {}, []);
+
+  const onNexusButtonClick = () => {
+    let navigating = true;
+    if (onHoming) navigating = onHoming();
+    // avoid undefined
+    if (navigating !== false) navigate("/");
+  };
 
   const menuClassName = () => {
     let prefix = "nexusButton-menu";
@@ -43,7 +50,7 @@ export default function NexusButton({ menuDirection }) {
       onMouseEnter={() => setMenuOpen(true)}
       onMouseLeave={() => setMenuOpen(false)}
     >
-      <div className="nexusButton-icon" onClick={() => navigate("/")}>
+      <div className="nexusButton-icon" onClick={onNexusButtonClick}>
         <NexusIcon />
       </div>
       <div className={menuClassName()}>

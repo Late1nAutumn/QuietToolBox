@@ -1,9 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
 import { CANVAS_MARGIN, DEFAULT_IMG_LINK } from "./constants";
 import Tools from "./components/Tools";
-import { EDITOR_INDEX, LINE_COMMAND } from "./enum";
+import { EDITOR_INDEX, LINE_COMMAND, NOTIFICATION_TYPE } from "./enum";
 import PathManager from "./components/PathManager";
-import { rgbToHex } from "../utils/functions";
+import { onLeavePage, rgbToHex } from "../utils/functions";
 import Modal from "./components/Modal";
 import Notification from "./components/Notification";
 import { pointsToPathD } from "./utils";
@@ -11,15 +11,22 @@ import NexusButton from "../Home/NexusButton/NexusButton";
 import { DIRECTION } from "../utils/enums";
 import { translator } from "./translation/translator";
 import { useGlobal } from "../context/GlobalContext";
-import { TRANSLATE_COLLECTION, WORK_AREA_CONTEXT } from "./translation/context";
+import {
+  NOTIFICATION_CONTEXT,
+  TRANSLATE_COLLECTION,
+  WORK_AREA_CONTEXT,
+} from "./translation/context";
+import ModalExitConfirm from "./components/ModalExitConfirm";
+import { useNavigate } from "react-router-dom";
 
 export default function Sketcher() {
   const { lang } = useGlobal();
+  const navigate = useNavigate();
 
   const imgRef = useRef(null);
   const colorPickerRef = useRef(null);
   const colorPickerContextRef = useRef(null);
-  const keyEventCallback = useRef({});
+  const keyEventCallback = useRef({}); // used: z, v, c
 
   const [paths, setPaths] = useState([
     {},
@@ -33,18 +40,19 @@ export default function Sketcher() {
     //   pointCount: 0,
     // },
   ]);
-  const [imgUrl, setImgUrl] = useState(DEFAULT_IMG_LINK); // null
+  const [imgUrl, setImgUrl] = useState(DEFAULT_IMG_LINK);
   const [imgSize, setImgSize] = useState({ width: 0, height: 0 });
   const [imgZoom, setImgZoom] = useState(100);
   const [cursorCoord, setCurorCoord] = useState({ x: 0, y: 0 });
   const [cursorColor, setCursorColor] = useState("#ffffff");
   const [showCursor, setShowCursor] = useState(true);
+  const [pixelColorDisplay, setPixelColorDisplay] = useState("");
 
   const [editorIndex, setEditorIndex] = useState(EDITOR_INDEX.IDLE);
   const [pathCommand, setPathCommand] = useState("L");
 
   const [modalComponent, setModalComponent] = useState(null);
-  const [notificationContent, setNotificationContent] = useState("");
+  const [notificationContent, setNotificationContent] = useState(null);
 
   const onImgLoad = () => {
     let { width, height } = imgRef.current;
@@ -62,6 +70,18 @@ export default function Sketcher() {
     setImgSize({ width, height });
     setImgZoom(100);
     URL.revokeObjectURL(imgUrl);
+  };
+
+  const onImgError = () => {
+    setImgUrl("");
+    setNotificationContent({
+      type: NOTIFICATION_TYPE.FAIL,
+      msg: translator(
+        NOTIFICATION_CONTEXT.IMG_ERROR,
+        lang,
+        TRANSLATE_COLLECTION.NOTIFICATION
+      ),
+    });
   };
 
   const onCursorMove = (e) => {
@@ -94,28 +114,16 @@ export default function Sketcher() {
     setPaths(temp);
   };
 
-  const getPixelColor = () => {
-    if (
-      cursorCoord.x < 0 ||
-      cursorCoord.x > imgSize.width ||
-      cursorCoord.y < 0 ||
-      cursorCoord.y > imgSize.height
-    )
-      return "";
-    let output = "";
-    if (colorPickerContextRef.current) {
-      let pixel = colorPickerContextRef.current.getImageData(
-        cursorCoord.x,
-        cursorCoord.y,
-        1,
-        1
-      ).data;
-      if (pixel) {
-        output += rgbToHex(...pixel);
-        if (pixel[3] !== 255) output += ` ${Math.round(pixel[3] / 2.55)}%`;
-        return output;
-      }
-    }
+  const onHoming = () => {
+    setModalComponent(
+      <ModalExitConfirm
+        setModalComponent={setModalComponent}
+        onConfirm={() => {
+          navigate("/");
+        }}
+      />
+    );
+    return false; // exit in handled on modal confirm
   };
 
   const pendingPathD = () => {
@@ -142,11 +150,37 @@ export default function Sketcher() {
   };
 
   useEffect(() => {
-    window.onkeydown = onKey;
+    window.addEventListener("keydown", onKey);
+    window.addEventListener("beforeunload", onLeavePage);
     return () => {
-      window.onkeydown = null;
+      window.removeEventListener("keydown", onKey);
+      window.removeEventListener("beforeunload", onLeavePage);
     };
   }, []);
+
+  useEffect(() => {
+    if (
+      cursorCoord.x < 0 ||
+      cursorCoord.x > imgSize.width ||
+      cursorCoord.y < 0 ||
+      cursorCoord.y > imgSize.height
+    )
+      setPixelColorDisplay("");
+    let output = "";
+    if (colorPickerContextRef.current) {
+      let pixel = colorPickerContextRef.current.getImageData(
+        cursorCoord.x,
+        cursorCoord.y,
+        1,
+        1
+      ).data;
+      if (pixel) {
+        output += rgbToHex(...pixel);
+        if (pixel[3] !== 255) output += ` ${Math.round(pixel[3] / 2.55)}%`;
+        setPixelColorDisplay(output);
+      }
+    }
+  }, [cursorCoord, imgSize, colorPickerContextRef]);
 
   return (
     <div className="sketcher">
@@ -170,7 +204,7 @@ export default function Sketcher() {
           setShowCursor={setShowCursor}
         />
         <div className="sketcher-nexus">
-          <NexusButton menuDirection={DIRECTION.BOTTOM} />
+          <NexusButton menuDirection={DIRECTION.BOTTOM} onHoming={onHoming} />
         </div>
       </div>
 
@@ -184,6 +218,7 @@ export default function Sketcher() {
           setModalComponent={setModalComponent}
           setNotificationContent={setNotificationContent}
           imgSize={imgSize}
+          pixelColorDisplay={pixelColorDisplay}
         />
       </div>
 
@@ -201,6 +236,7 @@ export default function Sketcher() {
             ref={imgRef}
             src={imgUrl}
             onLoad={onImgLoad}
+            onError={onImgError}
             alt="image load fail"
             crossOrigin="anonymous"
           />
@@ -300,7 +336,7 @@ export default function Sketcher() {
         <b>
           ({cursorCoord.x},{cursorCoord.y})
         </b>
-        &nbsp;{getPixelColor()}
+        &nbsp;{pixelColorDisplay}
       </div>
       <canvas ref={colorPickerRef} className="sketcher-colorPicker" />
     </div>

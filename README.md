@@ -19,7 +19,7 @@ A collection of my tools as a static page
 
 
 
-phone / 4k style for portrait
+phone / 4k style warning
 
 changing favicon & title
 
@@ -30,7 +30,3 @@ skip animation
 - app chat
 - chat translation
 - switch lang chat
-
-- sketcher on leave warning
-  - send callback for final actions
-- sketcher use img link warning

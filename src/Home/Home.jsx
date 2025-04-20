@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { NexusIcon } from "../svg/NexusIcon";
 import { Link } from "react-router-dom";
 import {
+  APPS,
   APP_IMG_GRID_SIZE,
   APP_IMG_SIZE,
   SCREEN_THRESHOLD,
@@ -11,32 +11,20 @@ import Chatbox from "./Portrait/Chatbox";
 import NexusButton from "./NexusButton/NexusButton";
 import { DIRECTION } from "../utils/enums";
 
-const APPS = [
-  { link: "/nikki", text: "Nikki Kiwi", cover: "./asset/nikkikiwiCover.png" },
-  { link: "/sketcher", text: "Sketcher", cover: "./asset/sketcherCover.png" },
-  {
-    link: "/steamster",
-    text: "Steamster",
-    cover: "./asset/steamsterCover.png",
-  },
-  {
-    link: "/",
-    text: "Diver Trainer",
-    cover: "./asset/underConstructionCover.png",
-  },
-  { link: "/", text: "Dashboard", cover: "./asset/underConstructionCover.png" },
-  // { link: "/", text: "6" },
-];
-
-export default function Home() {
-  const [scrollY, setScrollY] = useState(0);
+export default function Home({ scrollY, setScrollY }) {
   const [animationEnded, setAnimationEnded] = useState(false);
 
+  const APP_LIST = Object.values(APPS);
+
+  const onScroll = () => {
+    setScrollY(window.scrollY);
+  };
+
   useEffect(() => {
-    if (window.onscroll === null)
-      window.onscroll = () => setScrollY(window.scrollY);
+    window.scrollTo(0, scrollY);
+    window.addEventListener("scroll", onScroll);
     return () => {
-      window.onscroll = null;
+      window.removeEventListener("scroll", onScroll);
     };
   }, []);
 
@@ -51,7 +39,7 @@ export default function Home() {
       threshold2 = a - c,
       threshold3 = a + c,
       threshold4 = a + b;
-    APPS.forEach(() => {
+    APP_LIST.forEach(() => {
       switch (true) {
         case middleY > threshold4:
           grids.push({ size: APP_IMG_SIZE.MIN });
@@ -84,11 +72,11 @@ export default function Home() {
             className={"home-background-title" + (focus ? "-focus" : "")}
             key={i}
           >
-            {APPS[i].text}
+            {APP_LIST[i].text}
           </div>
         ))}
         <div className="home-background-focused-title">
-          {APPS[grids.findIndex(({ focus }) => focus)]?.text || ""}
+          {APP_LIST[grids.findIndex(({ focus }) => focus)]?.text || ""}
         </div>
       </div>
       <div className="home-content">
@@ -108,7 +96,7 @@ export default function Home() {
               {grids.map(({ size, focus }, i) => (
                 <tr key={i}>
                   <td>
-                    <Link to={APPS[i].link}>
+                    <Link to={APP_LIST[i].link}>
                       <div
                         className="home-content-app"
                         style={{
@@ -116,10 +104,10 @@ export default function Home() {
                           height: `${Math.floor(size)}px`,
                         }}
                       >
-                        {APPS[i].cover ? (
-                          <img src={APPS[i].cover} />
+                        {APP_LIST[i].cover ? (
+                          <img src={APP_LIST[i].cover} />
                         ) : (
-                          APPS[i].text
+                          APP_LIST[i].text
                         )}
                       </div>
                     </Link>

@@ -3,7 +3,7 @@ import { translator } from "../translation/translator";
 import { useGlobal } from "../../context/GlobalContext";
 import { MODAL_CONTEXT, TRANSLATE_COLLECTION } from "../translation/context";
 
-export default function ModalPathDeleteConfirm({
+export default function ModalExitConfirm({
   setModalComponent,
   onConfirm,
   onCancel,
@@ -23,15 +23,11 @@ export default function ModalPathDeleteConfirm({
   return (
     <div className="sketcher-model-content untouchable">
       <h2>
-        {translator(
-          MODAL_CONTEXT.TITLE_DELETE_PATH,
-          lang,
-          TRANSLATE_COLLECTION.MODAL
-        )}
+        {translator(MODAL_CONTEXT.TITLE_EXIT, lang, TRANSLATE_COLLECTION.MODAL)}
       </h2>
       <div>
         {translator(
-          MODAL_CONTEXT.CONTENT_DELETE_PATH,
+          MODAL_CONTEXT.CONTENT_EXIT,
           lang,
           TRANSLATE_COLLECTION.MODAL
         )}

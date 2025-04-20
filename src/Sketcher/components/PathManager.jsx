@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { EDITOR_INDEX } from "../enum";
+import { EDITOR_INDEX, NOTIFICATION_TYPE } from "../enum";
 import { EyeSlash } from "../../svg/EyeSlash";
 import { Eye } from "../../svg/Eye";
 import { Edit } from "../../svg/Edit";
@@ -27,6 +27,7 @@ export default function PathManager({
   setModalComponent,
   setNotificationContent,
   imgSize,
+  pixelColorDisplay,
 }) {
   const { lang } = useGlobal();
   const pathInputRef = useRef(null);
@@ -39,13 +40,14 @@ export default function PathManager({
     console.log(`[OUTPUT]: ${str}`);
 
     copyToClipboard(str).then(() =>
-      setNotificationContent(
-        translator(
+      setNotificationContent({
+        type: NOTIFICATION_TYPE.SUCCESS,
+        msg: translator(
           NOTIFICATION_CONTEXT.EXPORT_SVG,
           lang,
           TRANSLATE_COLLECTION.NOTIFICATION
-        )
-      )
+        ),
+      })
     );
   };
 
@@ -102,7 +104,6 @@ export default function PathManager({
           let temp = paths.slice();
           temp.splice(i, 1);
           setPaths(temp);
-          setModalComponent(null);
         }}
       />
     );
@@ -119,13 +120,14 @@ export default function PathManager({
   };
   const onPathCopy = () => {
     copyToClipboard(pathInputRef.current.value).then(() =>
-      setNotificationContent(
-        translator(
+      setNotificationContent({
+        type: NOTIFICATION_TYPE.SUCCESS,
+        msg: translator(
           NOTIFICATION_CONTEXT.EXPORT_PATH,
           lang,
           TRANSLATE_COLLECTION.NOTIFICATION
-        )
-      )
+        ),
+      })
     );
   };
   const onRemoveLastPoint = () => {
@@ -138,6 +140,18 @@ export default function PathManager({
     if (editorIndex === EDITOR_INDEX.IDLE) return; // for hotkey
     let temp = paths.slice();
     temp[editorIndex].closing = !temp[editorIndex].closing;
+    setPaths(temp);
+  };
+  const onCopyColorToStroke = () => {
+    if (editorIndex === EDITOR_INDEX.IDLE) return; // for hotkey
+    let temp = paths.slice();
+    temp[editorIndex].stroke = pixelColorDisplay.slice(0, 7);
+    setPaths(temp);
+  };
+  const onCopyColorToFill = () => {
+    if (editorIndex === EDITOR_INDEX.IDLE) return; // for hotkey
+    let temp = paths.slice();
+    temp[editorIndex].fill = pixelColorDisplay.slice(0, 7);
     setPaths(temp);
   };
   const onColorChange = (e, field) => {
@@ -161,6 +175,8 @@ export default function PathManager({
   useEffect(() => {
     keyEventCallback.current["z"] = onRemoveLastPoint;
     keyEventCallback.current["v"] = onCheckClosingPath;
+    keyEventCallback.current["s"] = onCopyColorToStroke;
+    keyEventCallback.current["f"] = onCopyColorToFill;
     return () => {
       delete keyEventCallback.current["z"];
       delete keyEventCallback.current["v"];
@@ -301,11 +317,13 @@ export default function PathManager({
                   <div>
                     <input
                       ref={pathInputRef}
-                      placeholder={translator(
-                        PATH_MANAGER_CONTEXT.PLACEHOLDER_PATH_INPUT,
-                        lang,
-                        TRANSLATE_COLLECTION.PATH_MANAGER
-                      )}
+                      placeholder={
+                        translator(
+                          PATH_MANAGER_CONTEXT.PLACEHOLDER_PATH_INPUT,
+                          lang,
+                          TRANSLATE_COLLECTION.PATH_MANAGER
+                        ) + ":"
+                      }
                       value={pointsToPathD(
                         paths[editorIndex].points,
                         paths[editorIndex].closing
@@ -343,6 +361,30 @@ export default function PathManager({
                       <button onClick={onRemoveLastPoint}>
                         {translator(
                           PATH_MANAGER_CONTEXT.BUTTON_REMOVE_NODE,
+                          lang,
+                          TRANSLATE_COLLECTION.PATH_MANAGER
+                        )}
+                      </button>
+                    </label>
+                  </div>
+                  <div>
+                    <label>
+                      [S]
+                      <button onClick={onCopyColorToStroke}>
+                        {translator(
+                          PATH_MANAGER_CONTEXT.BUTTON_COLOR_TO_SROKE,
+                          lang,
+                          TRANSLATE_COLLECTION.PATH_MANAGER
+                        )}
+                      </button>
+                    </label>
+                  </div>
+                  <div>
+                    <label>
+                      [F]
+                      <button onClick={onCopyColorToFill}>
+                        {translator(
+                          PATH_MANAGER_CONTEXT.BUTTON_COLOR_TO_FILL,
                           lang,
                           TRANSLATE_COLLECTION.PATH_MANAGER
                         )}

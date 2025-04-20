@@ -1,7 +1,10 @@
 import React, { useEffect, useRef } from "react";
 import { translator } from "../translation/translator";
 import { useGlobal } from "../../context/GlobalContext";
-import { TOOLBOX_CONTEXT, TRANSLATE_COLLECTION } from "../translation/context";
+import {
+  TOOLBOX_CONTEXT,
+  TRANSLATE_COLLECTION,
+} from "../translation/context";
 
 export default function Tools({
   keyEventCallback,
@@ -84,7 +87,16 @@ export default function Tools({
               TRANSLATE_COLLECTION.TOOLBOX
             )}
             <br />
-            <input ref={importImageRef} placeholder="Image URL here:" />
+            <input
+              ref={importImageRef}
+              placeholder={
+                translator(
+                  TOOLBOX_CONTEXT.PLACEHOLDER_IMG_LINK,
+                  lang,
+                  TRANSLATE_COLLECTION.TOOLBOX
+                ) + ":"
+              }
+            />
             <br />
             <button>
               <label className="sketcher-tools-file-picker">
