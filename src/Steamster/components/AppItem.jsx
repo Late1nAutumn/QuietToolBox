@@ -1,15 +1,19 @@
 import React from "react";
+import { useGlobal } from "../../context/GlobalContext";
+
+import { GENRE, PRICE } from "../dataProcess/steam";
+import { MY_RATING } from "../dataProcess/lists";
 
 import { STEAM_LINKS } from "../constants";
 import { LANG } from "../../utils/enums";
-import { achievementPortion, categoryMapper, playLength } from "../utils";
-import { useGlobal } from "../../context/GlobalContext";
-import { GENRE, PRICE } from "../dataProcess/steam";
+import { SORT_MODE } from "../dataProcess/enums";
 import { translator } from "../translation/translator";
 import { TOOLTIP_CONTEXT, TRANSLATE_COLLECTION } from "../translation/context";
+
+
 import { toISODate } from "../../utils/functions";
-import { SORT_MODE } from "../dataProcess/enums";
-import { MY_RATING } from "../dataProcess/lists";
+import { achievementPortion, categoryMapper, playLength } from "../utils";
+
 import { Star } from "../../svg/Star";
 import { StarHalf } from "../../svg/StarHalf";
 import { StarHollow } from "../../svg/StarHollow";

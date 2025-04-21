@@ -1,12 +1,12 @@
 import React from "react";
+import { useGlobal } from "../../context/GlobalContext";
 
 import { LOAD_STATUS } from "../../utils/enums";
-
-import LoadingThrobber from "./LoadingThrobber";
-import AppItem from "./AppItem";
 import { translator } from "../translation/translator";
 import { APP_MISC_CONTEXT, TRANSLATE_COLLECTION } from "../translation/context";
-import { useGlobal } from "../../context/GlobalContext";
+
+import AppItem from "./AppItem";
+import LoadingThrobber from "./LoadingThrobber";
 
 export default function AppGrid({
   collections,

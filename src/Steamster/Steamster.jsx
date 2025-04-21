@@ -10,7 +10,7 @@ import {
   SEARCH_DEBOUNCE_COOLDOWN,
 } from "./constants";
 import { DIRECTION, LOAD_STATUS } from "../utils/enums";
-import { request, setFavicon, wait } from "../utils/functions";
+import { request, setFavicon } from "../utils/functions";
 import { GROUP_MODE, SORT_MODE } from "./dataProcess/enums";
 import { collectionGrouper, collectionSorter } from "./utils";
 import { universalDataProcessor } from "./dataProcess/preprocess";

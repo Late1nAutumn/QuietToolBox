@@ -1,9 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
-import AppItem from "./AppItem";
+import { useGlobal } from "../../context/GlobalContext";
 
 import STORED_APP_DETAIL from "../dataProcess/data/myAppDetail.json";
-import { useGlobal } from "../../context/GlobalContext";
-import { playLength } from "../utils";
 import {
   MY_CLOUDED_APPS,
   LIMITED_FREE_APPS,
@@ -13,7 +11,13 @@ import {
   MY_RECOMMENDED_APPS,
   STOP_SALE_APPS,
 } from "../dataProcess/lists";
+
 import { PRICE, RECOMMEND } from "../dataProcess/steam";
+
+import { playLength } from "../utils";
+
+import AppItem from "./AppItem";
+
 
 const HIDE_APP_LEVEL = {
   NSFW: 1,

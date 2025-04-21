@@ -1,4 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
+import { useGlobal } from "../../context/GlobalContext";
+
 import { GOSSIP, GREETING } from "./chatData";
 import {
   DEFAULT_CHATBOX_DIALOG_WAIT,
@@ -6,7 +8,6 @@ import {
   DEFAULT_CHATBOX_TEXT_SPEED,
   IDLE_TIMEOUT,
 } from "../../utils/constants";
-import { useGlobal } from "../../context/GlobalContext";
 
 export default function Chatbox({ dialogCallbackRef }) {
   const { lang } = useGlobal();

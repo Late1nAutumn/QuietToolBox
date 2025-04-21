@@ -19,3 +19,13 @@ A collection of my tools as a static page
 
 
 phone / 4k style warning
+browser style warning
+
+search engine improvement
+contact
+
+destroy mode
+- obj displayer
+- my color pattele
+- nexus+
+- design collection

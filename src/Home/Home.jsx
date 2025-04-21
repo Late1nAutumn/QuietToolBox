@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { useGlobal } from "../context/GlobalContext";
+
 import {
   APPS,
   APP_IMG_GRID_SIZE,
@@ -9,9 +10,6 @@ import {
   HOME_TITLE,
   SCREEN_THRESHOLD,
 } from "../utils/constants";
-import Portrait from "./Portrait";
-import Chatbox from "./Portrait/Chatbox";
-import NexusButton from "./NexusButton/NexusButton";
 import { DIRECTION } from "../utils/enums";
 import { setFavicon } from "../utils/functions";
 import { generalTranslator } from "../utils/translation/translator";
@@ -19,7 +17,12 @@ import {
   CHAT_CONTEXT,
   TRANSLATION_COLLECTION,
 } from "../utils/translation/context";
-import { FIELD, LOCALSTORAGE, STORE } from "../utils/localStorage";
+import { LOCALSTORAGE, STORE } from "../utils/localStorage";
+
+import Portrait from "./Portrait";
+import Chatbox from "./Portrait/Chatbox";
+import NexusButton from "./NexusButton/NexusButton";
+
 
 export default function Home({ scrollY, setScrollY }) {
   const { lang } = useGlobal();
@@ -135,10 +138,7 @@ export default function Home({ scrollY, setScrollY }) {
           {animationEnded && <Chatbox dialogCallbackRef={dialogCallbackRef} />}
           {userFocusedWindow && (
             <Portrait
-              skipped={
-                false
-                // LOCALSTORAGE.getIsPortraitSkipped()
-              }
+              skipped={LOCALSTORAGE.getIsPortraitSkipped()}
               active={true}
               onAnimationEnd={() => {
                 setAnimationEnded(true);

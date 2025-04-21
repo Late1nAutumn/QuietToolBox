@@ -1,3 +1,6 @@
+import STORED_APP_DETAIL from "./data/myAppDetail.json";
+import { MISSING_APPS } from "./lists";
+
 import { LANG } from "../../utils/enums";
 import {
   APP_TYPE,
@@ -7,9 +10,8 @@ import {
   RELEASE_DATE,
   STORE_CATEGORY,
 } from "./steam";
+
 import { request, toISODate, wait } from "../../utils/functions";
-import { MISSING_APPS } from "./lists";
-import STORED_APP_DETAIL from "./data/myAppDetail.json";
 
 const STEAM_API_APP_DETAIL_COOLDOWN_MS = 6 * 60 * 1000; // 200 calls per 5 minutes
 const REQUESTS_PER_COOLDOWN = 200;

@@ -1,13 +1,14 @@
 import React from "react";
-import { mainStatType } from "../model/utils";
 import { useGlobal } from "../../context/GlobalContext";
-import { translator } from "../translation/translator";
-import { DATA_FIELD, STYLE } from "../model/enums";
+
+import { mainStatType } from "../model/utils";
 import {
   CLASS_NAMES,
   DUEL_ACCESORY_LIMIT,
   FANDOM_URL,
 } from "../model/constants";
+import { DATA_FIELD, STYLE } from "../model/enums";
+import { translator } from "../translation/translator";
 import { APP_MISC_CONTEXT, TRANSLATE_COLLECTION } from "../translation/context";
 
 export default function DataTable({ originData, data, fields }) {

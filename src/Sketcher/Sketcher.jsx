@@ -1,24 +1,27 @@
 import React, { useEffect, useRef, useState } from "react";
-import { CANVAS_MARGIN, DEFAULT_IMG_LINK } from "./constants";
-import Tools from "./components/Tools";
-import { EDITOR_INDEX, LINE_COMMAND, NOTIFICATION_TYPE } from "./enum";
-import PathManager from "./components/PathManager";
-import { onLeavePage, rgbToHex, setFavicon } from "../utils/functions";
-import Modal from "./components/Modal";
-import Notification from "./components/Notification";
-import { pointsToPathD } from "./utils";
-import NexusButton from "../Home/NexusButton/NexusButton";
+import { useNavigate } from "react-router-dom";
+
+import { APP, APPS } from "../utils/constants";
 import { DIRECTION } from "../utils/enums";
+import { CANVAS_MARGIN, DEFAULT_IMG_LINK } from "./constants";
+import { EDITOR_INDEX, LINE_COMMAND, NOTIFICATION_TYPE } from "./enum";
 import { translator } from "./translation/translator";
-import { useGlobal } from "../context/GlobalContext";
 import {
   NOTIFICATION_CONTEXT,
   TRANSLATE_COLLECTION,
   WORK_AREA_CONTEXT,
 } from "./translation/context";
+import { useGlobal } from "../context/GlobalContext";
+
+import { onLeavePage, rgbToHex, setFavicon } from "../utils/functions";
+import { pointsToPathD } from "./utils";
+
+import PathManager from "./components/PathManager";
+import Tools from "./components/Tools";
+import Notification from "./components/Notification";
+import Modal from "./components/Modal";
+import NexusButton from "../Home/NexusButton/NexusButton";
 import ModalExitConfirm from "./components/ModalExitConfirm";
-import { useNavigate } from "react-router-dom";
-import { APP, APPS } from "../utils/constants";
 
 export default function Sketcher() {
   const { lang } = useGlobal();

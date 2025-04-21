@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useGlobal } from "../../context/GlobalContext";
+
+import { DIRECTION } from "../../utils/enums";
 
 import { Languages } from "../../svg/Languages";
 import { NexusIcon } from "../../svg/NexusIcon";
-import { DIRECTION } from "../../utils/enums";
-import { useGlobal } from "../../context/GlobalContext";
 
 export default function NexusButton({ menuDirection, onHoming }) {
   const navigate = useNavigate();

@@ -1,6 +1,7 @@
 import React, { useRef } from "react";
-import { translator } from "../translation/translator";
 import { useGlobal } from "../../context/GlobalContext";
+
+import { translator } from "../translation/translator";
 import { FILTER_CONTEXT, TRANSLATE_COLLECTION } from "../translation/context";
 
 export default function FilterSorter({ fields, filter, setFilter }) {

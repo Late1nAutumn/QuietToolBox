@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
-import { NexusIcon } from "../svg/NexusIcon";
 import { useNavigate } from "react-router-dom";
+
+import { NexusIcon } from "../svg/NexusIcon";
 
 const SPINNER_DISPLAY_DELAY = 2000;
 const REDIRECT_DELAY = 2000;

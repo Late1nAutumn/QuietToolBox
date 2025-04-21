@@ -1,4 +1,6 @@
 import React, { useRef } from "react";
+import { useGlobal } from "../../context/GlobalContext";
+
 import {
   DATA_FIELD,
   FILTABLE_FIELDS_INPUT_TYPE,
@@ -13,8 +15,8 @@ import {
   tagNameMapper,
   translator,
 } from "../translation/translator";
-import { useGlobal } from "../../context/GlobalContext";
 import { FILTER_CONTEXT, TRANSLATE_COLLECTION } from "../translation/context";
+
 import { compendiumEnumToText } from "../model/utils";
 
 export default function FilterFilter({

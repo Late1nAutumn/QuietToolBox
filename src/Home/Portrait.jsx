@@ -1,8 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
 
-import Svg from "./Portrait/Svg";
 import { PORTRAIT_SIZE } from "./Portrait/portraitData";
 import { PORTRAIT_EYE_TRACK_COOLDOWN } from "../utils/constants";
+
+import Svg from "./Portrait/Svg";
 
 // TODO: don't start anime when not looking at window
 

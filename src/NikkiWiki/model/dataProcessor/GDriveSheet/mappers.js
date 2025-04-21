@@ -1,12 +1,7 @@
 // version 20250204
 import rawData from "../../rawData/GDriveSheet/ClothesOG";
-import {
-  slotTextToType,
-  isAccessory,
-  mainStatType,
-  leveledStat,
-  scoreSimulation,
-} from "../../utils";
+import { mapSetToCompendium } from "../../manualData/manualData";
+
 import { DATA_FIELD, SET, STYLE, STYLES, TABLE_MODE, TAG } from "../../enums";
 import {
   itemNameMapper,
@@ -14,7 +9,14 @@ import {
   translator,
 } from "../../../translation/translator";
 import { TRANSLATE_COLLECTION } from "../../../translation/context";
-import { mapSetToCompendium } from "../../manualData/manualData";
+
+import {
+  slotTextToType,
+  isAccessory,
+  mainStatType,
+  leveledStat,
+  scoreSimulation,
+} from "../../utils";
 
 export function clothesOGData() {
   let allTags = { [TAG.NONE]: true };

@@ -1,6 +1,4 @@
 import { LANG } from "../../utils/enums";
-import { TRANSLATE_COLLECTION } from "../translation/context";
-import { translator } from "../translation/translator";
 import { LEVELING_STAT_MULTIPLIER, MULTIPLIER, TAG_VALUE } from "./constants";
 import {
   DATA_FIELD,
@@ -11,6 +9,8 @@ import {
   STYLES,
   REGION,
 } from "./enums";
+import { translator } from "../translation/translator";
+import { TRANSLATE_COLLECTION } from "../translation/context";
 
 // #region app
 export function tableFieldsOfMode(tableMode, statMode, lang) {

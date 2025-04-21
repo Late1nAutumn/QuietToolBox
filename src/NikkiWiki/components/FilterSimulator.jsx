@@ -1,8 +1,9 @@
 import React, { useRef } from "react";
+import { useGlobal } from "../../context/GlobalContext";
+
+import { TAG_MULTIPLIERS } from "../model/constants";
 import { DATA_FIELD, STYLE, STYLES, TAG } from "../model/enums";
 import { tagNameMapper, translator } from "../translation/translator";
-import { useGlobal } from "../../context/GlobalContext";
-import { TAG_MULTIPLIERS } from "../model/constants";
 import { FILTER_CONTEXT, TRANSLATE_COLLECTION } from "../translation/context";
 
 export default function FilterSimulator({ tags, filter, setFilter }) {

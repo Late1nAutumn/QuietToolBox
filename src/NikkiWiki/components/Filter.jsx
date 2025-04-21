@@ -1,14 +1,14 @@
 import React, { useState } from "react";
-
 import { useGlobal } from "../../context/GlobalContext";
+
+import { CLASS_NAMES } from "../model/constants";
 import { DATA_FIELD, FILTER_TAB, STAT_MODE } from "../model/enums";
 import { translator } from "../translation/translator";
+import { FILTER_CONTEXT, TRANSLATE_COLLECTION } from "../translation/context";
 
 import FilterSorter from "./FilterSorter";
 import FilterSimulator from "./FilterSimulator";
 import FilterFilter from "./FilterFilter";
-import { CLASS_NAMES } from "../model/constants";
-import { FILTER_CONTEXT, TRANSLATE_COLLECTION } from "../translation/context";
 
 export default function Filter({
   fields,
