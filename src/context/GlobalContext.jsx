@@ -1,12 +1,11 @@
 import React, { createContext, useContext, useState } from "react";
 
-import { LANG } from "../utils/enums.js";
+import { mapNavigatorLang } from "../utils/functions.js";
 
 const GlobalContext = createContext();
 
 export const GlobalProvider = ({ children }) => {
-  // TODO: set lang from user system
-  const [lang, setLang] = useState(LANG.default);
+  const [lang, setLang] = useState(mapNavigatorLang());
 
   const nextLanguage = () => {
     // TODO: to be rewrite later

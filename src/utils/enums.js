@@ -1,6 +1,6 @@
 // app
 export const LANG = {
-  default: 0,
+  // default: 1,
   EN: 0,
   CN: 1,
 };

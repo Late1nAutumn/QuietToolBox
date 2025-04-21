@@ -1,18 +1,33 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
+import { useGlobal } from "../context/GlobalContext";
 import {
   APPS,
   APP_IMG_GRID_SIZE,
   APP_IMG_SIZE,
+  HOME_FAVICON,
+  HOME_TITLE,
   SCREEN_THRESHOLD,
 } from "../utils/constants";
 import Portrait from "./Portrait";
 import Chatbox from "./Portrait/Chatbox";
 import NexusButton from "./NexusButton/NexusButton";
 import { DIRECTION } from "../utils/enums";
+import { setFavicon } from "../utils/functions";
+import { generalTranslator } from "../utils/translation/translator";
+import {
+  CHAT_CONTEXT,
+  TRANSLATION_COLLECTION,
+} from "../utils/translation/context";
+import { FIELD, LOCALSTORAGE, STORE } from "../utils/localStorage";
 
 export default function Home({ scrollY, setScrollY }) {
+  const { lang } = useGlobal();
+  const dialogCallbackRef = useRef(null);
+
   const [animationEnded, setAnimationEnded] = useState(false);
+  const [appImgGrids, setAppImgGrids] = useState([]);
+  const [userFocusedWindow, setUserFocusedWindow] = useState(false);
 
   const APP_LIST = Object.values(APPS);
 
@@ -20,15 +35,29 @@ export default function Home({ scrollY, setScrollY }) {
     setScrollY(window.scrollY);
   };
 
+  const onUserFocus = () => {
+    if (!document.hidden) setUserFocusedWindow(true);
+  };
+
   useEffect(() => {
+    document.title = HOME_TITLE;
+    setFavicon(HOME_FAVICON);
+
+    LOCALSTORAGE.initStore(STORE.MAIN);
+
+    onUserFocus();
+    document.addEventListener("visibilitychange", onUserFocus);
+
     window.scrollTo(0, scrollY);
+
     window.addEventListener("scroll", onScroll);
     return () => {
       window.removeEventListener("scroll", onScroll);
+      document.removeEventListener("visibilitychange", onUserFocus);
     };
   }, []);
 
-  const appImgGrids = () => {
+  useEffect(() => {
     let grids = [];
     let middleY = window.innerHeight / 2;
     let a = window.innerHeight / 2 + scrollY,
@@ -39,7 +68,7 @@ export default function Home({ scrollY, setScrollY }) {
       threshold2 = a - c,
       threshold3 = a + c,
       threshold4 = a + b;
-    APP_LIST.forEach(() => {
+    APP_LIST.forEach(({ intro }, i) => {
       switch (true) {
         case middleY > threshold4:
           grids.push({ size: APP_IMG_SIZE.MIN });
@@ -49,6 +78,14 @@ export default function Home({ scrollY, setScrollY }) {
           break;
         case middleY > threshold2:
           grids.push({ size: APP_IMG_SIZE.MAX, focus: true });
+          if (
+            dialogCallbackRef.current &&
+            appImgGrids[i] &&
+            !appImgGrids[i].focus
+          )
+            dialogCallbackRef.current({
+              list: [{ text: intro[lang], speed: 15 }],
+            });
           break;
         case middleY > threshold1:
           grids.push({ size: APP_IMG_SIZE.MIN + (middleY - threshold1) * d });
@@ -59,15 +96,29 @@ export default function Home({ scrollY, setScrollY }) {
       }
       middleY += APP_IMG_GRID_SIZE;
     });
-    return grids;
-  };
+    setAppImgGrids(grids);
+  }, [scrollY]);
 
-  const grids = appImgGrids();
+  useEffect(() => {
+    if (dialogCallbackRef.current)
+      dialogCallbackRef.current({
+        list: [
+          {
+            text: generalTranslator(
+              CHAT_CONTEXT.LANG_SWITCH,
+              lang,
+              TRANSLATION_COLLECTION.CHAT
+            ),
+            speed: 30,
+          },
+        ],
+      });
+  }, [lang]);
 
   return (
     <div className="home untouchable">
       <div className="home-background">
-        {grids.map(({ focus }, i) => (
+        {appImgGrids.map(({ focus }, i) => (
           <div
             className={"home-background-title" + (focus ? "-focus" : "")}
             key={i}
@@ -76,24 +127,30 @@ export default function Home({ scrollY, setScrollY }) {
           </div>
         ))}
         <div className="home-background-focused-title">
-          {APP_LIST[grids.findIndex(({ focus }) => focus)]?.text || ""}
+          {APP_LIST[appImgGrids.findIndex(({ focus }) => focus)]?.text || ""}
         </div>
       </div>
       <div className="home-content">
         <div className="home-content-head">
-          {animationEnded && <Chatbox />}
-          <Portrait
-            skipped={true}
-            active={true}
-            onAnimationEnd={() => {
-              setAnimationEnded(true);
-            }}
-          />
+          {animationEnded && <Chatbox dialogCallbackRef={dialogCallbackRef} />}
+          {userFocusedWindow && (
+            <Portrait
+              skipped={
+                false
+                // LOCALSTORAGE.getIsPortraitSkipped()
+              }
+              active={true}
+              onAnimationEnd={() => {
+                setAnimationEnded(true);
+                LOCALSTORAGE.setSkipPortrait();
+              }}
+            />
+          )}
         </div>
         <div className="home-content-apps">
           <table>
             <tbody>
-              {grids.map(({ size, focus }, i) => (
+              {appImgGrids.map(({ size, focus }, i) => (
                 <tr key={i}>
                   <td>
                     <Link to={APP_LIST[i].link}>

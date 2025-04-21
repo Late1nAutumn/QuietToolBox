@@ -1,3 +1,5 @@
+import { LANG } from "./enums";
+
 export const request = async (url) => {
   let data = await fetch(url);
   let json = await data.json();
@@ -41,3 +43,19 @@ export const copyToClipboard = async (content) =>
     .catch((err) => console.log("[ERROR]: copy failed:", err));
 
 export const toISODate = (date) => new Date(date).toISOString().split("T")[0];
+
+export const setFavicon = (path) => {
+  const favicon = document.querySelector("link[rel='icon']");
+  if (favicon) favicon.href = path;
+};
+
+export const mapNavigatorLang = () => {
+  const lang = navigator.language.toLowerCase().slice(0, 2);
+  switch (lang) {
+    case "zh":
+      return LANG.CN;
+    case "en":
+    default:
+      return LANG.EN;
+  }
+};

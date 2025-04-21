@@ -7,15 +7,19 @@ export function generalTranslator(context, lang, collection) {
   let text = "";
   switch (lang) {
     case LANG.CN:
-      text = CN_PACK[collection][context];
+      text = CN_PACK[collection]?.[context] || "";
       break;
     case LANG.EN:
-      text = EN_PACK[collection][context];
+      text = EN_PACK[collection]?.[context] || "";
       break;
     default:
       console.log("[ERROR]: Translate pack not imported for current language");
-      text = EN_PACK[collection][context];
+      text = EN_PACK[collection]?.[context] || "";
       break;
   }
+  if (text === "")
+    console.log(
+      `[ERROR]: translation missing for [${context}] in collection [${collection} for language ${lang}]`
+    );
   return text;
 }

@@ -1,10 +1,13 @@
+import { LANG } from "./enums";
+
 // #region portrait
 export const PORTRAIT_EYE_TRACK_COOLDOWN = 50;
 // #endregion
 
 // #region chatbox
 export const DEFAULT_CHATBOX_TEXT_SPEED = 30;
-export const DEFAULT_CHATBOX_PRASE_DURATION = 2000;
+export const DEFAULT_CHATBOX_PRASE_WAIT = 1500;
+export const DEFAULT_CHATBOX_DIALOG_WAIT = 2000;
 export const IDLE_TIMEOUT = {
   BASE_TIME: 3000,
   MAX_RANDOM_TIME: 2000,
@@ -21,31 +24,59 @@ export const APP = {
   DASHBOARD: 5,
 };
 
+export const HOME_TITLE = "Nexus";
+export const HOME_FAVICON = "/asset/favicon/nexus.png";
+
 export const APPS = {
   [APP.NIKKI_KIWI]: {
-    link: "/nikki",
+    favicon: "/asset/favicon/nikkikiwi.png",
     text: "Nikki Kiwi",
-    cover: "./asset/nikkikiwiCover.png",
+    link: "/nikki",
+    cover: "/asset/cover/nikkikiwi.png",
+    intro: {
+      [LANG.EN]: "To check gears' stats in Inifinity Nikki",
+      [LANG.CN]: "无限暖暖装备属性比较",
+    },
   },
   [APP.SKETCHER]: {
-    link: "/sketcher",
+    favicon: "/asset/favicon/sketcher.png",
     text: "Sketcher",
-    cover: "./asset/sketcherCover.png",
+    link: "/sketcher",
+    cover: "/asset/cover/sketcher.png",
+    intro: {
+      [LANG.EN]: "This helps me draw SVG paths out of images",
+      [LANG.CN]: "我拿这个来描图画svg",
+    },
   },
   [APP.STEAMSTER]: {
-    link: "/steamster",
+    favicon: "/asset/favicon/steamster.png",
     text: "Steamster",
-    cover: "./asset/steamsterCover.png",
+    link: "/steamster",
+    cover: "/asset/cover/steamster.png",
+    intro: {
+      [LANG.EN]: "Wanna check my games on Steam?",
+      [LANG.CN]: "看看我的Steam库存？",
+    },
   },
   [APP.DIVER_TRAINER]: {
-    link: "/",
+    favicon: "",
     text: "Diver Trainer",
-    cover: "./asset/underConstructionCover.png",
+    link: "/",
+    cover: "/asset/cover/underConstruction.png",
+    intro: {
+      [LANG.EN]: "This app is under construction",
+      [LANG.CN]: "别催了在做了",
+    },
   },
   [APP.DASHBOARD]: {
-    link: "/",
+    favicon: "",
     text: "Dashboard",
-    cover: "./asset/underConstructionCover.png",
+    link: "/",
+    cover: "/asset/cover/underConstruction.png",
+    intro: {
+      [LANG.EN]: "This app is under construction",
+      [LANG.CN]: "别催了在做了",
+    },
   },
 };
 

@@ -3,7 +3,7 @@ import { CANVAS_MARGIN, DEFAULT_IMG_LINK } from "./constants";
 import Tools from "./components/Tools";
 import { EDITOR_INDEX, LINE_COMMAND, NOTIFICATION_TYPE } from "./enum";
 import PathManager from "./components/PathManager";
-import { onLeavePage, rgbToHex } from "../utils/functions";
+import { onLeavePage, rgbToHex, setFavicon } from "../utils/functions";
 import Modal from "./components/Modal";
 import Notification from "./components/Notification";
 import { pointsToPathD } from "./utils";
@@ -18,6 +18,7 @@ import {
 } from "./translation/context";
 import ModalExitConfirm from "./components/ModalExitConfirm";
 import { useNavigate } from "react-router-dom";
+import { APP, APPS } from "../utils/constants";
 
 export default function Sketcher() {
   const { lang } = useGlobal();
@@ -150,6 +151,8 @@ export default function Sketcher() {
   };
 
   useEffect(() => {
+    document.title = APPS[APP.SKETCHER].text;
+    setFavicon(APPS[APP.SKETCHER].favicon);
     window.addEventListener("keydown", onKey);
     window.addEventListener("beforeunload", onLeavePage);
     return () => {

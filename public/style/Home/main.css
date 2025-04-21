@@ -66,6 +66,7 @@
   color: white;
   font-size: 20px;
   text-align: center;
+  white-space: pre-wrap;
 }
 .home-content-chatbox::after {
   content: "";

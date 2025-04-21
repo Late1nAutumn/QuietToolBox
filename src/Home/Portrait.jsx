@@ -8,13 +8,13 @@ import { PORTRAIT_EYE_TRACK_COOLDOWN } from "../utils/constants";
 
 export default function Portrait({
   skipped,
-  active,
+  active, // to improve performance
   onAnimationEnd = () => {},
 }) {
   let eyeballTrackCooldown = 0;
   let portraitContainerRef = useRef(null);
 
-  const [eyeTrack, setEyeTrack] = useState(true);
+  const [eyeTrack, setEyeTrack] = useState(false);
   const [eyeballCoord, setEyeballCoord] = useState({
     lEyeX: 201,
     lEyeY: 376,
@@ -72,7 +72,6 @@ export default function Portrait({
   };
 
   useEffect(() => {
-    if (window.onmousemove === null) window.onmousemove = updateEye;
     if (skipped) {
       onAnimationEnd();
       setEyeTrack(true);
@@ -82,10 +81,14 @@ export default function Portrait({
         onAnimationEnd();
         setEyeTrack(true);
       }, 7500);
-    return () => {
-      window.onmousemove = null;
-    };
   }, []);
+
+  useEffect(() => {
+    window.addEventListener("mousemove", updateEye);
+    return () => {
+      window.removeEventListener("mousemove", updateEye);
+    };
+  }, [eyeTrack, active]);
 
   return (
     <div ref={portraitContainerRef} className="home-content-portrait">

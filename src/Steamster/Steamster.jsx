@@ -10,7 +10,7 @@ import {
   SEARCH_DEBOUNCE_COOLDOWN,
 } from "./constants";
 import { DIRECTION, LOAD_STATUS } from "../utils/enums";
-import { request, wait } from "../utils/functions";
+import { request, setFavicon, wait } from "../utils/functions";
 import { GROUP_MODE, SORT_MODE } from "./dataProcess/enums";
 import { collectionGrouper, collectionSorter } from "./utils";
 import { universalDataProcessor } from "./dataProcess/preprocess";
@@ -23,6 +23,7 @@ import { useGlobal } from "../context/GlobalContext";
 import { ArrowUpWide } from "../svg/ArrowUpWide";
 import ManualProcessor from "./components/ManualProcessor";
 import NexusButton from "../Home/NexusButton/NexusButton";
+import { APP, APPS } from "../utils/constants";
 
 export default function Steamster() {
   const { lang } = useGlobal();
@@ -33,7 +34,7 @@ export default function Steamster() {
   const [loading, setLoading] = useState(LOAD_STATUS.LOADING);
 
   const [groupMode, setGroupMode] = useState(GROUP_MODE.APP_TYPE);
-  const [sortMode, setSortMode] = useState(SORT_MODE.RELEASE_DATE);
+  const [sortMode, setSortMode] = useState(SORT_MODE.MY_GAME_TIME);
   const [hideNSFW, setHideNSFW] = useState(true);
   const [searchBarValue, setSearchBarValue] = useState("");
   const [searchWord, setSearchWord] = useState("");
@@ -96,6 +97,8 @@ export default function Steamster() {
   };
 
   useEffect(() => {
+    document.title = APPS[APP.STEAMSTER].text;
+    setFavicon(APPS[APP.STEAMSTER].favicon);
     window.scrollTo(0, 0);
     window.addEventListener("scroll", updateToTopButton);
 

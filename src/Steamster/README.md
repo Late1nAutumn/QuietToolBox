@@ -6,9 +6,7 @@ A page listing my Steam game collections
 - Categories & Genres ID
 - Steam api / url availability
 
-
 ## To Improve
-- List load freezing
 - My own genre
 
 ## To Fix

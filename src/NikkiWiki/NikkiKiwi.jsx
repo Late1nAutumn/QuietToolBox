@@ -1,14 +1,18 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
 
 import ItemTable from "./components/ItemTable.jsx";
 import Footer from "./components/Footer.jsx";
 
 import { TABLE_MODE } from "./model/enums.js";
-import { NexusIcon } from "../svg/NexusIcon.jsx";
+import { APP, APPS } from "../utils/constants.js";
+import { setFavicon } from "../utils/functions.js";
 
 export default function NikkiKiwi() {
-  // useEffect(() => {});
+  useEffect(() => {
+    document.title = APPS[APP.NIKKI_KIWI].text;
+    setFavicon(APPS[APP.NIKKI_KIWI].favicon);
+  }, []);
 
   return (
     <div className="nikkikiwi">
