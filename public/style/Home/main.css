@@ -115,7 +115,6 @@
   justify-content: center;
   background-color: white;
   transition: box-shadow 0.3s;
-  box-shadow: 0 0 8px rgba(255, 255, 255, 0.7);
   /* -webkit-box-reflect: below 5px
     linear-gradient(
       to bottom,
@@ -124,7 +123,9 @@
     ); */
 }
 .home-content-app:hover {
-  box-shadow: 0 0 10px rgba(255, 255, 255, 1);
+  box-shadow: 3px 3px 15px rgba(255, 255, 255, 0.7),
+    3px -3px 15px rgba(255, 255, 255, 0.7), -3px 3px 15px rgba(255, 255, 255, 0.7),
+    -3px -3px 15px rgba(255, 255, 255, 0.7);
 }
 
 .home-content-app img {
@@ -164,6 +165,7 @@
   margin-top: 20vh;
   font-size: 230px;
   color: red;
+  opacity: 0.17;
 }
 .home-background-focused-title {
   position: fixed;

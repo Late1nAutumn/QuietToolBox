@@ -4,6 +4,7 @@ import { useGlobal } from "../context/GlobalContext";
 
 import {
   APPS,
+  AUTO_SCROLL_DELAY,
   APP_IMG_GRID_SIZE,
   APP_IMG_SIZE,
   HOME_FAVICON,
@@ -22,7 +23,6 @@ import { LOCALSTORAGE, STORE } from "../utils/localStorage";
 import Portrait from "./Portrait";
 import Chatbox from "./Portrait/Chatbox";
 import NexusButton from "./NexusButton/NexusButton";
-
 
 export default function Home({ scrollY, setScrollY }) {
   const { lang } = useGlobal();
@@ -51,11 +51,20 @@ export default function Home({ scrollY, setScrollY }) {
     onUserFocus();
     document.addEventListener("visibilitychange", onUserFocus);
 
-    window.scrollTo(0, scrollY);
+    setTimeout(() => {
+      window.scrollTo({
+        left: 0,
+        top: scrollY,
+        // behavior: "smooth",
+      });
+    }, AUTO_SCROLL_DELAY);
 
     window.addEventListener("scroll", onScroll);
+    // not the best way triggering recalculation for resize, just being lazy
+    window.addEventListener("resize", onScroll);
     return () => {
       window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
       document.removeEventListener("visibilitychange", onUserFocus);
     };
   }, []);
@@ -138,11 +147,11 @@ export default function Home({ scrollY, setScrollY }) {
           {animationEnded && <Chatbox dialogCallbackRef={dialogCallbackRef} />}
           {userFocusedWindow && (
             <Portrait
-              skipped={LOCALSTORAGE.getIsPortraitSkipped()}
+              skipped={LOCALSTORAGE[STORE.MAIN].getIsPortraitSkipped()}
               active={true}
               onAnimationEnd={() => {
                 setAnimationEnded(true);
-                LOCALSTORAGE.setSkipPortrait();
+                LOCALSTORAGE[STORE.MAIN].setSkipPortrait();
               }}
             />
           )}

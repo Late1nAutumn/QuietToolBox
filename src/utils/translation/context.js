@@ -7,8 +7,12 @@ export const TRANSLATION_COLLECTION = {
 };
 
 export const TIME_CONTEXT = {
-  MINUTE: 1,
-  HOUR: 2,
+  HOUR: 4,
+  MINUTE: 3,
+  SECOND: 2,
+  SHORT_HOUR: 4.1,
+  SHORT_MINUTE: 3.1,
+  SHORT_SECOND: 2.1,
 };
 
 export const CHAT_CONTEXT = {

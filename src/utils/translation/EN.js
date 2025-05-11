@@ -11,8 +11,12 @@ const { CHAT, GOSSIP } = TRANSLATION_COLLECTION;
 
 export const EN_PACK = {
   [TIME]: {
-    [TIME_CONTEXT.MINUTE]: "minutes",
     [TIME_CONTEXT.HOUR]: "hours",
+    [TIME_CONTEXT.MINUTE]: "minutes",
+    [TIME_CONTEXT.SECOND]: "seconds",
+    [TIME_CONTEXT.SHORT_HOUR]: "hr",
+    [TIME_CONTEXT.SHORT_MINUTE]: "min",
+    [TIME_CONTEXT.SHORT_SECOND]: "sec",
   },
   [CHAT]: {
     [CHAT_CONTEXT.GREETING]: "Hello! Welcome to my toolbox",

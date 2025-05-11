@@ -13,13 +13,18 @@ import {
 } from "./translation/context";
 import { useGlobal } from "../context/GlobalContext";
 
-import { onLeavePage, rgbToHex, setFavicon } from "../utils/functions";
+import {
+  decimaling,
+  onLeavePage,
+  rgbToHex,
+  setFavicon,
+} from "../utils/functions";
 import { pointsToPathD } from "./utils";
 
 import PathManager from "./components/PathManager";
 import Tools from "./components/Tools";
 import Notification from "./components/Notification";
-import Modal from "./components/Modal";
+import Modal from "../components/Modal";
 import NexusButton from "../Home/NexusButton/NexusButton";
 import ModalExitConfirm from "./components/ModalExitConfirm";
 
@@ -90,8 +95,8 @@ export default function Sketcher() {
 
   const onCursorMove = (e) => {
     let zoomRatio = imgZoom / 100;
-    let x = Math.round(((e.clientX - CANVAS_MARGIN) / zoomRatio) * 1000) / 1000,
-      y = Math.round(((e.clientY - CANVAS_MARGIN) / zoomRatio) * 1000) / 1000;
+    let x = decimaling((e.clientX - CANVAS_MARGIN) / zoomRatio, 3),
+      y = decimaling((e.clientY - CANVAS_MARGIN) / zoomRatio, 3);
     setCurorCoord({ x, y });
   };
 

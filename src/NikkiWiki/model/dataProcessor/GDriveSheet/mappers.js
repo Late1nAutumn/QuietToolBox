@@ -92,7 +92,7 @@ export function mapSetData(rawData) {
         [DATA_FIELD.OBTAIN_FROM]: obtainFrom,
         [DATA_FIELD.ITEMS]: [],
       };
-    sets[set][DATA_FIELD.COUNT_ACCESSORY] += isAccessory(slot) ? 1 : 0;
+    sets[set][DATA_FIELD.COUNT_ACCESSORY] += +isAccessory(slot);
     for (let tag in tags)
       sets[set][DATA_FIELD.TAGS][tag] =
         (sets[set][DATA_FIELD.TAGS][tag] || 0) + 1;

@@ -1,9 +1,14 @@
 export const STORE = {
   MAIN: "mainStore",
+  GRAIN_BRAIN: "granaryStore",
 };
 
 export const FIELD = {
+  // main
   SKIP_PORTRAIT_ANIMATION: "skipPortrait",
+  // granary
+  AUTO_SAVE: "autoSave",
+  MANUAL_SAVE: "manualSave",
 };
 
 const read = (store, field) => {
@@ -42,7 +47,34 @@ export const LOCALSTORAGE = {
       localStorage.setItem(store, JSON.stringify({}));
     }
   },
-  getIsPortraitSkipped: () =>
-    read(STORE.MAIN, FIELD.SKIP_PORTRAIT_ANIMATION) || false,
-  setSkipPortrait: () => write(STORE.MAIN, FIELD.SKIP_PORTRAIT_ANIMATION, true),
+
+  [STORE.MAIN]: {
+    getIsPortraitSkipped: () =>
+      read(STORE.MAIN, FIELD.SKIP_PORTRAIT_ANIMATION) || false,
+    setSkipPortrait: () =>
+      write(STORE.MAIN, FIELD.SKIP_PORTRAIT_ANIMATION, true),
+  },
+
+  [STORE.GRAIN_BRAIN]: {
+    autoSave: (atlas) => write(STORE.GRAIN_BRAIN, FIELD.AUTO_SAVE, atlas),
+    loadAutoSave: () => read(STORE.GRAIN_BRAIN, FIELD.AUTO_SAVE) || null,
+    saveProgess: (atlas, savename) => {
+      let savePack = read(STORE.GRAIN_BRAIN, FIELD.MANUAL_SAVE) || {};
+      savePack[savename] = atlas;
+      write(STORE.GRAIN_BRAIN, FIELD.MANUAL_SAVE, savePack);
+    },
+    getSaveList: () => {
+      let savePack = read(STORE.GRAIN_BRAIN, FIELD.MANUAL_SAVE) || null;
+      return savePack;
+    },
+    getSave: (name) => {
+      let savePack = read(STORE.GRAIN_BRAIN, FIELD.MANUAL_SAVE) || null;
+      return savePack?.[name] || null;
+    },
+    deleteSave: (name) => {
+      let savePack = read(STORE.GRAIN_BRAIN, FIELD.MANUAL_SAVE) || null;
+      delete savePack[name];
+      write(STORE.GRAIN_BRAIN, FIELD.MANUAL_SAVE, savePack);
+    },
+  },
 };

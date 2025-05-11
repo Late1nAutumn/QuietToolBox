@@ -13,6 +13,10 @@ export const CN_PACK = {
   [TIME]: {
     [TIME_CONTEXT.MINUTE]: "分钟",
     [TIME_CONTEXT.HOUR]: "小时",
+    [TIME_CONTEXT.SECOND]: "秒钟",
+    [TIME_CONTEXT.SHORT_HOUR]: "时",
+    [TIME_CONTEXT.SHORT_MINUTE]: "分",
+    [TIME_CONTEXT.SHORT_SECOND]: "秒",
   },
   [CHAT]: {
     [CHAT_CONTEXT.GREETING]:

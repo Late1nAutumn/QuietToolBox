@@ -7,7 +7,7 @@ export const PORTRAIT_EYE_TRACK_COOLDOWN = 50;
 // #region chatbox
 export const DEFAULT_CHATBOX_TEXT_SPEED = 30;
 export const DEFAULT_CHATBOX_PRASE_WAIT = 1500;
-export const DEFAULT_CHATBOX_DIALOG_WAIT = 2000;
+export const DEFAULT_CHATBOX_DIALOG_WAIT = 3000;
 export const IDLE_TIMEOUT = {
   BASE_TIME: 3000,
   MAX_RANDOM_TIME: 2000,
@@ -20,7 +20,7 @@ export const APP = {
   NIKKI_KIWI: 1,
   SKETCHER: 2,
   STEAMSTER: 3,
-  DIVER_TRAINER: 4,
+  GRAIN_GRAIN: 4,
   DASHBOARD: 5,
 };
 
@@ -58,14 +58,14 @@ export const APPS = {
       [LANG.CN]: "看看我的Steam库存？",
     },
   },
-  [APP.DIVER_TRAINER]: {
-    favicon: "",
-    text: "Diver Trainer",
-    link: "/",
-    cover: "/asset/cover/underConstruction.png",
+  [APP.GRAIN_GRAIN]: {
+    favicon: "/asset/favicon/grainBrain.png",
+    text: "Grain Brain",
+    link: "/granary",
+    cover: "/asset/cover/grainBrain.png",
     intro: {
-      [LANG.EN]: "This app is under construction",
-      [LANG.CN]: "别催了在做了",
+      [LANG.EN]: "Play Age of Empires 4?\nWe have the ultimate solution for grainary optimization here.",
+      [LANG.CN]: "谷仓强迫症的终极福音",
     },
   },
   [APP.DASHBOARD]: {
@@ -80,6 +80,7 @@ export const APPS = {
   },
 };
 
+export const AUTO_SCROLL_DELAY = 50;
 export const SCREEN_THRESHOLD = {
   FULL_ZOOM_IN: 0.15,
   FULL_ZOOM_OUT: 0.55,

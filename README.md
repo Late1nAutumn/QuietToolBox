@@ -1,9 +1,6 @@
 # QuietToolBox
 A collection of my tools as a static page
 
-## TODO
-- gossip only when user focusing window
-
 ## Checklist
 - Check style on ALL pages, especially range input. On OS, mobile, languages
 
@@ -16,10 +13,18 @@ A collection of my tools as a static page
 - Webpack
 - Nodemon
 
+## To Improve
+- Better way of caulculating app img size when resizing
+
+## TODO
+- gossip only when user focusing window
+
 
 
 phone / 4k style warning
 browser style warning
+
+check swipe app list on phone
 
 search engine improvement
 contact

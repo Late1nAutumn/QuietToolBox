@@ -22,7 +22,7 @@ export default function ModalPathDeleteConfirm({
   };
 
   return (
-    <div className="sketcher-model-content untouchable">
+    <div className="sketcher-modal-content untouchable">
       <h2>
         {translator(
           MODAL_CONTEXT.TITLE_DELETE_PATH,
@@ -37,7 +37,7 @@ export default function ModalPathDeleteConfirm({
           TRANSLATE_COLLECTION.MODAL
         )}
       </div>
-      <div className="sketcher-model-content-buttons">
+      <div className="sketcher-modal-content-buttons">
         <button onClick={onConfirmClick}>
           {translator(
             MODAL_CONTEXT.BUTTON_COMFIRM,

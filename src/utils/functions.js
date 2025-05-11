@@ -8,12 +8,6 @@ export const request = async (url) => {
 
 export const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-// browser default event "beforeunload" handler
-export const onLeavePage = (e) => {
-  e.preventDefault();
-  e.returnValue = "反正没人会看到这行字";
-};
-
 export const sortByProperty = (arr, property, reverse) => {
   let temp = arr.slice();
   for (let i = 0; i < arr.length - 1; i++)
@@ -33,21 +27,42 @@ export const sortByProperty = (arr, property, reverse) => {
   return temp;
 };
 
+// #region math
+export const pointDistance = (x1, y1, x2, y2) =>
+  Math.sqrt((x1 - x2) ** 2 + (y1 - y2) ** 2);
+export const coordDistance = (c1, c2) =>
+  Math.sqrt((c1.x - c2.x) ** 2 + (c1.y - c2.y) ** 2);
+
+export const decimaling = (value, digits) => {
+  if (digits < 0) return value;
+  let multiplier = 10 ** digits;
+  return Math.round(value * multiplier) / multiplier;
+};
+
 export const rgbToHex = (r, g, b) =>
   `#${((1 << 24) | (r << 16) | (g << 8) | b).toString(16).slice(1)}`;
+// #endregion
 
-export const copyToClipboard = async (content) =>
-  navigator.clipboard
-    .writeText(content)
-    .then(() => console.log("[log]: content copied to clipboard"))
-    .catch((err) => console.log("[ERROR]: copy failed:", err));
+export const preventDefault = (e) => e.preventDefault();
+// browser default event "beforeunload" handler
+export const onLeavePage = (e) => {
+  e.preventDefault();
+  e.returnValue = "どうせ誰にもこの行は見られない";
+};
 
+// #region browser
 export const toISODate = (date) => new Date(date).toISOString().split("T")[0];
 
 export const setFavicon = (path) => {
   const favicon = document.querySelector("link[rel='icon']");
   if (favicon) favicon.href = path;
 };
+
+export const copyToClipboard = async (content) =>
+  navigator.clipboard
+    .writeText(content)
+    .then(() => console.log("[log]: content copied to clipboard"))
+    .catch((err) => console.log("[ERROR]: copy failed:", err));
 
 export const mapNavigatorLang = () => {
   const lang = navigator.language.toLowerCase().slice(0, 2);
@@ -59,3 +74,4 @@ export const mapNavigatorLang = () => {
       return LANG.EN;
   }
 };
+// #endregion

@@ -10,7 +10,6 @@ import { SORT_MODE } from "../dataProcess/enums";
 import { translator } from "../translation/translator";
 import { TOOLTIP_CONTEXT, TRANSLATE_COLLECTION } from "../translation/context";
 
-
 import { toISODate } from "../../utils/functions";
 import { achievementPortion, categoryMapper, playLength } from "../utils";
 
@@ -96,9 +95,9 @@ export default function AppItem({ data, referrer, sortMode }) {
         ? [0, 0, 0, 1]
         : [
             Math.floor(Math.max(rating - 5, 0)),
-            (rating - 5) % 1 >= 0.5 ? 1 : 0,
+            +((rating - 5) % 1 >= 0.5),
             Math.floor(Math.max(rating, 0)),
-            (rating - 5) % 1 <= -0.5 ? 1 : 0,
+            +((rating - 5) % 1 <= -0.5),
           ];
     return counts
       .map((count, star) => new Array(count).fill(star))
