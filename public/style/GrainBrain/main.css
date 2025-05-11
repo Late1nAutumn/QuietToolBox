@@ -414,6 +414,10 @@
   color: var(--aoe4-light-gold);
 }
 .grainbrain-header-title {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 65px;
   font-size: 32px;
   font-family: Times, serif;
   white-space: pre-wrap;
