@@ -8,6 +8,7 @@ import { autoFill, autoFillAvailable } from "../utils/func";
 
 import { translator } from "../utils/translation/translator";
 import {
+  FOOTER_BUTTON_CONTEXT,
   NOTIFICATION_CONTEXT,
   TOOLTIP_ICONS_CONTEXT,
   TRANSLATION_COLLECTION,
@@ -68,7 +69,6 @@ export default function Footer({
   return (
     <div className="grainbrain-footer">
       <div
-        className={autoFillable ? "" : "grainbrain-inactive"}
         onClick={onAutoFill}
         title={translator(
           TOOLTIP_ICONS_CONTEXT.AUTO_FILL,
@@ -76,10 +76,19 @@ export default function Footer({
           TRANSLATION_COLLECTION.TOOLTIP_ICONS
         )}
       >
-        <img src="./asset/aoe4/tree_replanting.png" />
+        <img
+          className={autoFillable ? "" : "grainbrain-inactive"}
+          src="./asset/aoe4/tree_replanting.png"
+        />
+        <div>
+          {translator(
+            FOOTER_BUTTON_CONTEXT.AUTO_FILL,
+            lang,
+            TRANSLATION_COLLECTION.FOOTER_BUTTON
+          )}
+        </div>
       </div>
       <div
-        className={displayGuidelines ? "" : "grainbrain-inactive"}
         onClick={toggleGuideline}
         title={translator(
           TOOLTIP_ICONS_CONTEXT.TOGGLE_GUIDELINE,
@@ -87,10 +96,19 @@ export default function Footer({
           TRANSLATION_COLLECTION.TOOLTIP_ICONS
         )}
       >
-        <img src="./asset/aoe4/supervise.png" />
+        <img
+          className={displayGuidelines ? "" : "grainbrain-inactive"}
+          src="./asset/aoe4/supervise.png"
+        />
+        <div>
+          {translator(
+            FOOTER_BUTTON_CONTEXT.TOGGLE_GUIDELINE,
+            lang,
+            TRANSLATION_COLLECTION.FOOTER_BUTTON
+          )}
+        </div>
       </div>
       <div
-        className={displayGrid ? "" : "grainbrain-inactive"}
         onClick={toggleGrid}
         title={translator(
           TOOLTIP_ICONS_CONTEXT.TOGGLE_GRID,
@@ -98,7 +116,17 @@ export default function Footer({
           TRANSLATION_COLLECTION.TOOLTIP_ICONS
         )}
       >
-        <img src="./asset/aoe4/iron_clamps.png" />
+        <img
+          className={displayGrid ? "" : "grainbrain-inactive"}
+          src="./asset/aoe4/iron_clamps.png"
+        />
+        <div>
+          {translator(
+            FOOTER_BUTTON_CONTEXT.TOGGLE_GRID,
+            lang,
+            TRANSLATION_COLLECTION.FOOTER_BUTTON
+          )}
+        </div>
       </div>
       <div
         onClick={autoCamera}
@@ -109,6 +137,13 @@ export default function Footer({
         )}
       >
         <img src="./asset/aoe4/tracking.png" />
+        <div>
+          {translator(
+            FOOTER_BUTTON_CONTEXT.CENTER_VIEW,
+            lang,
+            TRANSLATION_COLLECTION.FOOTER_BUTTON
+          )}
+        </div>
       </div>
       <div
         onClick={onHelpclick}
@@ -119,6 +154,13 @@ export default function Footer({
         )}
       >
         <img src="./asset/aoe4/unknown_mercenary.png" />
+        <div>
+          {translator(
+            FOOTER_BUTTON_CONTEXT.OPEN_HELP,
+            lang,
+            TRANSLATION_COLLECTION.FOOTER_BUTTON
+          )}
+        </div>
       </div>
     </div>
   );

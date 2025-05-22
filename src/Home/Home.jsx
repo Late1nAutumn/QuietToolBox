@@ -183,6 +183,11 @@ export default function Home({ scrollY, setScrollY }) {
             </tbody>
           </table>
         </div>
+        <div className="home-content-bottomFrame">
+          <svg viewBox="0 0 1000 150" preserveAspectRatio="none">
+            <path d="M0,50 C300,180 900,180 1200,50 L1200,200 L0,200Z" />
+          </svg>
+        </div>
         <div className="home-content-nexus">
           <NexusButton menuDirection={DIRECTION.RIGHT} />
         </div>

@@ -102,7 +102,7 @@ export default function AppItem({ data, referrer, sortMode }) {
     return counts
       .map((count, star) => new Array(count).fill(star))
       .flat()
-      .map((star) => stars[star])
+      .map((star, i) => <React.Fragment key={i}>{stars[star]}</React.Fragment>)
       .slice(0, 5);
   };
 

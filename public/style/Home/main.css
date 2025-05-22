@@ -22,25 +22,25 @@
   bottom: 10px;
   left: 20px;
   height: 40px;
-  z-index: 111;
+  z-index: 250;
 }
 .home .nexusButton-icon svg {
-  fill: darkred;
+  fill: #222;
 }
 .home .nexusButton-icon:hover svg {
-  fill: red;
+  fill: #555;
 }
 .home .nexusButton-menu-button svg {
-  stroke: darkred;
-  fill: darkred;
+  stroke: #222;
+  fill: #222;
 }
 .home .nexusButton-menu-button:hover svg {
-  stroke: red;
-  fill: red;
+  stroke: #555;
+  fill: #555;
 }
 .home-content-head {
   position: fixed;
-  z-index: 110;
+  z-index: 150;
   left: calc(50vw - 5vw);
   transform: translateX(-100%);
   display: flex;
@@ -82,6 +82,7 @@
 .home-content-portrait {
   bottom: 0;
   height: var(--portrait-height);
+  filter: brightness(85%);
 }
 .home-content-apps {
   position: absolute;
@@ -115,21 +116,26 @@
   justify-content: center;
   background-color: white;
   transition: box-shadow 0.3s;
-  /* -webkit-box-reflect: below 5px
-    linear-gradient(
-      to bottom,
-      rgba(255, 255, 255, 0) 30%,
-      rgba(255, 255, 255, 0.2) 100%
-    ); */
 }
 .home-content-app:hover {
   box-shadow: 3px 3px 15px rgba(255, 255, 255, 0.7),
-    3px -3px 15px rgba(255, 255, 255, 0.7), -3px 3px 15px rgba(255, 255, 255, 0.7),
+    3px -3px 15px rgba(255, 255, 255, 0.7),
+    -3px 3px 15px rgba(255, 255, 255, 0.7),
     -3px -3px 15px rgba(255, 255, 255, 0.7);
 }
 
 .home-content-app img {
   width: 100%;
+}
+
+.home-content-bottomFrame > svg {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  z-index: 200;
+  width: 100%;
+  height: 150px;
+  fill: #ddd;
 }
 /* #endregion */
 

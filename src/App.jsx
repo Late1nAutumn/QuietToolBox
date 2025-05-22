@@ -6,13 +6,15 @@ import { GlobalProvider } from "./context/GlobalContext.jsx";
 // constants
 // utils
 // components
+import RootWrapper from "./RootWrapper.jsx";
 import Home from "./Home/Home.jsx";
-import NotFound from "./Home/NotFound.jsx";
+import Error from "./Home/Error.jsx";
 import NikkiKiwi from "./NikkiWiki/NikkiKiwi.jsx";
 import Sketcher from "./Sketcher/Sketcher.jsx";
 import Steamster from "./Steamster/Steamster.jsx";
 import GrainBrain from "./GrainBrain/GrainBrain.jsx";
 import Dashboard from "./Dashboard/Dashboard.jsx";
+import { ERROR_PAGE_TYPE } from "./utils/enums.js";
 
 const App = () => {
   // to scroll back after navigating
@@ -22,15 +24,26 @@ const App = () => {
     <GlobalProvider>
       <Router>
         <Routes>
-          <Route path="/nikki/*" element={<NikkiKiwi />} />
-          <Route path="/sketcher/*" element={<Sketcher />} />
-          <Route path="/steamster/*" element={<Steamster />} />
-          <Route path="/granary/*" element={<GrainBrain />} />
-          <Route
-            path="/"
-            element={<Home scrollY={homeScrollY} setScrollY={homeSetScrollY} />}
-          />
-          <Route path="/*" element={<NotFound />} />
+          <Route path="/" element={<RootWrapper />}>
+            <Route
+              path="/"
+              element={
+                <Home scrollY={homeScrollY} setScrollY={homeSetScrollY} />
+              }
+            />
+            <Route path="/nikki/*" element={<NikkiKiwi />} />
+            <Route path="/sketcher/*" element={<Sketcher />} />
+            <Route path="/steamster/*" element={<Steamster />} />
+            <Route path="/granary/*" element={<GrainBrain />} />
+            <Route
+              path="/mobile"
+              element={<Error pageType={ERROR_PAGE_TYPE.MOBILE} />}
+            />
+            <Route
+              path="/*"
+              element={<Error pageType={ERROR_PAGE_TYPE.NOT_FOUND} />}
+            />
+          </Route>
         </Routes>
       </Router>
     </GlobalProvider>

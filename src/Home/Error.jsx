@@ -2,11 +2,12 @@ import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { NexusIcon } from "../svg/NexusIcon";
+import { ERROR_PAGE_TYPE } from "../utils/enums";
 
 const SPINNER_DISPLAY_DELAY = 2000;
 const REDIRECT_DELAY = 2000;
 
-export default function NotFound() {
+export default function Error({ pageType }) {
   const navigate = useNavigate();
   const timeoutRef = useRef(null);
 
@@ -22,29 +23,39 @@ export default function NotFound() {
   };
 
   useEffect(() => {
-    window.addEventListener("load", startRedirect);
+    if (pageType === ERROR_PAGE_TYPE.NOT_FOUND)
+      window.addEventListener("load", startRedirect);
     return () => {
       clearTimeout(timeoutRef.current);
       window.removeEventListener("load", startRedirect);
     };
   }, []);
 
+  let title, message;
+  switch (pageType) {
+    case ERROR_PAGE_TYPE.NOT_FOUND:
+      title = "404";
+      message = "Page not found";
+      break;
+    case ERROR_PAGE_TYPE.MOBILE:
+      title = "Sorry\n ";
+      message = "Mobile is not supported for now. Please visit through computer";
+      break;
+  }
+
   return (
-    <div className="not-found untouchable">
-      <div className="not-found-background">
-        <NexusIcon />
-      </div>
-      <div className="not-found-content">
-        <h1>404</h1>
-        <h5>Page not found</h5>
-        <div className="not-found-content-spinner">
+    <div className="error untouchable">
+      <div className="error-content">
+        <h1>{title}</h1>
+        <h5>{message}</h5>
+        <div className="error-content-spinner">
           {spinner && (
             <svg viewBox="0 0 50 50">
               <circle
                 cx="25"
                 cy="25"
                 r="20"
-                stroke="crimson"
+                stroke="violet"
                 stroke-width="4"
                 fill="none"
                 stroke-linecap="round"

@@ -2,6 +2,7 @@ import { BUILDING, DYNASTY, TECH, VILLAGER_STAT } from "../aoe4/enum.js";
 import { DATA_UNIT, HELP_PAGE_MODE, REPORT_SUBJECT } from "../enum.js";
 import {
   APP_MISC_CONTEXT,
+  FOOTER_BUTTON_CONTEXT,
   HINT_CONTEXT,
   LEGEND_CONTEXT,
   MODAL_CONTEXT,
@@ -19,6 +20,7 @@ const {
   DATA_UNIT_NAME,
   BUILDING_NAME,
   FARMER_STAT,
+  FOOTER_BUTTON,
   MODAL,
   NOTIFICATION,
   HINT,
@@ -91,6 +93,13 @@ export const EN_PACK = {
     [VILLAGER_STAT.GATHER_RATE]: "Gather rate",
     [VILLAGER_STAT.MOVE_SPEED]: "Move speed",
     [VILLAGER_STAT.CAPACITY]: "Capacity",
+  },
+  [FOOTER_BUTTON]: {
+    [FOOTER_BUTTON_CONTEXT.AUTO_FILL]: "Auto fill",
+    [FOOTER_BUTTON_CONTEXT.TOGGLE_GUIDELINE]: "Guideline",
+    [FOOTER_BUTTON_CONTEXT.TOGGLE_GRID]: "Grid line",
+    [FOOTER_BUTTON_CONTEXT.CENTER_VIEW]: "Center view",
+    [FOOTER_BUTTON_CONTEXT.OPEN_HELP]: "Help",
   },
   [MODAL]: {
     [MODAL_CONTEXT.MODAL_TITLE_SAVE]: "Save Data",
@@ -222,7 +231,7 @@ EN_PACK[HELP] = {
         "Left-click building icons to inspect",
         ["Click on blank area to cancel selection"],
         "Hold right-click and drag to look around",
-        "Scroll the mouse wheel to zoom",
+        "Scroll the mouse wheel to zoom by mouse position as center",
       ],
     },
     {

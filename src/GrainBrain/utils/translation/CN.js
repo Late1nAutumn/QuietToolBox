@@ -2,6 +2,7 @@ import { BUILDING, DYNASTY, TECH, VILLAGER_STAT } from "../aoe4/enum.js";
 import { DATA_UNIT, HELP_PAGE_MODE, REPORT_SUBJECT } from "../enum.js";
 import {
   APP_MISC_CONTEXT,
+  FOOTER_BUTTON_CONTEXT,
   HINT_CONTEXT,
   LEGEND_CONTEXT,
   MODAL_CONTEXT,
@@ -19,6 +20,7 @@ const {
   DATA_UNIT_NAME,
   BUILDING_NAME,
   FARMER_STAT,
+  FOOTER_BUTTON,
   MODAL,
   NOTIFICATION,
   HINT,
@@ -90,6 +92,13 @@ export const CN_PACK = {
     [VILLAGER_STAT.GATHER_RATE]: "采集速率",
     [VILLAGER_STAT.MOVE_SPEED]: "移动速度",
     [VILLAGER_STAT.CAPACITY]: "运载量",
+  },
+  [FOOTER_BUTTON]: {
+    [FOOTER_BUTTON_CONTEXT.AUTO_FILL]: "自动填充",
+    [FOOTER_BUTTON_CONTEXT.TOGGLE_GUIDELINE]: "辅助线",
+    [FOOTER_BUTTON_CONTEXT.TOGGLE_GRID]: "网格线",
+    [FOOTER_BUTTON_CONTEXT.CENTER_VIEW]: "视角居中",
+    [FOOTER_BUTTON_CONTEXT.OPEN_HELP]: "帮助",
   },
   [MODAL]: {
     [MODAL_CONTEXT.MODAL_TITLE_SAVE]: "保存数据",
@@ -204,7 +213,7 @@ CN_PACK[HELP] = {
         "鼠标左键点击建筑图标以选中建筑",
         ["点击地图空白处取消选择"],
         "按住右键拖动移动视角",
-        "鼠标滚轮缩放地图",
+        "鼠标滚轮会以鼠标位置为中心缩放地图",
       ],
     },
     {

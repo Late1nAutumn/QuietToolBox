@@ -26,9 +26,6 @@ browser style warning
 
 check swipe app list on phone
 
-search engine improvement
-contact
-
 destroy mode
 - obj displayer
 - my color pattele
