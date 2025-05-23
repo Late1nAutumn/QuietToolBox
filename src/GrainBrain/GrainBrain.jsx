@@ -13,6 +13,7 @@ import {
   ZOOM_PERCENT,
   TOOLBAR_WIDTH,
 } from "./utils/constants";
+import { HELP_PAGE_MODE } from "./utils/enum";
 import {
   autoFillAvailable,
   generateReport,
@@ -166,6 +167,10 @@ export default function GrainBrain() {
     autoCamera();
     // updateObjectList();
     updateAvailabilities();
+
+    // show help page on first run
+    if (LOCALSTORAGE[STORE.GRAIN_BRAIN].loadAutoSave() === null)
+      openHelpModal(HELP_PAGE_MODE.STATISTICS);
     setHint(
       translator(HINT_CONTEXT.DEFAULT_HINT, lang, TRANSLATION_COLLECTION.HINT)
     );
@@ -177,6 +182,7 @@ export default function GrainBrain() {
     window.addEventListener("blur", dragEnd);
     window.addEventListener("wheel", zoomCamera);
     window.addEventListener("contextmenu", preventDefault);
+    console.log("[info]: Run debug() to check auto save data");
     window.debug = () =>
       JSON.stringify(LOCALSTORAGE[STORE.GRAIN_BRAIN].loadAutoSave());
     return () => {
