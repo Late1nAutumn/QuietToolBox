@@ -363,7 +363,7 @@ EN_PACK[HELP] = {
       ],
     },
     {
-      title: "Please acknowledge these application flaws",
+      title: "Please acknowledge these flaws before use",
       list: [
         "Ignoring chunks under-harvested without wheelbarrow",
         "Ignoring villagers' chunk bias",
