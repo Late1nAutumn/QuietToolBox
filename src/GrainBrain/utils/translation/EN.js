@@ -56,7 +56,7 @@ export const EN_PACK = {
     [REPORT_SUBJECT.TRIPLE_BUFFED]: "Triple buffed",
     [REPORT_SUBJECT.DOUBLE_BUFFED]: "Double buffed",
     [REPORT_SUBJECT.UNBUFFED_ACTIVE_CHUNK]: "Unbuffed chunk ratio",
-    [REPORT_SUBJECT.AVERAGE_MOVE_DURATION]: "Average move duration per farm",
+    [REPORT_SUBJECT.AVERAGE_MOVE_DURATION]: "Average move duration",
     [REPORT_SUBJECT.AVERAGE_MOVE_RATIO]: "Average move duration ratio",
     // granary
     [REPORT_SUBJECT.BUFFED_FARM_COUNT]: "Farms in area",
