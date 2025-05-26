@@ -366,7 +366,7 @@ EN_PACK[HELP] = {
       title: "Please acknowledge these application flaws",
       list: [
         "Ignoring chunks under-harvested without wheelbarrow",
-        "Ignoring villagers’ chunk bias",
+        "Ignoring villagers' chunk bias",
         "Ignoring building collision when pathfinding",
         "Assuming each farm uses only one drop-off point",
         "Ignoring villager hitbox",
