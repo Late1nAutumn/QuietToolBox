@@ -341,6 +341,7 @@ export default function MainTools({
               lang,
               TRANSLATION_COLLECTION.TOOLTIP_ICONS
             )}
+            alt="research_icon"
           />
         </div>
         <table>
@@ -377,6 +378,7 @@ export default function MainTools({
               lang,
               TRANSLATION_COLLECTION.TOOLTIP_ICONS
             )}
+            alt="delete_icon"
           />
         </div>
         <div className="grainbrain-toolbar-subject">
@@ -404,13 +406,13 @@ export default function MainTools({
               TRANSLATION_COLLECTION.TOOLTIP_BUILDING
             )}
           >
-            <img src="./asset/aoe4/granary.png" />
+            <img src="./asset/aoe4/granary.png" alt="build_icon" />
           </span>
           <span
             className="grainbrain-toolbar-iconbutton"
             onClick={() => onStartAddBuilding(BUILDING.GRANARY)}
           >
-            <img src="./asset/aoe4/repair.png" />
+            <img src="./asset/aoe4/repair.png" alt="building_icon" />
           </span>
         </div>
         <div className="grainbrain-toolbar-subject">
@@ -433,13 +435,13 @@ export default function MainTools({
               TRANSLATION_COLLECTION.TOOLTIP_BUILDING
             )}
           >
-            <img src="./asset/aoe4/farm.png" />
+            <img src="./asset/aoe4/farm.png" alt="building_icon" />
           </span>
           <span
             className="grainbrain-toolbar-iconbutton"
             onClick={() => onStartAddBuilding(BUILDING.FARM)}
           >
-            <img src="./asset/aoe4/repair.png" />
+            <img src="./asset/aoe4/repair.png" alt="build_icon" />
           </span>
         </div>
         <div className="grainbrain-toolbar-subject">
@@ -459,13 +461,13 @@ export default function MainTools({
               TRANSLATION_COLLECTION.TOOLTIP_BUILDING
             )}
           >
-            <img src="./asset/aoe4/mill.png" />
+            <img src="./asset/aoe4/mill.png" alt="building_icon" />
           </span>
           <span
             className="grainbrain-toolbar-iconbutton"
             onClick={() => onStartAddBuilding(BUILDING.MILL)}
           >
-            <img src="./asset/aoe4/repair.png" />
+            <img src="./asset/aoe4/repair.png" alt="build_icon" />
           </span>
         </div>
         <div className="grainbrain-toolbar-subject">
@@ -489,13 +491,16 @@ export default function MainTools({
             className="grainbrain-toolbar-buildingicon grainbrain-aoeicon-military"
             onClick={() => onStartAddBuilding(BUILDING.OTHER)}
           >
-            <img src={otherBuildImgSrc(otherBuildingSize)} />
+            <img
+              src={otherBuildImgSrc(otherBuildingSize)}
+              alt="building_icon"
+            />
           </span>
           <span
             className="grainbrain-toolbar-iconbutton"
             onClick={() => onStartAddBuilding(BUILDING.OTHER)}
           >
-            <img src="./asset/aoe4/repair.png" />
+            <img src="./asset/aoe4/repair.png" alt="build_icon" />
           </span>
         </div>
       </div>
@@ -519,7 +524,7 @@ export default function MainTools({
               TRANSLATION_COLLECTION.TOOLTIP_TECH
             )}
           >
-            <img src="./asset/aoe4/horticulture.png" />
+            <img src="./asset/aoe4/horticulture.png" alt="tech_icon" />
           </span>
           <span
             className={techIconClassName(TECH.FERTILIZATION)}
@@ -530,7 +535,7 @@ export default function MainTools({
               TRANSLATION_COLLECTION.TOOLTIP_TECH
             )}
           >
-            <img src="./asset/aoe4/fertilization.png" />
+            <img src="./asset/aoe4/fertilization.png" alt="tech_icon" />
           </span>
           <span
             className={techIconClassName(TECH.CROSSBREEDING)}
@@ -541,7 +546,10 @@ export default function MainTools({
               TRANSLATION_COLLECTION.TOOLTIP_TECH
             )}
           >
-            <img src="./asset/aoe4/precision-cross-breeding.png" />
+            <img
+              src="./asset/aoe4/precision-cross-breeding.png"
+              alt="tech_icon"
+            />
           </span>
         </div>
         <div className="grainbrain-toolbar-subject">
@@ -554,7 +562,7 @@ export default function MainTools({
               TRANSLATION_COLLECTION.TOOLTIP_TECH
             )}
           >
-            <img src="./asset/aoe4/ancient-techniques.png" />
+            <img src="./asset/aoe4/ancient-techniques.png" alt="tech_icon" />
           </span>
           {techState[TECH.ANCIENTTECH] && (
             <select
@@ -579,7 +587,7 @@ export default function MainTools({
               TRANSLATION_COLLECTION.TOOLTIP_TECH
             )}
           >
-            <img src="./asset/aoe4/wheelbarrow.png" />
+            <img src="./asset/aoe4/wheelbarrow.png" alt="tech_icon" />
           </span>
           <span
             className={dynastyIconClassName(DYNASTY.YUAN)}
@@ -590,7 +598,7 @@ export default function MainTools({
               TRANSLATION_COLLECTION.TOOLTIP_DYNASTY
             )}
           >
-            <img src="./asset/aoe4/yuan.png" />
+            <img src="./asset/aoe4/yuan.png" alt="tech_icon" />
           </span>
         </div>
         <table>

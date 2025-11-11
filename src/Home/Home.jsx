@@ -171,7 +171,7 @@ export default function Home({ scrollY, setScrollY }) {
                         }}
                       >
                         {APP_LIST[i].cover ? (
-                          <img src={APP_LIST[i].cover} />
+                          <img src={APP_LIST[i].cover} alt="app_cover"/>
                         ) : (
                           APP_LIST[i].text
                         )}

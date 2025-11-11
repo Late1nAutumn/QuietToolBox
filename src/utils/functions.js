@@ -89,7 +89,9 @@ export const mapNavigatorLang = () => {
   }
 };
 
-export const isMobile = () =>
-  /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+export const isMobile = () => {
+  return false;
+  return /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+};
 
 // #endregion

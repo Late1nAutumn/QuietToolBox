@@ -45,7 +45,7 @@ export default function Notification({ data, index, removeLastNotification }) {
     <div className={className()} style={{ bottom: index * 40 }}>
       <span className="grainbrain-notification-message">{data.msg}</span>
       <span className="grainbrain-notification-icon">
-        <img src={notificationIconSrc()} />
+        <img src={notificationIconSrc()} alt="notification_icon" />
       </span>
     </div>
   );

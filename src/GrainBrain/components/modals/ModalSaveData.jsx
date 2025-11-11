@@ -157,23 +157,26 @@ export default function ModalSaveData({
                 {name}
               </span>
               <span>{farmCount}</span>
-              <img src="./asset/aoe4/farm.png" />
+              <img src="./asset/aoe4/farm.png" alt="farm_icon" />
               <span className="grainbrain-modal-savelist-save-delete">
                 {deletingItem === i ? (
                   <>
                     <img
                       src="./asset/aoe4/delete.png"
                       onClick={onConfirmDelete}
+                      alt="delete_icon"
                     />
                     <img
                       src="./asset/aoe4/cancel.png"
                       onClick={onCancelDelete}
+                      alt="cancel_icon"
                     />
                   </>
                 ) : (
                   <img
                     src="./asset/aoe4/delete.png"
                     onClick={(e) => onDeleteClick(e, i)}
+                    alt="delete_icon"
                   />
                 )}
               </span>

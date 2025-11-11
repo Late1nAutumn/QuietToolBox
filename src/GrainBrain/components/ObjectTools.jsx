@@ -72,6 +72,7 @@ export default function ObjectTools({
                       lang,
                       TRANSLATION_COLLECTION.TOOLTIP_ICONS
                     )}
+                    alt="research_icon"
                   />
                 </div>
               );
@@ -208,7 +209,11 @@ export default function ObjectTools({
         )}
 
         <div className="grainbrain-toolbar-centered">
-          <img src="./asset/aoe4/back.png" onClick={onBackClick} />
+          <img
+            src="./asset/aoe4/back.png"
+            onClick={onBackClick}
+            alt="back_icon"
+          />
           <img
             src="./asset/aoe4/delete.png"
             onClick={onDeleteClick}
@@ -217,6 +222,7 @@ export default function ObjectTools({
               lang,
               TRANSLATION_COLLECTION.TOOLTIP_ICONS
             )}
+            alt="delete_icon"
           />
         </div>
       </div>

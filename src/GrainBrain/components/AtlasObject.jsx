@@ -134,7 +134,7 @@ export default function AtlasObject({
         }}
         onClick={() => onBuildingSelect(uuid)}
       >
-        <img src={objectTypeIconSrc()} />
+        <img src={objectTypeIconSrc()} alt="object_icon" />
       </div>
       <div
         className={

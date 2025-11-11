@@ -79,6 +79,7 @@ export default function Footer({
         <img
           className={autoFillable ? "" : "grainbrain-inactive"}
           src="./asset/aoe4/tree_replanting.png"
+          alt="button_icon"
         />
         <div>
           {translator(
@@ -99,6 +100,7 @@ export default function Footer({
         <img
           className={displayGuidelines ? "" : "grainbrain-inactive"}
           src="./asset/aoe4/supervise.png"
+          alt="button_icon"
         />
         <div>
           {translator(
@@ -119,6 +121,7 @@ export default function Footer({
         <img
           className={displayGrid ? "" : "grainbrain-inactive"}
           src="./asset/aoe4/iron_clamps.png"
+          alt="button_icon"
         />
         <div>
           {translator(
@@ -136,7 +139,7 @@ export default function Footer({
           TRANSLATION_COLLECTION.TOOLTIP_ICONS
         )}
       >
-        <img src="./asset/aoe4/tracking.png" />
+        <img src="./asset/aoe4/tracking.png" alt="button_icon" />
         <div>
           {translator(
             FOOTER_BUTTON_CONTEXT.CENTER_VIEW,
@@ -153,7 +156,7 @@ export default function Footer({
           TRANSLATION_COLLECTION.TOOLTIP_ICONS
         )}
       >
-        <img src="./asset/aoe4/unknown_mercenary.png" />
+        <img src="./asset/aoe4/unknown_mercenary.png" alt="button_icon" />
         <div>
           {translator(
             FOOTER_BUTTON_CONTEXT.OPEN_HELP,

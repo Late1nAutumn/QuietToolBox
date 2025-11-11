@@ -311,7 +311,7 @@ export default function Steamster() {
           </span>
           <span className="steamster-nav-avatar">
             <a href={USER_PROFILE.profileurl} target="_blank">
-              <img src={USER_PROFILE.avatar} />
+              <img src={USER_PROFILE.avatar} alt="user_portrait" />
             </a>
           </span>
         </div>
