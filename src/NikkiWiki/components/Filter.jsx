@@ -109,7 +109,7 @@ export default function Filter({
                       value={filter.config.itemLv}
                       onChange={onItemLvChange}
                     >
-                      {new Array(12).fill(0).map((_, i) => (
+                      {Array.from({ length: 12 }, (_, i) => (
                         <option value={i} key={i}>
                           {(() => {
                             let context;

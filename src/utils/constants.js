@@ -17,10 +17,10 @@ export const IDLE_TIMEOUT = {
 // #region app list
 // defined here instead of enum to avoid looping import
 export const APP = {
-  NIKKI_KIWI: 1,
-  SKETCHER: 2,
-  STEAMSTER: 3,
-  GRAIN_GRAIN: 4,
+  STEAMSTER: 1,
+  GRAIN_GRAIN: 2,
+  NIKKI_KIWI: 3,
+  SKETCHER: 4,
   DASHBOARD: 5,
 };
 
@@ -28,26 +28,6 @@ export const HOME_TITLE = "Nexus";
 export const HOME_FAVICON = "/asset/favicon/nexus.png";
 
 export const APPS = {
-  [APP.NIKKI_KIWI]: {
-    favicon: "/asset/favicon/nikkikiwi.png",
-    text: "Nikki Kiwi",
-    link: "/nikki",
-    cover: "/asset/cover/nikkikiwi.png",
-    intro: {
-      [LANG.EN]: "To check gears' stats in Inifinity Nikki",
-      [LANG.CN]: "无限暖暖装备属性比较",
-    },
-  },
-  [APP.SKETCHER]: {
-    favicon: "/asset/favicon/sketcher.png",
-    text: "Sketcher",
-    link: "/sketcher",
-    cover: "/asset/cover/sketcher.png",
-    intro: {
-      [LANG.EN]: "This helps me draw SVG paths out of images",
-      [LANG.CN]: "我拿这个来描图画svg",
-    },
-  },
   [APP.STEAMSTER]: {
     favicon: "/asset/favicon/steamster.png",
     text: "Steamster",
@@ -66,6 +46,26 @@ export const APPS = {
     intro: {
       [LANG.EN]: "Play Age of Empires 4?\nWe have the ultimate solution for grainary optimization here.",
       [LANG.CN]: "谷仓强迫症的终极福音",
+    },
+  },
+  [APP.NIKKI_KIWI]: {
+    favicon: "/asset/favicon/nikkikiwi.png",
+    text: "Nikki Kiwi",
+    link: "/nikki",
+    cover: "/asset/cover/nikkikiwi.png",
+    intro: {
+      [LANG.EN]: "To check gears' stats in Inifinity Nikki",
+      [LANG.CN]: "无限暖暖装备属性比较",
+    },
+  },
+  [APP.SKETCHER]: {
+    favicon: "/asset/favicon/sketcher.png",
+    text: "Sketcher",
+    link: "/sketcher",
+    cover: "/asset/cover/sketcher.png",
+    intro: {
+      [LANG.EN]: "This helps me draw SVG paths out of images",
+      [LANG.CN]: "我拿这个来描图画svg",
     },
   },
   [APP.DASHBOARD]: {

@@ -109,31 +109,28 @@ const getBestChunks = (
   chunkBuffs
 ) => {
   // get best chunks in regrow period
-  let chunks = new Array(RULE.FARM_CHUNK ** 2)
-    .fill()
-    .map((_, index) => {
-      let coord = chunkCoord(farmData.coord, index);
-      let { x, y, distance } = dropOffPoint(
-        coord,
-        dropperData.coord,
-        dropperData.kind
-      );
-      return {
-        index,
-        coord,
-        dropOffCoord: { x, y },
-        dropOffDistance: distance,
-      };
-    })
-    .sort(
-      // it is what it is for now
-      (a, b) =>
-        a.dropOffDistance - b.dropOffDistance ||
-        Math.abs(rowOfChunkIndex(a.index) - RULE.FARM_CHUNK / 2) -
-          Math.abs(rowOfChunkIndex(b.index) - RULE.FARM_CHUNK / 2) ||
-        Math.abs(colOfChunkIndex(a.index) - RULE.FARM_CHUNK / 2) -
-          Math.abs(colOfChunkIndex(b.index) - RULE.FARM_CHUNK / 2)
+  let chunks = Array.from({ length: RULE.FARM_CHUNK ** 2 }, (_, index) => {
+    let coord = chunkCoord(farmData.coord, index);
+    let { x, y, distance } = dropOffPoint(
+      coord,
+      dropperData.coord,
+      dropperData.kind
     );
+    return {
+      index,
+      coord,
+      dropOffCoord: { x, y },
+      dropOffDistance: distance,
+    };
+  }).sort(
+    // it is what it is for now
+    (a, b) =>
+      a.dropOffDistance - b.dropOffDistance ||
+      Math.abs(rowOfChunkIndex(a.index) - RULE.FARM_CHUNK / 2) -
+        Math.abs(rowOfChunkIndex(b.index) - RULE.FARM_CHUNK / 2) ||
+      Math.abs(colOfChunkIndex(a.index) - RULE.FARM_CHUNK / 2) -
+        Math.abs(colOfChunkIndex(b.index) - RULE.FARM_CHUNK / 2)
+  );
 
   // get farm rate
   // period start after gather in the first chunk finished
@@ -181,7 +178,7 @@ export const generateTracker = (atlas, techState) => {
         farms[uuid] = {
           chunkBuffs: new Array(RULE.FARM_CHUNK ** 2).fill(0),
           dropper: null,
-          buffedBy: new Array(RULE.FARM_CHUNK ** 2).fill().map(() => []),
+          buffedBy: Array.from({ length: RULE.FARM_CHUNK ** 2 }, () => []),
           period: Infinity,
           efficiency: 0,
           activeChunks: [],

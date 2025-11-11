@@ -33,7 +33,7 @@ export default function AtlasObject({
             gridTemplateRows: `repeat(${RULE.FARM_CHUNK}, 1fr)`,
           }}
         >
-          {new Array(RULE.FARM_CHUNK ** 2).fill().map((_, i) => (
+          {Array.from({ length: RULE.FARM_CHUNK ** 2 }, (_, i) => (
             <div
               className={
                 "grainbrain-object-guideline-farmchunk" +

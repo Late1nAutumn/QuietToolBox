@@ -23,7 +23,7 @@ import {
 
 import { APP, APPS } from "../utils/constants";
 import { DIRECTION } from "../utils/enums";
-import { preventDefault, setFavicon } from "../utils/functions";
+import { preventDefault, randomUUID, setFavicon } from "../utils/functions";
 import { LOCALSTORAGE, STORE } from "../utils/localStorage";
 
 import { translator } from "./utils/translation/translator";
@@ -97,7 +97,7 @@ export default function GrainBrain() {
 
   const newNotification = (msg, type) => {
     notificationList.current = notificationList.current.slice();
-    notificationList.current.push({ type, msg, id: crypto.randomUUID() });
+    notificationList.current.push({ type, msg, id: randomUUID() });
     setNotificationDisplay(notificationList.current);
   };
   const removeLastNotification = () => {

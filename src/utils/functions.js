@@ -27,6 +27,20 @@ export const sortByProperty = (arr, property, reverse) => {
   return temp;
 };
 
+export const randomUUID = () => {
+  if (
+    window.location.protocol === "https:" ||
+    window.location.hostname === "localhost"
+  )
+    // crypto does NOT work in http://
+    return crypto.randomUUID();
+
+  const url = URL.createObjectURL(new Blob());
+  const uuid = url.toString().split("/").pop();
+  URL.revokeObjectURL(url);
+  return uuid;
+};
+
 // #region math
 export const pointDistance = (x1, y1, x2, y2) =>
   Math.sqrt((x1 - x2) ** 2 + (y1 - y2) ** 2);

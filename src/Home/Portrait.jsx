@@ -26,7 +26,7 @@ export default function Portrait({
   const computeEyeballCoordinate = (mouseX, mouseY) => {
     // need to be recalculated in case of resizing
     // assuming conteriner is position:fixed
-    let obj = portraitContainerRef.current.getBoundingClientRect();
+    let obj = portraitContainerRef.current?.getBoundingClientRect?.() || {};
     let containerX = obj.x,
       containerY = obj.y,
       containerWidth = obj.width,

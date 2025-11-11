@@ -1,4 +1,5 @@
 import { AUTO_CAMERA_PADDING, AUTO_ZOOM_LIMIT, ZOOM_LIMIT } from "./constants";
+import { randomUUID } from "../../utils/functions";
 
 export default class Grider {
   constructor(roster, atlas) {
@@ -31,7 +32,7 @@ export default class Grider {
   // #region data
   startAddingObject(kind, mods, coordX, coordY) {
     this.newObject = {
-      uuid: crypto.randomUUID(),
+      uuid: randomUUID(),
       kind,
       coord: { x: 0, y: 0 },
       mods,
@@ -90,7 +91,7 @@ export default class Grider {
 
   batchNewObjectByCoord(kind, mods, list) {
     list.forEach((coord) => {
-      let uuid = crypto.randomUUID();
+      let uuid = randomUUID();
       this.atlas[uuid] = {
         uuid,
         kind,
@@ -150,8 +151,8 @@ export default class Grider {
     let cols = rightBound - leftBound,
       rows = bottomBound - topBound;
     let zoom = Math.min(
-      width / cols * (1 - 2 * AUTO_CAMERA_PADDING),
-      height / rows * (1 - 2 * AUTO_CAMERA_PADDING)
+      (width / cols) * (1 - 2 * AUTO_CAMERA_PADDING),
+      (height / rows) * (1 - 2 * AUTO_CAMERA_PADDING)
     );
     zoom = Math.min(zoom, AUTO_ZOOM_LIMIT);
     zoom = Math.max(zoom, ZOOM_LIMIT);

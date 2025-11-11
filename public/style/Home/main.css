@@ -19,24 +19,24 @@
 /* #region content */
 .home-content-nexus {
   position: fixed;
-  bottom: 10px;
+  bottom: 15px;
   left: 20px;
   height: 40px;
   z-index: 250;
 }
 .home .nexusButton-icon svg {
-  fill: #222;
+  fill: #777;
 }
 .home .nexusButton-icon:hover svg {
-  fill: #555;
+  fill: white;
 }
 .home .nexusButton-menu-button svg {
-  stroke: #222;
-  fill: #222;
+  stroke: #777;
+  fill: #777;
 }
 .home .nexusButton-menu-button:hover svg {
-  stroke: #555;
-  fill: #555;
+  stroke: white;
+  fill: white;
 }
 .home-content-head {
   position: fixed;
@@ -82,7 +82,10 @@
 .home-content-portrait {
   bottom: 0;
   height: var(--portrait-height);
-  filter: brightness(85%);
+  filter: brightness(90%);
+}
+.home-content-portrait svg {
+  filter: drop-shadow(0 0 8px black);
 }
 .home-content-apps {
   position: absolute;
@@ -114,6 +117,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  border: 1px solid #aaa;
   background-color: white;
   transition: box-shadow 0.3s;
 }
@@ -138,7 +142,7 @@
   z-index: 200;
   width: 100%;
   height: 150px;
-  fill: #ddd;
+  fill: #272f3c;
 }
 /* #endregion */
 
@@ -153,7 +157,7 @@
   justify-content: start;
   flex-direction: row-reverse;
   /* background-color: black; */
-  background-color: #111;
+  background-color: #0f1419;
   overflow: hidden;
 }
 
@@ -173,7 +177,7 @@
   text-orientation: sideways;
   margin-top: 20vh;
   font-size: 230px;
-  color: red;
+  color: #f59e0b;
   opacity: 0.17;
 }
 .home-background-focused-title {
@@ -184,7 +188,7 @@
   font-weight: bold;
   white-space: nowrap;
   color: white;
-  opacity: 0.5;
+  opacity: 0.7;
 }
 /* #endregion */
 

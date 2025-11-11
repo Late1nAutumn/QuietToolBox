@@ -561,7 +561,7 @@ export default function MainTools({
               value={techState[TECH.DYNASTY_COUNT]}
               onChange={onDynastyCountChange}
             >
-              {new Array(4).fill(0).map((_, i) => (
+              {Array.from({ length: 4 }, (_, i) => (
                 <option value={i + 1} key={i}>
                   {i + 1}
                 </option>

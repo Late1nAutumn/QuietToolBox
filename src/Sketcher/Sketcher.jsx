@@ -137,8 +137,7 @@ export default function Sketcher() {
 
   const pendingPathD = () => {
     if (paths[editorIndex]?.points?.length) {
-      let lastPoint =
-        paths[editorIndex].points[paths[editorIndex].points.length - 1];
+      let lastPoint = paths[editorIndex].points.at(-1);
       let d = `M${lastPoint.x} ${lastPoint.y}L${cursorCoord.x} ${cursorCoord.y}`;
       // if (paths[editorIndex].closing) {
       //   let startPoint = paths[editorIndex].points[0];

@@ -55,6 +55,7 @@ export default function Shape(props) {
             d={path}
             fill={"transparent"}
             stroke={"white"}
+            strokeWidth={2}
             style={{
               strokeDasharray: perimeter,
               // WARNING: negative offset value WON'T work on Safari
