@@ -47,14 +47,18 @@ export const DEFAULT_SPHERE_RADIUS = 0.055;
 export const DEFAULT_SPHERE_BORDER_SCALE = 1.1; // % inner sphere radius
 
 export const DEFAULT_COLOR_LIST = [
-  { visible: true, r: 0.9333, g: 0.8549, b: 0.6157 }, // #EEDA9D
-  { visible: true, r: 0.7882, g: 0.5098, b: 0.4196 }, // #C9826B
-  { visible: true, r: 0.7804, g: 0.7098, b: 0.6824 }, // #C7B5AE
-  { visible: true, r: 0.9451, g: 0.8902, b: 0.8275 }, // #F1E3D3
-  { visible: true, r: 0.1725, g: 0.1725, b: 0.1725 }, // #2C2C2C
-  { visible: true, r: 0.6706, g: 0.5451, b: 0.3961 }, // #AB8B65
-  { visible: true, r: 0.702, g: 0.2314, b: 0.1725 }, // #B33B2C
-  { visible: true, r: 0.8902, g: 0.8902, b: 0.8863 }, // #E3E3E2
+  { visible: true, r: 0.702, g: 0.2314, b: 0.1725 }, // #B33B2C 茜色
+  { visible: true, r: 0.8902, g: 0.8902, b: 0.8863 }, // #E3E3E2 白練
+  { visible: true, r: 0.1843, g: 0.4196, b: 0.3608 }, // #2F6B5C 千歳绿
+  { visible: true, r: 0.7882, g: 0.5098, b: 0.4196 }, // #C9826B 朱砂
+  { visible: true, r: 0.7804, g: 0.7098, b: 0.6824 }, // #C7B5AE 黛蓝
+  { visible: true, r: 0.9451, g: 0.8902, b: 0.8275 }, // #F1E3D3 牙白
+  { visible: true, r: 0.1725, g: 0.1725, b: 0.1725 }, // #2C2C2C 墨色
+  { visible: true, r: 0.6706, g: 0.5451, b: 0.3961 }, // #AB8B65 缃色
+  { visible: true, r: 0.2275, g: 0.4314, b: 0.4353 }, // #3A6E6F 浮世绘蓝
+  { visible: true, r: 0.7647, g: 0.5569, b: 0.4196 }, // #C38E6B 浮世绘橙
+  { visible: true, r: 0.5765, g: 0.3216, b: 0.2549 }, // #935241 浮世绘棕
+  { visible: true, r: 0.9333, g: 0.8549, b: 0.6157 }, // #EEDA9D 浮世绘黄
 ];
 
 // mouse sensitive
