@@ -1,0 +1,53 @@
+:root{
+  --colorblinder-color-theme-primary: #ff884d;
+  --colorblinder-color-theme-primary-light: #ffaa66;
+  --colorblinder-color-theme-primary-lighter: #ffd8b0;
+}
+
+.colorblinder {
+  margin: 0;
+  padding: 0;
+  background: #0a0a1a;
+  overflow: hidden;
+  font-family: "Segoe UI", "Poppins", sans-serif;
+  width: 100vw;
+  height: 100vh;
+}
+.colorblinder canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.colorblinder ::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+.colorblinder ::-webkit-scrollbar-thumb {
+  background-color: rgb(255, 140, 80);
+  border-radius: 10px;
+}
+.colorblinder ::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.colorblinder-nexus {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  height: 40px;
+}
+.colorblinder .nexusButton-icon svg {
+  fill: var(--colorblinder-color-theme-primary);
+}
+.colorblinder .nexusButton-icon:hover svg {
+  fill: var(--colorblinder-color-theme-primary-light);
+}
+.colorblinder .nexusButton-menu-button svg {
+  stroke: var(--colorblinder-color-theme-primary);
+  fill: var(--colorblinder-color-theme-primary);
+}
+.colorblinder .nexusButton-menu-button:hover svg {
+  stroke: var(--colorblinder-color-theme-primary-light);
+  fill: var(--colorblinder-color-theme-primary-light);
+}

@@ -1,0 +1,1598 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>色彩指示器 | 列表模式小球和圆环随最大半径缩放</title>
+    <style>
+        /* 样式与之前相同，省略以节省篇幅，实际运行时包含完整样式 */
+        body {
+            margin: 0;
+            padding: 0;
+            background: #0a0a1a;
+            overflow: hidden;
+            font-family: 'Segoe UI', 'Poppins', sans-serif;
+        }
+        canvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+        .controls-panel {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(20, 20, 32, 0.88);
+            backdrop-filter: blur(12px);
+            border-radius: 24px;
+            padding: 20px 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            border: 1px solid rgba(255, 140, 80, 0.45);
+            box-shadow: 0 8px 28px rgba(0,0,0,0.6);
+            z-index: 100;
+            min-width: 200px;
+            pointer-events: auto;
+            font-weight: 500;
+        }
+        .color-wheel-panel {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 260px;
+            background: rgba(20, 20, 32, 0.92);
+            backdrop-filter: blur(12px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 140, 80, 0.5);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 16px;
+            gap: 12px;
+            z-index: 100;
+            pointer-events: auto;
+        }
+        .color-wheel-panel h4 {
+            margin: 0;
+            color: #ffaa77;
+            font-size: 14px;
+            font-weight: normal;
+        }
+        .color-wheel-canvas {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            box-shadow: 0 0 0 3px #ff884d66;
+            cursor: pointer;
+        }
+        .wheel-info {
+            color: #ccc;
+            font-size: 11px;
+            text-align: center;
+        }
+        .color-info-box {
+            width: 100%;
+            background: rgba(0,0,0,0.6);
+            border-radius: 12px;
+            padding: 8px;
+            text-align: center;
+            font-family: monospace;
+            font-size: 12px;
+            color: #ffaa77;
+            border: 1px solid #ff884d66;
+        }
+        .color-info-box span {
+            color: #ffddbb;
+        }
+        .color-list-panel {
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            bottom: 20px;
+            width: 260px;
+            background: rgba(20, 20, 32, 0.92);
+            backdrop-filter: blur(12px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 140, 80, 0.5);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            z-index: 100;
+            pointer-events: auto;
+        }
+        .color-list-header {
+            padding: 14px 16px;
+            background: rgba(0,0,0,0.4);
+            border-bottom: 1px solid #ff884d66;
+            font-weight: bold;
+            color: #ffaa77;
+            text-align: center;
+        }
+        .color-add-area {
+            display: flex;
+            gap: 8px;
+            padding: 12px;
+            border-bottom: 1px solid #2c2c3a;
+        }
+        .color-add-area input {
+            flex: 1;
+            background: #2c2c3a;
+            border: 1px solid #ff884d88;
+            border-radius: 20px;
+            padding: 8px 12px;
+            color: white;
+            font-size: 12px;
+            outline: none;
+        }
+        .color-add-area button {
+            background: #ff884d;
+            border: none;
+            border-radius: 30px;
+            padding: 6px 14px;
+            font-weight: bold;
+            cursor: pointer;
+            color: #1a1a2a;
+        }
+        .color-add-area button:hover {
+            background: #ffaa66;
+        }
+        .color-items {
+            flex: 1;
+            overflow-y: auto;
+            padding: 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .color-item {
+            background: rgba(0,0,0,0.5);
+            border-radius: 40px;
+            padding: 6px 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border: 1px solid #3a3a4a;
+        }
+        .color-swatch {
+            width: 28px;
+            height: 28px;
+            border-radius: 28px;
+            border: 1px solid white;
+        }
+        .color-value {
+            flex: 1;
+            font-family: monospace;
+            font-size: 12px;
+            color: #ddd;
+        }
+        .delete-color {
+            background: none;
+            border: none;
+            color: #ff8866;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: bold;
+            padding: 0 6px;
+            border-radius: 20px;
+        }
+        .delete-color:hover {
+            color: #ff3300;
+            background: rgba(255,80,80,0.2);
+        }
+        .note {
+            position: absolute;
+            bottom: 16px;
+            right: 300px;
+            background: rgba(0,0,0,0.55);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            color: #ccc;
+            font-family: monospace;
+            pointer-events: none;
+            z-index: 100;
+        }
+        .subnote {
+            font-size: 10px;
+            text-align: center;
+            color: #aaa;
+            margin-top: 8px;
+        }
+        .mode-switch, .color-space-switch {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            margin: 4px 0;
+        }
+        .mode-btn, .color-space-btn {
+            background: rgba(0,0,0,0.5);
+            border: 1px solid #ff884d;
+            color: #ffccaa;
+            padding: 6px 12px;
+            border-radius: 40px;
+            font-size: 13px;
+            font-weight: bold;
+            cursor: pointer;
+            text-align: center;
+            flex: 1;
+        }
+        .color-space-btn {
+            border-color: #88aaff;
+            color: #aaccff;
+        }
+        .mode-btn.active {
+            background: #ff884d;
+            color: #1a1a2a;
+        }
+        .color-space-btn.active {
+            background: #88aaff;
+            color: #1a1a2a;
+        }
+        .control-item {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .control-item label {
+            font-size: 13px;
+            letter-spacing: 1px;
+            color: #ffd8b0;
+            display: flex;
+            justify-content: space-between;
+            font-weight: 600;
+        }
+        input[type="range"] {
+            width: 100%;
+            cursor: pointer;
+            accent-color: #ff884d;
+        }
+        .divider {
+            height: 1px;
+            background: rgba(255,140,80,0.3);
+            margin: 4px 0;
+        }
+        .hidden {
+            display: none;
+        }
+        @media (max-width: 700px) {
+            .color-wheel-panel { width: 220px; right: 10px; padding: 12px; }
+            .color-wheel-canvas { width: 160px; height: 160px; }
+            .color-list-panel { width: 220px; right: 10px; top: 10px; bottom: 10px; }
+            .note { right: 250px; }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="webglCanvas"></canvas>
+    
+    <div class="controls-panel">
+        <div class="title">🎨 色彩指示器</div>
+        <div class="mode-switch">
+            <div id="btnPickerMode" class="mode-btn active">🎨 选色模式</div>
+            <div id="btnListMode" class="mode-btn">📋 列表模式</div>
+        </div>
+        <div class="color-space-switch">
+            <div id="btnHSV" class="color-space-btn active">HSV</div>
+            <div id="btnHSL" class="color-space-btn">HSL</div>
+        </div>
+        <div class="control-item">
+            <label>📐 柱面半径 <span id="radiusVal">0.10</span></label>
+            <input type="range" id="radiusSlider" min="0.01" max="1.0" step="0.01" value="0.1">
+        </div>
+        <div class="control-item">
+            <label>📏 总高度 <span id="heightVal">2.00</span></label>
+            <input type="range" id="heightSlider" min="0.5" max="3.0" step="0.01" value="2.0">
+        </div>
+        <div class="control-item">
+            <label>🔘 最大半径 <span id="scaleVal">1.00</span></label>
+            <input type="range" id="scaleSlider" min="0.5" max="2.0" step="0.01" value="1.0">
+        </div>
+        <div class="control-item" id="midYControl">
+            <label>🟤 中间圆盘Y轴 <span id="midYVal">0.00</span></label>
+            <input type="range" id="midSlider" min="-1.0" max="1.0" step="0.01" value="0.0">
+        </div>
+        <div class="control-item">
+            <label>💍 柱面透明度 <span id="alphaVal">0.30</span></label>
+            <input type="range" id="alphaSlider" min="0.0" max="1.0" step="0.01" value="0.3">
+        </div>
+        <div class="divider"></div>
+        <div class="control-item">
+            <label>🔄 水平旋转角 <span id="azimuthVal">0°</span></label>
+            <input type="range" id="azimuthSlider" min="0" max="360" step="1" value="0">
+        </div>
+        <div class="control-item">
+            <label>↕️ 垂直俯仰角 <span id="elevationVal">0°</span></label>
+            <input type="range" id="elevationSlider" min="-90" max="90" step="1" value="0">
+        </div>
+        <div class="subnote">
+            🎨 选色模式: 独立白线（细长方体，从圆心向外延伸，仅随俯仰角倾斜）<br>
+            📋 列表模式: 每个彩色小球周围有一圈黑色边框，同层半透明圆环半径随最大半径缩放
+        </div>
+    </div>
+    
+    <div id="colorWheelPanel" class="color-wheel-panel">
+        <h4>🎨 中圆盘颜色映射</h4>
+        <canvas id="colorWheelCanvas" class="color-wheel-canvas" width="200" height="200"></canvas>
+        <div class="wheel-info">红色在右侧 | 白线固定向下 | 白环标记当前半径 | 准星取色</div>
+        <div id="colorInfoBox" class="color-info-box">
+            🎯 准星颜色<br>
+            RGB: <span id="rgbValue">(0,0,0)</span><br>
+            HEX: <span id="hexValue">#000000</span>
+        </div>
+    </div>
+    
+    <div id="colorListPanel" class="color-list-panel hidden">
+        <div class="color-list-header">🎨 颜色映射小球</div>
+        <div class="color-add-area">
+            <input type="text" id="colorInput" placeholder="#ff6600 或 rgb(255,102,0)" value="#888888">
+            <button id="addColorBtn">+ 添加</button>
+        </div>
+        <div class="color-items" id="colorItemsContainer">
+            <div style="text-align:center; color:#aaa; padding:20px;">暂无颜色，点击上方添加</div>
+        </div>
+    </div>
+    <div class="note">
+        🌈 最大半径滑块整体缩放圆柱、圆盘、白环、白线，小球位置和圆环半径同步缩放
+    </div>
+
+    <script>
+        (function() {
+            const canvas = document.getElementById('webglCanvas');
+            let gl;
+            
+            let currentMode = 'picker';
+            
+            // 圆柱体相关
+            let cylinderProgram;
+            let discProgram;
+            let cylinderSideBuffers = {};
+            let cylinderSideVertexCount = 0;
+            let discBuffers = {};
+            let discVertexCount = 0;
+            
+            let cylinderRadius = 0.1;
+            let cylinderHeight = 2.0;
+            let halfHeight = 1.0;
+            const discRadius = 1.0;
+            const segments = 72;
+            let midYNormalized = 0.0;
+            let azimuthDeg = 0;
+            let elevationDeg = 0;
+            let globalRadiusScale = 1.0;
+            
+            // 小球列表
+            let colorItems = [];
+            let sphereProgram;          // 彩色小球着色器
+            let borderSphereProgram;    // 黑色边框小球着色器
+            let sphereVertexBuffer = null;
+            let sphereIndexBuffer = null;
+            let sphereIndexCount = 0;
+            
+            // 圆环列表（列表模式半透明圆环）
+            let ringItems = [];
+            let ringProgram;
+            let ringVertexBuffer = null;
+            let ringVertexCount = 0;
+            let cylinderAlpha = 0.3;
+            
+            // 选色模式中圆盘交线圆环（白色）
+            let midIntersectionRingBuffer = null;
+            let midIntersectionRingVertexCount = 0;
+            
+            // 独立白线（细长方体）
+            let pointerProgram = null;
+            let pointerVertexBuffer = null;
+            let pointerIndexBuffer = null;
+            let pointerIndexCount = 0;
+            
+            // 2D圆盘相关
+            const wheelCanvas = document.getElementById('colorWheelCanvas');
+            const wheelCtx = wheelCanvas.getContext('2d');
+            let colorMode = 0;
+            
+            const rgbSpan = document.getElementById('rgbValue');
+            const hexSpan = document.getElementById('hexValue');
+            
+            const cameraPosition = [0, 1.6, 6.2];
+            const cameraTarget = [0, 0, 0];
+            const cameraUp = [0, 1, 0];
+            
+            const MIN_RADIUS = 0.01;
+            const MAX_RADIUS = 1.0;
+            
+            // UI 元素
+            const radiusSlider = document.getElementById('radiusSlider');
+            const radiusVal = document.getElementById('radiusVal');
+            const heightSlider = document.getElementById('heightSlider');
+            const heightVal = document.getElementById('heightVal');
+            const scaleSlider = document.getElementById('scaleSlider');
+            const scaleVal = document.getElementById('scaleVal');
+            const midSlider = document.getElementById('midSlider');
+            const midYVal = document.getElementById('midYVal');
+            const azimuthSlider = document.getElementById('azimuthSlider');
+            const azimuthVal = document.getElementById('azimuthVal');
+            const elevationSlider = document.getElementById('elevationSlider');
+            const elevationVal = document.getElementById('elevationVal');
+            const alphaSlider = document.getElementById('alphaSlider');
+            const alphaVal = document.getElementById('alphaVal');
+            const btnHSV = document.getElementById('btnHSV');
+            const btnHSL = document.getElementById('btnHSL');
+            const btnPickerMode = document.getElementById('btnPickerMode');
+            const btnListMode = document.getElementById('btnListMode');
+            const colorInput = document.getElementById('colorInput');
+            const addColorBtn = document.getElementById('addColorBtn');
+            const colorItemsContainer = document.getElementById('colorItemsContainer');
+            const colorListPanel = document.getElementById('colorListPanel');
+            const colorWheelPanel = document.getElementById('colorWheelPanel');
+            const midYControl = document.getElementById('midYControl');
+            
+            // ---------- 辅助数学 ----------
+            function normalize(v) {
+                const len = Math.hypot(v[0], v[1], v[2]);
+                if (len < 1e-6) return [0,0,0];
+                return [v[0]/len, v[1]/len, v[2]/len];
+            }
+            function cross(a, b) {
+                return [ a[1]*b[2] - a[2]*b[1], a[2]*b[0] - a[0]*b[2], a[0]*b[1] - a[1]*b[0] ];
+            }
+            function dot(a, b) { return a[0]*b[0] + a[1]*b[1] + a[2]*b[2]; }
+            function subVectors(a,b) { return [a[0]-b[0], a[1]-b[1], a[2]-b[2]]; }
+            
+            function createViewMatrix(eye, target, up) {
+                const z = normalize(subVectors(eye, target));
+                const x = normalize(cross(up, z));
+                const y = normalize(cross(z, x));
+                return [
+                    x[0], x[1], x[2], 0,
+                    y[0], y[1], y[2], 0,
+                    z[0], z[1], z[2], 0,
+                    -dot(x, eye), -dot(y, eye), -dot(z, eye), 1
+                ];
+            }
+            
+            function createProjectionMatrix(aspect, fovDeg=48, near=0.3, far=20.0) {
+                const f = 1.0 / Math.tan(fovDeg * Math.PI / 360);
+                const rangeInv = 1.0 / (near - far);
+                return [
+                    f/aspect, 0, 0, 0,
+                    0, f, 0, 0,
+                    0, 0, (far+near)*rangeInv, -1,
+                    0, 0, 2*far*near*rangeInv, 0
+                ];
+            }
+            
+            function createModelRotationMatrix(azimuthDeg, elevationDeg) {
+                const azRad = azimuthDeg * Math.PI/180;
+                const elRad = elevationDeg * Math.PI/180;
+                const cosAz = Math.cos(azRad), sinAz = Math.sin(azRad);
+                const cosEl = Math.cos(elRad), sinEl = Math.sin(elRad);
+                const ry = [ cosAz, 0, sinAz, 0, 0,1,0,0, -sinAz,0,cosAz,0, 0,0,0,1 ];
+                const rx = [ 1,0,0,0, 0,cosEl,-sinEl,0, 0,sinEl,cosEl,0, 0,0,0,1 ];
+                function mul4(a,b) {
+                    let res = new Array(16);
+                    for(let i=0;i<4;i++) for(let j=0;j<4;j++) {
+                        res[j*4+i] = 0;
+                        for(let k=0;k<4;k++) res[j*4+i] += a[k*4+i] * b[j*4+k];
+                    }
+                    return res;
+                }
+                return mul4(rx, ry);
+            }
+            
+            function createPitchOnlyMatrix(elevationDeg) {
+                const elRad = elevationDeg * Math.PI/180;
+                const cosEl = Math.cos(elRad), sinEl = Math.sin(elRad);
+                return [
+                    1, 0, 0, 0,
+                    0, cosEl, -sinEl, 0,
+                    0, sinEl, cosEl, 0,
+                    0, 0, 0, 1
+                ];
+            }
+            
+            function multiplyMatrices(a, b) {
+                let res = new Array(16);
+                for(let i=0;i<4;i++) {
+                    for(let j=0;j<4;j++) {
+                        res[j*4+i] = 0;
+                        for(let k=0;k<4;k++) {
+                            res[j*4+i] += a[k*4+i] * b[j*4+k];
+                        }
+                    }
+                }
+                return res;
+            }
+            
+            // ---------- 几何生成 ----------
+            function generateGeometry(cylinderR, discR, height, seg, midYActual, includeTopAndMid, scale) {
+                const halfH = height/2;
+                const scaledCylR = cylinderR * scale;
+                const scaledDiscR = discR * scale;
+                const sidePositions = [];
+                const sideIndices = [];
+                const topIdx = [], bottomIdx = [];
+                for(let i=0;i<=seg;i++) {
+                    const theta = (i/seg)*Math.PI*2;
+                    const x = scaledCylR * Math.cos(theta), z = scaledCylR * Math.sin(theta);
+                    sidePositions.push(x, halfH, z);
+                    topIdx.push(sidePositions.length/3 - 1);
+                    sidePositions.push(x, -halfH, z);
+                    bottomIdx.push(sidePositions.length/3 - 1);
+                }
+                for(let i=0;i<seg;i++) {
+                    const tl = topIdx[i], tr = topIdx[i+1];
+                    const bl = bottomIdx[i], br = bottomIdx[i+1];
+                    sideIndices.push(tl, tr, bl);
+                    sideIndices.push(tr, br, bl);
+                }
+                const sideVertCount = sideIndices.length;
+                
+                function addDisc(yCenter, radius, positions, indices) {
+                    const scaledRad = radius * scale;
+                    const centerTop = positions.length/3;
+                    positions.push(0, yCenter, 0);
+                    const edgeStart = positions.length/3;
+                    for(let i=0;i<=seg;i++) {
+                        const theta = (i/seg)*Math.PI*2;
+                        const x = scaledRad * Math.cos(theta), z = scaledRad * Math.sin(theta);
+                        positions.push(x, yCenter, z);
+                    }
+                    for(let i=0;i<seg;i++) indices.push(centerTop, edgeStart+i, edgeStart+i+1);
+                    const centerBottom = positions.length/3;
+                    positions.push(0, yCenter, 0);
+                    const edgeStartB = positions.length/3;
+                    for(let i=0;i<=seg;i++) {
+                        const theta = (i/seg)*Math.PI*2;
+                        const x = scaledRad * Math.cos(theta), z = scaledRad * Math.sin(theta);
+                        positions.push(x, yCenter, z);
+                    }
+                    for(let i=0;i<seg;i++) indices.push(centerBottom, edgeStartB+i+1, edgeStartB+i);
+                }
+                const discPositions = [];
+                const discIndices = [];
+                addDisc(-halfH, discR, discPositions, discIndices);
+                if(includeTopAndMid) {
+                    addDisc(halfH, cylinderR, discPositions, discIndices);
+                    addDisc(Math.min(halfH, Math.max(-halfH, midYActual)), discR, discPositions, discIndices);
+                }
+                const discVertCount = discIndices.length;
+                return {
+                    sidePositions: new Float32Array(sidePositions),
+                    sideIndices: new Uint16Array(sideIndices),
+                    sideVertexCount: sideVertCount,
+                    discPositions: new Float32Array(discPositions),
+                    discIndices: new Uint16Array(discIndices),
+                    discVertexCount: discVertCount
+                };
+            }
+            
+            function updateGeometry() {
+                if(!gl || !cylinderProgram || !discProgram) return;
+                const includeTopAndMid = (currentMode === 'picker');
+                const midYActual = midYNormalized * halfHeight;
+                const geo = generateGeometry(cylinderRadius, discRadius, cylinderHeight, segments, midYActual, includeTopAndMid, globalRadiusScale);
+                gl.bindBuffer(gl.ARRAY_BUFFER, cylinderSideBuffers.position);
+                gl.bufferData(gl.ARRAY_BUFFER, geo.sidePositions, gl.STATIC_DRAW);
+                gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, cylinderSideBuffers.indices);
+                gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, geo.sideIndices, gl.STATIC_DRAW);
+                cylinderSideVertexCount = geo.sideVertexCount;
+                gl.bindBuffer(gl.ARRAY_BUFFER, discBuffers.position);
+                gl.bufferData(gl.ARRAY_BUFFER, geo.discPositions, gl.STATIC_DRAW);
+                gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, discBuffers.indices);
+                gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, geo.discIndices, gl.STATIC_DRAW);
+                discVertexCount = geo.discVertexCount;
+            }
+            
+            // 着色器初始化
+            function initCylinderShaders() {
+                const vsSource = `
+                    attribute vec3 aPosition;
+                    uniform mat4 uModelMatrix;
+                    uniform mat4 uViewMatrix;
+                    uniform mat4 uProjectionMatrix;
+                    varying vec3 vLocalPos;
+                    void main() {
+                        vLocalPos = aPosition;
+                        vec4 worldPos = uModelMatrix * vec4(aPosition, 1.0);
+                        gl_Position = uProjectionMatrix * uViewMatrix * worldPos;
+                    }
+                `;
+                const fsSource = `
+                    precision mediump float;
+                    varying vec3 vLocalPos;
+                    uniform float u_minRadius;
+                    uniform float u_maxRadius;
+                    uniform float u_midY;
+                    uniform float u_halfHeight;
+                    uniform int u_colorMode;
+                    uniform float u_alpha;
+                    vec3 hsv2rgb(vec3 c) {
+                        vec4 K = vec4(1.0, 2.0/3.0, 1.0/3.0, 3.0);
+                        vec3 p = abs(fract(c.xxx + K.xyz) * 6.0 - K.www);
+                        return c.z * mix(K.xxx, clamp(p - K.xxx, 0.0, 1.0), c.y);
+                    }
+                    vec3 hsl2rgb(vec3 c) {
+                        vec3 rgb = clamp( abs(mod(c.x*6.0+vec3(0.0,4.0,2.0), 6.0)-3.0)-1.0, 0.0, 1.0 );
+                        return c.z + c.y * (rgb-0.5) * (1.0-abs(2.0*c.z-1.0));
+                    }
+                    void main() {
+                        float x = vLocalPos.x, y = vLocalPos.y, z = vLocalPos.z;
+                        float r = length(vec2(x,z));
+                        float angle = atan(z,x);
+                        float hue = angle/(2.0*3.1415926);
+                        if(hue<0.0) hue+=1.0;
+                        float normY = y / u_halfHeight;
+                        float lightness = (1.0 - normY) / 2.0;
+                        lightness = clamp(lightness,0.0,1.0);
+                        float saturation = (r - u_minRadius)/(u_maxRadius - u_minRadius);
+                        saturation = clamp(saturation,0.0,1.0);
+                        vec3 color;
+                        if(u_colorMode==0) color = hsv2rgb(vec3(hue, saturation, lightness));
+                        else color = hsl2rgb(vec3(hue, saturation, lightness));
+                        gl_FragColor = vec4(color, u_alpha);
+                    }
+                `;
+                function createShader(type, src) {
+                    const s = gl.createShader(type);
+                    gl.shaderSource(s, src);
+                    gl.compileShader(s);
+                    if(!gl.getShaderParameter(s, gl.COMPILE_STATUS)) console.error(gl.getShaderInfoLog(s));
+                    return s;
+                }
+                const vs = createShader(gl.VERTEX_SHADER, vsSource);
+                const fs = createShader(gl.FRAGMENT_SHADER, fsSource);
+                const prog = gl.createProgram();
+                gl.attachShader(prog, vs);
+                gl.attachShader(prog, fs);
+                gl.linkProgram(prog);
+                return prog;
+            }
+            
+            function initDiscShaders() {
+                const vsSource = `
+                    attribute vec3 aPosition;
+                    uniform mat4 uModelMatrix;
+                    uniform mat4 uViewMatrix;
+                    uniform mat4 uProjectionMatrix;
+                    varying vec3 vLocalPos;
+                    void main() {
+                        vLocalPos = aPosition;
+                        vec4 worldPos = uModelMatrix * vec4(aPosition, 1.0);
+                        gl_Position = uProjectionMatrix * uViewMatrix * worldPos;
+                    }
+                `;
+                const fsSource = `
+                    precision mediump float;
+                    varying vec3 vLocalPos;
+                    uniform float u_minRadius;
+                    uniform float u_maxRadius;
+                    uniform float u_midY;
+                    uniform float u_halfHeight;
+                    uniform int u_colorMode;
+                    vec3 hsv2rgb(vec3 c) {
+                        vec4 K = vec4(1.0, 2.0/3.0, 1.0/3.0, 3.0);
+                        vec3 p = abs(fract(c.xxx + K.xyz) * 6.0 - K.www);
+                        return c.z * mix(K.xxx, clamp(p - K.xxx, 0.0, 1.0), c.y);
+                    }
+                    vec3 hsl2rgb(vec3 c) {
+                        vec3 rgb = clamp( abs(mod(c.x*6.0+vec3(0.0,4.0,2.0), 6.0)-3.0)-1.0, 0.0, 1.0 );
+                        return c.z + c.y * (rgb-0.5) * (1.0-abs(2.0*c.z-1.0));
+                    }
+                    void main() {
+                        float x = vLocalPos.x, y = vLocalPos.y, z = vLocalPos.z;
+                        float r = length(vec2(x,z));
+                        float angle = atan(z,x);
+                        float hue = angle/(2.0*3.1415926);
+                        if(hue<0.0) hue+=1.0;
+                        bool isTop = (y > u_halfHeight - 0.01);
+                        float lightness;
+                        if(isTop) {
+                            float midNorm = u_midY / u_halfHeight;
+                            lightness = (1.0 - midNorm) / 2.0;
+                        } else {
+                            float normY = y / u_halfHeight;
+                            lightness = (1.0 - normY) / 2.0;
+                        }
+                        lightness = clamp(lightness,0.0,1.0);
+                        float saturation = (r - u_minRadius)/(u_maxRadius - u_minRadius);
+                        saturation = clamp(saturation,0.0,1.0);
+                        vec3 color;
+                        if(u_colorMode==0) color = hsv2rgb(vec3(hue, saturation, lightness));
+                        else color = hsl2rgb(vec3(hue, saturation, lightness));
+                        gl_FragColor = vec4(color, 1.0);
+                    }
+                `;
+                function createShader(type, src) {
+                    const s = gl.createShader(type);
+                    gl.shaderSource(s, src);
+                    gl.compileShader(s);
+                    if(!gl.getShaderParameter(s, gl.COMPILE_STATUS)) console.error(gl.getShaderInfoLog(s));
+                    return s;
+                }
+                const vs = createShader(gl.VERTEX_SHADER, vsSource);
+                const fs = createShader(gl.FRAGMENT_SHADER, fsSource);
+                const prog = gl.createProgram();
+                gl.attachShader(prog, vs);
+                gl.attachShader(prog, fs);
+                gl.linkProgram(prog);
+                return prog;
+            }
+            
+            function initSphereShaders() {
+                const vsSource = `
+                    attribute vec3 aPosition;
+                    uniform mat4 uModelMatrix;
+                    uniform mat4 uViewMatrix;
+                    uniform mat4 uProjectionMatrix;
+                    void main() {
+                        gl_Position = uProjectionMatrix * uViewMatrix * uModelMatrix * vec4(aPosition, 1.0);
+                    }
+                `;
+                const fsSource = `
+                    precision mediump float;
+                    uniform vec3 uColor;
+                    void main() {
+                        gl_FragColor = vec4(uColor, 1.0);
+                    }
+                `;
+                function createShader(type, src) {
+                    const s = gl.createShader(type);
+                    gl.shaderSource(s, src);
+                    gl.compileShader(s);
+                    if(!gl.getShaderParameter(s, gl.COMPILE_STATUS)) console.error(gl.getShaderInfoLog(s));
+                    return s;
+                }
+                const vs = createShader(gl.VERTEX_SHADER, vsSource);
+                const fs = createShader(gl.FRAGMENT_SHADER, fsSource);
+                const prog = gl.createProgram();
+                gl.attachShader(prog, vs);
+                gl.attachShader(prog, fs);
+                gl.linkProgram(prog);
+                return prog;
+            }
+            
+            function initBorderSphereShaders() {
+                const vsSource = `
+                    attribute vec3 aPosition;
+                    uniform mat4 uModelMatrix;
+                    uniform mat4 uViewMatrix;
+                    uniform mat4 uProjectionMatrix;
+                    void main() {
+                        gl_Position = uProjectionMatrix * uViewMatrix * uModelMatrix * vec4(aPosition, 1.0);
+                    }
+                `;
+                const fsSource = `
+                    precision mediump float;
+                    void main() {
+                        gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0);
+                    }
+                `;
+                function createShader(type, src) {
+                    const s = gl.createShader(type);
+                    gl.shaderSource(s, src);
+                    gl.compileShader(s);
+                    if(!gl.getShaderParameter(s, gl.COMPILE_STATUS)) console.error(gl.getShaderInfoLog(s));
+                    return s;
+                }
+                const vs = createShader(gl.VERTEX_SHADER, vsSource);
+                const fs = createShader(gl.FRAGMENT_SHADER, fsSource);
+                const prog = gl.createProgram();
+                gl.attachShader(prog, vs);
+                gl.attachShader(prog, fs);
+                gl.linkProgram(prog);
+                return prog;
+            }
+            
+            function initRingShaders() {
+                const vsSource = `
+                    attribute vec3 aPosition;
+                    uniform mat4 uModelMatrix;
+                    uniform mat4 uViewMatrix;
+                    uniform mat4 uProjectionMatrix;
+                    void main() {
+                        gl_Position = uProjectionMatrix * uViewMatrix * uModelMatrix * vec4(aPosition, 1.0);
+                    }
+                `;
+                const fsSource = `
+                    precision mediump float;
+                    uniform float uAlpha;
+                    void main() {
+                        gl_FragColor = vec4(0.7, 0.9, 1.0, uAlpha);
+                    }
+                `;
+                function createShader(type, src) {
+                    const s = gl.createShader(type);
+                    gl.shaderSource(s, src);
+                    gl.compileShader(s);
+                    if(!gl.getShaderParameter(s, gl.COMPILE_STATUS)) console.error(gl.getShaderInfoLog(s));
+                    return s;
+                }
+                const vs = createShader(gl.VERTEX_SHADER, vsSource);
+                const fs = createShader(gl.FRAGMENT_SHADER, fsSource);
+                const prog = gl.createProgram();
+                gl.attachShader(prog, vs);
+                gl.attachShader(prog, fs);
+                gl.linkProgram(prog);
+                return prog;
+            }
+            
+            function initPointerShaders() {
+                const vsSource = `
+                    attribute vec3 aPosition;
+                    uniform mat4 uModelMatrix;
+                    uniform mat4 uViewMatrix;
+                    uniform mat4 uProjectionMatrix;
+                    void main() {
+                        gl_Position = uProjectionMatrix * uViewMatrix * uModelMatrix * vec4(aPosition, 1.0);
+                    }
+                `;
+                const fsSource = `
+                    precision mediump float;
+                    void main() {
+                        gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);
+                    }
+                `;
+                function createShader(type, src) {
+                    const s = gl.createShader(type);
+                    gl.shaderSource(s, src);
+                    gl.compileShader(s);
+                    if(!gl.getShaderParameter(s, gl.COMPILE_STATUS)) console.error(gl.getShaderInfoLog(s));
+                    return s;
+                }
+                const vs = createShader(gl.VERTEX_SHADER, vsSource);
+                const fs = createShader(gl.FRAGMENT_SHADER, fsSource);
+                const prog = gl.createProgram();
+                gl.attachShader(prog, vs);
+                gl.attachShader(prog, fs);
+                gl.linkProgram(prog);
+                return prog;
+            }
+            
+            // 共享几何体
+            function createSharedSphereMesh(radius=0.055, rings=12, sectors=12) {
+                const positions = [];
+                const indices = [];
+                for(let i=0; i<=rings; i++) {
+                    const phi = Math.PI * i / rings;
+                    const sinPhi = Math.sin(phi);
+                    const cosPhi = Math.cos(phi);
+                    for(let j=0; j<=sectors; j++) {
+                        const theta = 2 * Math.PI * j / sectors;
+                        const x = radius * sinPhi * Math.cos(theta);
+                        const y = radius * cosPhi;
+                        const z = radius * sinPhi * Math.sin(theta);
+                        positions.push(x, y, z);
+                    }
+                }
+                for(let i=0; i<rings; i++) {
+                    for(let j=0; j<sectors; j++) {
+                        const a = i*(sectors+1)+j;
+                        const b = i*(sectors+1)+j+1;
+                        const c = (i+1)*(sectors+1)+j;
+                        const d = (i+1)*(sectors+1)+j+1;
+                        indices.push(a,b,c, b,d,c);
+                    }
+                }
+                sphereVertexBuffer = gl.createBuffer();
+                gl.bindBuffer(gl.ARRAY_BUFFER, sphereVertexBuffer);
+                gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
+                sphereIndexBuffer = gl.createBuffer();
+                gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, sphereIndexBuffer);
+                gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(indices), gl.STATIC_DRAW);
+                sphereIndexCount = indices.length;
+            }
+            
+            // 创建列表模式半透明圆环几何体（半径 = discRadius * scale）
+            function createSharedRingMesh(radius, scale, seg=80) {
+                const scaledRad = radius * scale;
+                const positions = [];
+                for(let i=0; i<=seg; i++) {
+                    const theta = (i/seg) * Math.PI * 2;
+                    const x = scaledRad * Math.cos(theta);
+                    const z = scaledRad * Math.sin(theta);
+                    positions.push(x, 0, z);
+                }
+                if (ringVertexBuffer) gl.deleteBuffer(ringVertexBuffer);
+                ringVertexBuffer = gl.createBuffer();
+                gl.bindBuffer(gl.ARRAY_BUFFER, ringVertexBuffer);
+                gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
+                ringVertexCount = positions.length / 3;
+            }
+            
+            function createMidIntersectionRing(radius, scale, seg=80) {
+                const scaledRad = radius * scale;
+                const positions = [];
+                for(let i=0; i<=seg; i++) {
+                    const theta = (i/seg) * Math.PI * 2;
+                    const x = scaledRad * Math.cos(theta);
+                    const z = scaledRad * Math.sin(theta);
+                    positions.push(x, 0, z);
+                }
+                if (midIntersectionRingBuffer) gl.deleteBuffer(midIntersectionRingBuffer);
+                midIntersectionRingBuffer = gl.createBuffer();
+                gl.bindBuffer(gl.ARRAY_BUFFER, midIntersectionRingBuffer);
+                gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
+                midIntersectionRingVertexCount = positions.length / 3;
+            }
+            
+            function createPointerMesh(scale) {
+                const w = 0.005;
+                const len = 1.0 * scale;
+                const vertices = [
+                    -w, -w, 0,   w, -w, 0,   w,  w, 0,   -w,  w, 0,
+                    -w, -w, len,  w, -w, len,  w,  w, len, -w,  w, len
+                ];
+                const indices = [
+                    0,1,2, 0,2,3, 4,6,5, 4,7,6,
+                    0,4,1, 1,4,5, 2,6,3, 3,6,7,
+                    3,7,2, 2,7,6, 0,1,4, 1,5,4
+                ];
+                if (pointerVertexBuffer) gl.deleteBuffer(pointerVertexBuffer);
+                if (pointerIndexBuffer) gl.deleteBuffer(pointerIndexBuffer);
+                pointerVertexBuffer = gl.createBuffer();
+                gl.bindBuffer(gl.ARRAY_BUFFER, pointerVertexBuffer);
+                gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
+                pointerIndexBuffer = gl.createBuffer();
+                gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, pointerIndexBuffer);
+                gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(indices), gl.STATIC_DRAW);
+                pointerIndexCount = indices.length;
+            }
+            
+            // 颜色工具
+            function parseColorToRGB(str) {
+                str = str.trim().toLowerCase();
+                if(str.startsWith('#')) {
+                    let hex = str.slice(1);
+                    if(hex.length===3) hex = hex.split('').map(c=>c+c).join('');
+                    if(hex.length===6) {
+                        const r = parseInt(hex.slice(0,2),16)/255;
+                        const g = parseInt(hex.slice(2,4),16)/255;
+                        const b = parseInt(hex.slice(4,6),16)/255;
+                        return [r,g,b];
+                    }
+                }
+                const rgbMatch = str.match(/rgb\((\d+),\s*(\d+),\s*(\d+)\)/);
+                if(rgbMatch) {
+                    return [parseInt(rgbMatch[1])/255, parseInt(rgbMatch[2])/255, parseInt(rgbMatch[3])/255];
+                }
+                return null;
+            }
+            
+            function rgbToHsv(r,g,b) {
+                let max = Math.max(r,g,b), min = Math.min(r,g,b), v = max, d = max-min;
+                let s = (max===0)?0: d/max;
+                let h = 0;
+                if(max!==min) {
+                    if(max===r) h = (g-b)/d + (g<b?6:0);
+                    else if(max===g) h = (b-r)/d + 2;
+                    else h = (r-g)/d + 4;
+                    h /= 6;
+                }
+                return [h, s, v];
+            }
+            
+            function rgbToHsl(r,g,b) {
+                let max = Math.max(r,g,b), min = Math.min(r,g,b);
+                let l = (max+min)/2;
+                let s = 0, h = 0;
+                if(max!==min) {
+                    let d = max-min;
+                    s = l>0.5 ? d/(2-max-min) : d/(max+min);
+                    if(max===r) h = (g-b)/d + (g<b?6:0);
+                    else if(max===g) h = (b-r)/d + 2;
+                    else h = (r-g)/d + 4;
+                    h /= 6;
+                }
+                return [h, s, l];
+            }
+            
+            function isGrayColor(r,g,b) {
+                return Math.abs(r-g) < 0.001 && Math.abs(g-b) < 0.001;
+            }
+            
+            // 计算小球位置（逻辑半径，未缩放），返回的 x,z 将乘以 globalRadiusScale
+            function computeLocalPositionFromRGB(r,g,b, mode, halfH) {
+                let h, s, lightness;
+                if(mode===0) {
+                    const [hue, sat, val] = rgbToHsv(r,g,b);
+                    h = hue; s = sat; lightness = val;
+                } else {
+                    const [hue, sat, lig] = rgbToHsl(r,g,b);
+                    h = hue; s = sat; lightness = lig;
+                }
+                let radius;
+                if(isGrayColor(r,g,b)) {
+                    radius = 0;
+                } else {
+                    radius = MIN_RADIUS + s * (MAX_RADIUS - MIN_RADIUS);
+                }
+                let normY = 1 - 2 * lightness;
+                let y = normY * halfH;
+                y = Math.min(halfH, Math.max(-halfH, y));
+                const angle = h * 2 * Math.PI;
+                const x = radius * Math.cos(angle);
+                const z = radius * Math.sin(angle);
+                return [x, y, z];
+            }
+            
+            // 更新小球位置，应用全局缩放
+            function updateAllSphereLocalPositions() {
+                const halfH = halfHeight;
+                const scale = globalRadiusScale;
+                for(let i=0; i<colorItems.length; i++) {
+                    const item = colorItems[i];
+                    const [x, y, z] = computeLocalPositionFromRGB(item.r, item.g, item.b, colorMode, halfH);
+                    item.localX = x * scale;
+                    item.localY = y;
+                    item.localZ = z * scale;
+                }
+                ringItems = colorItems.map(item => ({ localY: item.localY }));
+            }
+            
+            function addColorFromInput() {
+                const raw = colorInput.value;
+                const rgb = parseColorToRGB(raw);
+                if(!rgb) {
+                    alert("无效颜色，请输入 #RRGGBB 或 rgb(r,g,b)");
+                    return;
+                }
+                const [r,g,b] = rgb;
+                const [x, y, z] = computeLocalPositionFromRGB(r,g,b, colorMode, halfHeight);
+                colorItems.push({ 
+                    r, g, b, 
+                    localX: x * globalRadiusScale, 
+                    localY: y, 
+                    localZ: z * globalRadiusScale 
+                });
+                ringItems.push({ localY: y });
+                refreshColorUI();
+            }
+            
+            function deleteColor(index) {
+                colorItems.splice(index,1);
+                ringItems.splice(index,1);
+                refreshColorUI();
+            }
+            
+            function refreshColorUI() {
+                colorItemsContainer.innerHTML = '';
+                if(colorItems.length === 0) {
+                    colorItemsContainer.innerHTML = '<div style="text-align:center; color:#aaa; padding:20px;">暂无颜色，点击上方添加</div>';
+                } else {
+                    for(let i=0;i<colorItems.length;i++) {
+                        const it = colorItems[i];
+                        const hex = '#' + ((1<<24)+(it.r*255<<16)+(it.g*255<<8)+(it.b*255)).toString(16).slice(1);
+                        const div = document.createElement('div');
+                        div.className = 'color-item';
+                        div.innerHTML = `
+                            <div class="color-swatch" style="background:${hex};"></div>
+                            <div class="color-value">${hex.toUpperCase()}${isGrayColor(it.r,it.g,it.b) ? ' (灰)' : ''}</div>
+                            <button class="delete-color" data-index="${i}">✕</button>
+                        `;
+                        div.querySelector('.delete-color').addEventListener('click', (e) => {
+                            const idx = parseInt(e.target.getAttribute('data-index'));
+                            deleteColor(idx);
+                        });
+                        colorItemsContainer.appendChild(div);
+                    }
+                }
+            }
+            
+            // ========== 2D圆盘绘制（同前） ==========
+            function hsv2rgb2(h, s, v) {
+                let r, g, b;
+                let i = Math.floor(h * 6);
+                let f = h * 6 - i;
+                let p = v * (1 - s);
+                let q = v * (1 - f * s);
+                let t = v * (1 - (1 - f) * s);
+                switch (i % 6) {
+                    case 0: r = v; g = t; b = p; break;
+                    case 1: r = q; g = v; b = p; break;
+                    case 2: r = p; g = v; b = t; break;
+                    case 3: r = p; g = q; b = v; break;
+                    case 4: r = t; g = p; b = v; break;
+                    default: r = v; g = p; b = q; break;
+                }
+                return [r, g, b];
+            }
+            
+            function hsl2rgb2(h, s, l) {
+                let r, g, b;
+                if (s === 0) {
+                    r = g = b = l;
+                } else {
+                    const hue2rgb = (p, q, t) => {
+                        if (t < 0) t += 1;
+                        if (t > 1) t -= 1;
+                        if (t < 1/6) return p + (q - p) * 6 * t;
+                        if (t < 1/2) return q;
+                        if (t < 2/3) return p + (q - p) * (2/3 - t) * 6;
+                        return p;
+                    };
+                    const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+                    const p = 2 * l - q;
+                    r = hue2rgb(p, q, h + 1/3);
+                    g = hue2rgb(p, q, h);
+                    b = hue2rgb(p, q, h - 1/3);
+                }
+                return [r, g, b];
+            }
+            
+            function getColorFromWheel(hue, saturation, mode, brightness) {
+                if (mode === 0) return hsv2rgb2(hue, saturation, brightness);
+                else return hsl2rgb2(hue, saturation, brightness);
+            }
+            
+            function drawColorWheel() {
+                const size = wheelCanvas.width;
+                const center = size/2;
+                const radius = size/2;
+                const rotationRad = azimuthDeg * Math.PI / 180;
+                const brightness = (1 - midYNormalized) / 2;
+                
+                const imageData = wheelCtx.getImageData(0, 0, size, size);
+                const data = imageData.data;
+                
+                for (let y = 0; y < size; y++) {
+                    for (let x = 0; x < size; x++) {
+                        const dx = x - center;
+                        const dy = y - center;
+                        const r = Math.hypot(dx, dy);
+                        if (r > radius) {
+                            const idx = (y * size + x) * 4;
+                            data[idx] = 0;
+                            data[idx+1] = 0;
+                            data[idx+2] = 0;
+                            data[idx+3] = 0;
+                            continue;
+                        }
+                        const normR = r / radius;
+                        let rawAngle = Math.atan2(dy, dx);
+                        let angle = rawAngle - rotationRad;
+                        angle = ((angle % (2*Math.PI)) + 2*Math.PI) % (2*Math.PI);
+                        let hue = angle / (2 * Math.PI);
+                        const saturation = normR;
+                        const [rr, gg, bb] = getColorFromWheel(hue, saturation, colorMode, brightness);
+                        const idx = (y * size + x) * 4;
+                        data[idx] = rr * 255;
+                        data[idx+1] = gg * 255;
+                        data[idx+2] = bb * 255;
+                        data[idx+3] = 255;
+                    }
+                }
+                wheelCtx.putImageData(imageData, 0, 0);
+                
+                // 白色圆环（标记当前柱面半径）
+                const markerRadius = cylinderRadius * radius;
+                if (markerRadius > 0) {
+                    wheelCtx.beginPath();
+                    wheelCtx.arc(center, center, markerRadius, 0, 2 * Math.PI);
+                    wheelCtx.strokeStyle = 'white';
+                    wheelCtx.lineWidth = 2;
+                    wheelCtx.stroke();
+                }
+                
+                // 白色直线：从圆心指向正下方（半径1.0）
+                const lineEndX = center;
+                const lineEndY = center + radius;
+                wheelCtx.beginPath();
+                wheelCtx.moveTo(center, center);
+                wheelCtx.lineTo(lineEndX, lineEndY);
+                wheelCtx.strokeStyle = 'white';
+                wheelCtx.lineWidth = 2;
+                wheelCtx.stroke();
+                
+                // 计算准星（交点）：正下方，距离圆心 markerRadius
+                const intersectX = center;
+                const intersectY = center + markerRadius;
+                // 准星处的原始角度（未旋转）是 -PI/2，但需要减去旋转角以得到实际色相
+                let rawAngleIntersect = -Math.PI / 2;
+                let angleIntersect = rawAngleIntersect - rotationRad;
+                angleIntersect = ((angleIntersect % (2*Math.PI)) + 2*Math.PI) % (2*Math.PI);
+                let hueIntersect = (angleIntersect / (2 * Math.PI) + 0.5) % 1.0;
+                const saturationIntersect = cylinderRadius;
+                const [rCol, gCol, bCol] = getColorFromWheel(hueIntersect, saturationIntersect, colorMode, brightness);
+                
+                // 绘制小圆（填充准星颜色，边框白色）
+                wheelCtx.beginPath();
+                wheelCtx.arc(intersectX, intersectY, 6, 0, 2 * Math.PI);
+                wheelCtx.fillStyle = `rgb(${rCol*255}, ${gCol*255}, ${bCol*255})`;
+                wheelCtx.fill();
+                wheelCtx.strokeStyle = 'white';
+                wheelCtx.lineWidth = 2;
+                wheelCtx.stroke();
+                
+                // 更新颜色信息框
+                const rgbText = `(${Math.round(rCol*255)}, ${Math.round(gCol*255)}, ${Math.round(bCol*255)})`;
+                const hexText = '#' + ((1 << 24) + (Math.round(rCol*255) << 16) + (Math.round(gCol*255) << 8) + Math.round(bCol*255)).toString(16).slice(1).toUpperCase();
+                rgbSpan.innerText = rgbText;
+                hexSpan.innerText = hexText;
+                
+                // 外圈装饰
+                wheelCtx.beginPath();
+                wheelCtx.arc(center, center, radius, 0, 2 * Math.PI);
+                wheelCtx.strokeStyle = '#ff884d';
+                wheelCtx.lineWidth = 2;
+                wheelCtx.stroke();
+            }
+            
+            // ========== WebGL 渲染 ==========
+            function renderDiscs(viewMatrix, projMatrix, cylinderRotMatrix) {
+                gl.useProgram(discProgram);
+                gl.uniformMatrix4fv(gl.getUniformLocation(discProgram, 'uModelMatrix'), false, cylinderRotMatrix);
+                gl.uniformMatrix4fv(gl.getUniformLocation(discProgram, 'uViewMatrix'), false, viewMatrix);
+                gl.uniformMatrix4fv(gl.getUniformLocation(discProgram, 'uProjectionMatrix'), false, projMatrix);
+                gl.uniform1f(gl.getUniformLocation(discProgram, 'u_minRadius'), MIN_RADIUS);
+                gl.uniform1f(gl.getUniformLocation(discProgram, 'u_maxRadius'), MAX_RADIUS);
+                gl.uniform1f(gl.getUniformLocation(discProgram, 'u_midY'), midYNormalized * halfHeight);
+                gl.uniform1f(gl.getUniformLocation(discProgram, 'u_halfHeight'), halfHeight);
+                gl.uniform1i(gl.getUniformLocation(discProgram, 'u_colorMode'), colorMode);
+                
+                gl.bindBuffer(gl.ARRAY_BUFFER, discBuffers.position);
+                const posLoc = gl.getAttribLocation(discProgram, 'aPosition');
+                gl.enableVertexAttribArray(posLoc);
+                gl.vertexAttribPointer(posLoc, 3, gl.FLOAT, false, 0, 0);
+                gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, discBuffers.indices);
+                gl.drawElements(gl.TRIANGLES, discVertexCount, gl.UNSIGNED_SHORT, 0);
+            }
+            
+            function renderCylinderSide(viewMatrix, projMatrix, cylinderRotMatrix) {
+                gl.useProgram(cylinderProgram);
+                gl.uniformMatrix4fv(gl.getUniformLocation(cylinderProgram, 'uModelMatrix'), false, cylinderRotMatrix);
+                gl.uniformMatrix4fv(gl.getUniformLocation(cylinderProgram, 'uViewMatrix'), false, viewMatrix);
+                gl.uniformMatrix4fv(gl.getUniformLocation(cylinderProgram, 'uProjectionMatrix'), false, projMatrix);
+                gl.uniform1f(gl.getUniformLocation(cylinderProgram, 'u_minRadius'), MIN_RADIUS);
+                gl.uniform1f(gl.getUniformLocation(cylinderProgram, 'u_maxRadius'), MAX_RADIUS);
+                gl.uniform1f(gl.getUniformLocation(cylinderProgram, 'u_midY'), midYNormalized * halfHeight);
+                gl.uniform1f(gl.getUniformLocation(cylinderProgram, 'u_halfHeight'), halfHeight);
+                gl.uniform1i(gl.getUniformLocation(cylinderProgram, 'u_colorMode'), colorMode);
+                const alpha = (currentMode === 'picker') ? cylinderAlpha : 1.0;
+                gl.uniform1f(gl.getUniformLocation(cylinderProgram, 'u_alpha'), alpha);
+                
+                gl.bindBuffer(gl.ARRAY_BUFFER, cylinderSideBuffers.position);
+                const posLoc = gl.getAttribLocation(cylinderProgram, 'aPosition');
+                gl.enableVertexAttribArray(posLoc);
+                gl.vertexAttribPointer(posLoc, 3, gl.FLOAT, false, 0, 0);
+                gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, cylinderSideBuffers.indices);
+                gl.drawElements(gl.TRIANGLES, cylinderSideVertexCount, gl.UNSIGNED_SHORT, 0);
+            }
+            
+            let whiteRingProgram = null;
+            function renderMidIntersectionRing(viewMatrix, projMatrix, cylinderRotMatrix) {
+                if (currentMode !== 'picker') return;
+                if (!midIntersectionRingBuffer) return;
+                const midYActual = midYNormalized * halfHeight;
+                const transMat = new Float32Array([
+                    1,0,0,0,
+                    0,1,0,0,
+                    0,0,1,0,
+                    0, midYActual, 0, 1
+                ]);
+                const modelMat = multiplyMatrices(cylinderRotMatrix, transMat);
+                
+                if (!whiteRingProgram) {
+                    const vsSource = `
+                        attribute vec3 aPosition;
+                        uniform mat4 uModelMatrix;
+                        uniform mat4 uViewMatrix;
+                        uniform mat4 uProjectionMatrix;
+                        void main() {
+                            gl_Position = uProjectionMatrix * uViewMatrix * uModelMatrix * vec4(aPosition, 1.0);
+                        }
+                    `;
+                    const fsSource = `
+                        precision mediump float;
+                        void main() {
+                            gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);
+                        }
+                    `;
+                    function createShader(type, src) {
+                        const s = gl.createShader(type);
+                        gl.shaderSource(s, src);
+                        gl.compileShader(s);
+                        if(!gl.getShaderParameter(s, gl.COMPILE_STATUS)) console.error(gl.getShaderInfoLog(s));
+                        return s;
+                    }
+                    const vs = createShader(gl.VERTEX_SHADER, vsSource);
+                    const fs = createShader(gl.FRAGMENT_SHADER, fsSource);
+                    whiteRingProgram = gl.createProgram();
+                    gl.attachShader(whiteRingProgram, vs);
+                    gl.attachShader(whiteRingProgram, fs);
+                    gl.linkProgram(whiteRingProgram);
+                }
+                gl.useProgram(whiteRingProgram);
+                gl.uniformMatrix4fv(gl.getUniformLocation(whiteRingProgram, 'uModelMatrix'), false, modelMat);
+                gl.uniformMatrix4fv(gl.getUniformLocation(whiteRingProgram, 'uViewMatrix'), false, viewMatrix);
+                gl.uniformMatrix4fv(gl.getUniformLocation(whiteRingProgram, 'uProjectionMatrix'), false, projMatrix);
+                
+                gl.bindBuffer(gl.ARRAY_BUFFER, midIntersectionRingBuffer);
+                const posLoc = gl.getAttribLocation(whiteRingProgram, 'aPosition');
+                gl.enableVertexAttribArray(posLoc);
+                gl.vertexAttribPointer(posLoc, 3, gl.FLOAT, false, 0, 0);
+                gl.drawArrays(gl.LINE_LOOP, 0, midIntersectionRingVertexCount);
+            }
+            
+            function renderPointer(viewMatrix, projMatrix) {
+                if (currentMode !== 'picker') return;
+                if (!pointerVertexBuffer) return;
+                const midYActual = midYNormalized * halfHeight;
+                const transMat = new Float32Array([
+                    1,0,0,0,
+                    0,1,0,0,
+                    0,0,1,0,
+                    0, midYActual, 0, 1
+                ]);
+                const pitchMat = createPitchOnlyMatrix(elevationDeg);
+                const modelMat = multiplyMatrices(pitchMat, transMat);
+                
+                gl.useProgram(pointerProgram);
+                gl.uniformMatrix4fv(gl.getUniformLocation(pointerProgram, 'uModelMatrix'), false, modelMat);
+                gl.uniformMatrix4fv(gl.getUniformLocation(pointerProgram, 'uViewMatrix'), false, viewMatrix);
+                gl.uniformMatrix4fv(gl.getUniformLocation(pointerProgram, 'uProjectionMatrix'), false, projMatrix);
+                
+                gl.bindBuffer(gl.ARRAY_BUFFER, pointerVertexBuffer);
+                const posLoc = gl.getAttribLocation(pointerProgram, 'aPosition');
+                gl.enableVertexAttribArray(posLoc);
+                gl.vertexAttribPointer(posLoc, 3, gl.FLOAT, false, 0, 0);
+                gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, pointerIndexBuffer);
+                gl.drawElements(gl.TRIANGLES, pointerIndexCount, gl.UNSIGNED_SHORT, 0);
+            }
+
+            function renderSpheres(viewMatrix, projMatrix, cylinderRotMatrix) {
+                if(currentMode !== 'list') return;
+                if(colorItems.length === 0) return;
+                
+                // 先画彩色小球
+                gl.useProgram(sphereProgram);
+                gl.uniformMatrix4fv(gl.getUniformLocation(sphereProgram, 'uViewMatrix'), false, viewMatrix);
+                gl.uniformMatrix4fv(gl.getUniformLocation(sphereProgram, 'uProjectionMatrix'), false, projMatrix);
+                
+                gl.bindBuffer(gl.ARRAY_BUFFER, sphereVertexBuffer);
+                const posLocColor = gl.getAttribLocation(sphereProgram, 'aPosition');
+                gl.enableVertexAttribArray(posLocColor);
+                gl.vertexAttribPointer(posLocColor, 3, gl.FLOAT, false, 0, 0);
+                gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, sphereIndexBuffer);
+                
+                for(let s of colorItems) {
+                    const transMat = new Float32Array([
+                        1,0,0,0,
+                        0,1,0,0,
+                        0,0,1,0,
+                        s.localX, s.localY, s.localZ, 1
+                    ]);
+                    const finalMat = multiplyMatrices(cylinderRotMatrix, transMat);
+                    gl.uniformMatrix4fv(gl.getUniformLocation(sphereProgram, 'uModelMatrix'), false, finalMat);
+                    gl.uniform3f(gl.getUniformLocation(sphereProgram, 'uColor'), s.r, s.g, s.b);
+                    gl.drawElements(gl.TRIANGLES, sphereIndexCount, gl.UNSIGNED_SHORT, 0);
+                }
+                
+                // 再画黑色边框（稍大，只画背面）
+                gl.useProgram(borderSphereProgram);
+                gl.uniformMatrix4fv(gl.getUniformLocation(borderSphereProgram, 'uViewMatrix'), false, viewMatrix);
+                gl.uniformMatrix4fv(gl.getUniformLocation(borderSphereProgram, 'uProjectionMatrix'), false, projMatrix);
+                
+                gl.bindBuffer(gl.ARRAY_BUFFER, sphereVertexBuffer);
+                const posLocBorder = gl.getAttribLocation(borderSphereProgram, 'aPosition');
+                gl.enableVertexAttribArray(posLocBorder);
+                gl.vertexAttribPointer(posLocBorder, 3, gl.FLOAT, false, 0, 0);
+                gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, sphereIndexBuffer);
+                
+                gl.enable(gl.CULL_FACE);
+                gl.cullFace(gl.FRONT);
+                const scaleFactor = 1.08;
+                for(let s of colorItems) {
+                    const transMat = new Float32Array([
+                        1,0,0,0,
+                        0,1,0,0,
+                        0,0,1,0,
+                        s.localX, s.localY, s.localZ, 1
+                    ]);
+                    const scaleMat = new Float32Array([
+                        scaleFactor,0,0,0,
+                        0,scaleFactor,0,0,
+                        0,0,scaleFactor,0,
+                        0,0,0,1
+                    ]);
+                    const temp = multiplyMatrices(transMat, scaleMat);
+                    const finalMat = multiplyMatrices(cylinderRotMatrix, temp);
+                    gl.uniformMatrix4fv(gl.getUniformLocation(borderSphereProgram, 'uModelMatrix'), false, finalMat);
+                    gl.drawElements(gl.TRIANGLES, sphereIndexCount, gl.UNSIGNED_SHORT, 0);
+                }
+                gl.cullFace(gl.BACK);
+            }
+            
+            function renderRings(viewMatrix, projMatrix, cylinderRotMatrix) {
+                if(currentMode !== 'list') return;
+                if(ringItems.length === 0) return;
+                gl.useProgram(ringProgram);
+                gl.uniformMatrix4fv(gl.getUniformLocation(ringProgram, 'uViewMatrix'), false, viewMatrix);
+                gl.uniformMatrix4fv(gl.getUniformLocation(ringProgram, 'uProjectionMatrix'), false, projMatrix);
+                gl.uniform1f(gl.getUniformLocation(ringProgram, 'uAlpha'), cylinderAlpha);
+                
+                gl.bindBuffer(gl.ARRAY_BUFFER, ringVertexBuffer);
+                const posLoc = gl.getAttribLocation(ringProgram, 'aPosition');
+                gl.enableVertexAttribArray(posLoc);
+                gl.vertexAttribPointer(posLoc, 3, gl.FLOAT, false, 0, 0);
+                
+                for(let r of ringItems) {
+                    const transMat = new Float32Array([
+                        1,0,0,0,
+                        0,1,0,0,
+                        0,0,1,0,
+                        0, r.localY, 0, 1
+                    ]);
+                    const finalMat = multiplyMatrices(cylinderRotMatrix, transMat);
+                    gl.uniformMatrix4fv(gl.getUniformLocation(ringProgram, 'uModelMatrix'), false, finalMat);
+                    gl.drawArrays(gl.LINE_LOOP, 0, ringVertexCount);
+                }
+            }
+            
+            function render() {
+                if(!gl) return;
+                gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+                
+                const aspect = canvas.width/canvas.height;
+                const proj = createProjectionMatrix(aspect, 48, 0.3, 18.0);
+                const view = createViewMatrix(cameraPosition, cameraTarget, cameraUp);
+                const cylinderRotMat = createModelRotationMatrix(azimuthDeg, elevationDeg);
+                
+                gl.depthMask(true);
+                gl.disable(gl.BLEND);
+                renderDiscs(view, proj, cylinderRotMat);
+                renderSpheres(view, proj, cylinderRotMat);
+                
+                gl.enable(gl.BLEND);
+                gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+                gl.depthMask(false);
+                renderCylinderSide(view, proj, cylinderRotMat);
+                renderRings(view, proj, cylinderRotMat);
+                
+                renderMidIntersectionRing(view, proj, cylinderRotMat);
+                renderPointer(view, proj);
+                
+                gl.depthMask(true);
+                
+                requestAnimationFrame(render);
+            }
+            
+            function initGL() {
+                gl = canvas.getContext('webgl');
+                if(!gl) return false;
+                gl.enable(gl.DEPTH_TEST);
+                gl.enable(gl.CULL_FACE);
+                gl.clearColor(0.05,0.07,0.12,1.0);
+                return true;
+            }
+            
+            function initBuffers() {
+                cylinderSideBuffers.position = gl.createBuffer();
+                cylinderSideBuffers.indices = gl.createBuffer();
+                discBuffers.position = gl.createBuffer();
+                discBuffers.indices = gl.createBuffer();
+                updateGeometry();
+                createMidIntersectionRing(cylinderRadius, globalRadiusScale, 80);
+                createSharedRingMesh(discRadius, globalRadiusScale, 80);
+                createPointerMesh(globalRadiusScale);
+            }
+            
+            function setHeight(newHeight) {
+                cylinderHeight = newHeight;
+                halfHeight = cylinderHeight / 2;
+                heightVal.innerText = cylinderHeight.toFixed(2);
+                updateGeometry();
+                updateAllSphereLocalPositions();
+            }
+            
+            function setGlobalScale(newScale) {
+                globalRadiusScale = newScale;
+                scaleVal.innerText = globalRadiusScale.toFixed(2);
+                updateGeometry();
+                createMidIntersectionRing(cylinderRadius, globalRadiusScale, 80);
+                createSharedRingMesh(discRadius, globalRadiusScale, 80);
+                createPointerMesh(globalRadiusScale);
+                updateAllSphereLocalPositions(); // 重新计算小球位置
+            }
+            
+            function setMode(mode) {
+                currentMode = mode;
+                if(mode === 'picker') {
+                    btnPickerMode.classList.add('active');
+                    btnListMode.classList.remove('active');
+                    colorListPanel.classList.add('hidden');
+                    colorWheelPanel.classList.remove('hidden');
+                    midYControl.style.display = 'flex';
+                    drawColorWheel();
+                } else {
+                    btnPickerMode.classList.remove('active');
+                    btnListMode.classList.add('active');
+                    colorListPanel.classList.remove('hidden');
+                    colorWheelPanel.classList.add('hidden');
+                    midYControl.style.display = 'none';
+                }
+                updateGeometry();
+            }
+            
+            function bindEvents() {
+                radiusSlider.addEventListener('input', (e) => {
+                    cylinderRadius = parseFloat(e.target.value);
+                    radiusVal.innerText = cylinderRadius.toFixed(2);
+                    updateGeometry();
+                    createMidIntersectionRing(cylinderRadius, globalRadiusScale, 80);
+                    if (currentMode === 'picker') drawColorWheel();
+                });
+                heightSlider.addEventListener('input', (e) => {
+                    setHeight(parseFloat(e.target.value));
+                });
+                scaleSlider.addEventListener('input', (e) => {
+                    setGlobalScale(parseFloat(e.target.value));
+                });
+                midSlider.addEventListener('input', (e) => {
+                    midYNormalized = parseFloat(e.target.value);
+                    midYVal.innerText = midYNormalized.toFixed(2);
+                    updateGeometry();
+                    if (currentMode === 'picker') drawColorWheel();
+                });
+                azimuthSlider.addEventListener('input', (e) => {
+                    azimuthDeg = parseInt(e.target.value);
+                    azimuthVal.innerText = azimuthDeg+"°";
+                    if (currentMode === 'picker') drawColorWheel();
+                });
+                elevationSlider.addEventListener('input', (e) => {
+                    elevationDeg = parseInt(e.target.value);
+                    elevationVal.innerText = elevationDeg+"°";
+                });
+                alphaSlider.addEventListener('input', (e) => {
+                    cylinderAlpha = parseFloat(e.target.value);
+                    alphaVal.innerText = cylinderAlpha.toFixed(2);
+                });
+                btnHSV.addEventListener('click', () => {
+                    colorMode = 0;
+                    btnHSV.classList.add('active');
+                    btnHSL.classList.remove('active');
+                    updateAllSphereLocalPositions();
+                    if (currentMode === 'picker') drawColorWheel();
+                });
+                btnHSL.addEventListener('click', () => {
+                    colorMode = 1;
+                    btnHSL.classList.add('active');
+                    btnHSV.classList.remove('active');
+                    updateAllSphereLocalPositions();
+                    if (currentMode === 'picker') drawColorWheel();
+                });
+                addColorBtn.addEventListener('click', addColorFromInput);
+                btnPickerMode.addEventListener('click', () => setMode('picker'));
+                btnListMode.addEventListener('click', () => setMode('list'));
+            }
+            
+            function resizeCanvas() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+                gl.viewport(0,0,canvas.width,canvas.height);
+            }
+            
+            function main() {
+                if(!initGL()) return;
+                cylinderProgram = initCylinderShaders();
+                discProgram = initDiscShaders();
+                sphereProgram = initSphereShaders();
+                borderSphereProgram = initBorderSphereShaders();
+                ringProgram = initRingShaders();
+                pointerProgram = initPointerShaders();
+                if(!cylinderProgram || !discProgram || !sphereProgram || !borderSphereProgram || !ringProgram || !pointerProgram) return;
+                initBuffers();
+                createSharedSphereMesh(0.055, 12, 12);
+                bindEvents();
+                resizeCanvas();
+                window.addEventListener('resize', resizeCanvas);
+                setMode('picker');
+                render();
+            }
+            main();
+        })();
+    </script>
+</body>
+</html>

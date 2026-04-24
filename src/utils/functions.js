@@ -42,10 +42,8 @@ export const randomUUID = () => {
 };
 
 // #region math
-export const pointDistance = (x1, y1, x2, y2) =>
-  Math.sqrt((x1 - x2) ** 2 + (y1 - y2) ** 2);
-export const coordDistance = (c1, c2) =>
-  Math.sqrt((c1.x - c2.x) ** 2 + (c1.y - c2.y) ** 2);
+export const pointDistance = (x1, y1, x2, y2) => Math.hypot(x1 - x2, y1 - y2);
+export const coordDistance = (c1, c2) => Math.hypot(c1.x - c2.x, c1.y - c2.y);
 
 export const decimaling = (value, digits) => {
   if (digits < 0) return value;

@@ -18,10 +18,11 @@ export const IDLE_TIMEOUT = {
 // defined here instead of enum to avoid looping import
 export const APP = {
   STEAMSTER: 1,
-  GRAIN_GRAIN: 2,
-  NIKKI_KIWI: 3,
-  SKETCHER: 4,
-  DASHBOARD: 5,
+  GRAIN_BRAIN: 2,
+  COLORBLINDER: 3,
+  NIKKI_KIWI: 4,
+  SKETCHER: 5,
+  DASHBOARD: 6,
 };
 
 export const HOME_TITLE = "Nexus";
@@ -38,7 +39,7 @@ export const APPS = {
       [LANG.CN]: "看看我的Steam库存？",
     },
   },
-  [APP.GRAIN_GRAIN]: {
+  [APP.GRAIN_BRAIN]: {
     favicon: "/asset/favicon/grainBrain.png",
     text: "Grain Brain",
     link: "/granary",
@@ -46,6 +47,16 @@ export const APPS = {
     intro: {
       [LANG.EN]: "Play Age of Empires 4?\nWe have the ultimate solution for grainary optimization here.",
       [LANG.CN]: "谷仓强迫症的终极福音",
+    },
+  },
+  [APP.COLORBLINDER]: {
+    favicon: "/asset/favicon/colorblinder.png",
+    text: "Colorblinder",
+    link: "/color",
+    cover: "/asset/cover/colorblinder.png",
+    intro: {
+      [LANG.EN]: "I'm trying to understand palettes from a spatial perspective",
+      [LANG.CN]: "我想让色盲也能看懂配色关系",
     },
   },
   [APP.NIKKI_KIWI]: {
@@ -65,7 +76,7 @@ export const APPS = {
     cover: "/asset/cover/sketcher.png",
     intro: {
       [LANG.EN]: "This helps me draw SVG paths out of images",
-      [LANG.CN]: "我拿这个来描图画svg",
+      [LANG.CN]: "我需要画svg的时候就会用这个",
     },
   },
   [APP.DASHBOARD]: {

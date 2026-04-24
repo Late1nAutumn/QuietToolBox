@@ -20,7 +20,7 @@ import USER_PROFILE from "./dataProcess/data/userProfile.json";
 import { translator } from "./translation/translator";
 import { NAVBAR_CONTEXT, TRANSLATE_COLLECTION } from "./translation/context";
 import { useGlobal } from "../context/GlobalContext";
-import { ArrowUpWide } from "../svg/ArrowUpWide";
+import { ArrowUpWide } from "../components/svg/ArrowUpWide";
 import ManualProcessor from "./components/ManualProcessor";
 import NexusButton from "../Home/NexusButton/NexusButton";
 import { APP, APPS } from "../utils/constants";

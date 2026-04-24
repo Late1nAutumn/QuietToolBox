@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>WebGL圆柱体 - 完美双面渲染 | 独立柱面半径 | 物体自转</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: #0a0a1a;
+            overflow: hidden;
+            font-family: 'Segoe UI', 'Poppins', sans-serif;
+        }
+        canvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+        /* 左侧竖直控制面板 */
+        .controls-panel {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(20, 20, 32, 0.88);
+            backdrop-filter: blur(12px);
+            border-radius: 24px;
+            padding: 20px 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            border: 1px solid rgba(255, 140, 80, 0.45);
+            box-shadow: 0 8px 28px rgba(0,0,0,0.6);
+            z-index: 100;
+            min-width: 180px;
+            pointer-events: auto;
+            font-weight: 500;
+        }
+        .control-item {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .control-item label {
+            font-size: 13px;
+            letter-spacing: 1px;
+            color: #ffd8b0;
+            display: flex;
+            justify-content: space-between;
+            font-weight: 600;
+        }
+        .control-item span {
+            color: #ffaa66;
+            background: #00000066;
+            padding: 2px 8px;
+            border-radius: 20px;
+            font-size: 12px;
+        }
+        input {
+            cursor: pointer;
+            background: #2c2c3a;
+            height: 5px;
+            border-radius: 5px;
+            accent-color: #ff884d;
+        }
+        input[type="range"] {
+            width: 100%;
+        }
+        .divider {
+            height: 1px;
+            background: rgba(255,140,80,0.3);
+            margin: 4px 0;
+        }
+        .title {
+            text-align: center;
+            font-size: 14px;
+            color: #ffaa77;
+            margin-bottom: 8px;
+            font-weight: bold;
+            border-bottom: 1px solid #ff884d66;
+            padding-bottom: 6px;
+        }
+        .note {
+            position: absolute;
+            bottom: 16px;
+            right: 16px;
+            background: rgba(0,0,0,0.55);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            color: #ccc;
+            font-family: monospace;
+            pointer-events: none;
+            z-index: 100;
+        }
+        .subnote {
+            font-size: 10px;
+            text-align: center;
+            color: #aaa;
+            margin-top: 8px;
+        }
+        @media (max-width: 600px) {
+            .controls-panel { padding: 14px; min-width: 150px; gap: 18px; }
+            .control-item label { font-size: 11px; }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="webglCanvas"></canvas>
+    <div class="controls-panel">
+        <div class="title">⚙️ 圆柱参数</div>
+        <div class="control-item">
+            <label>📐 柱面半径 <span id="radiusVal">1.00</span></label>
+            <input type="range" id="radiusSlider" min="0.1" max="1.0" step="0.01" value="1.0">
+        </div>
+        <div class="control-item">
+            <label>🟤 中间圆盘Y轴 <span id="midYVal">0.00</span></label>
+            <input type="range" id="midSlider" min="-1.0" max="1.0" step="0.01" value="0.0">
+        </div>
+        <div class="divider"></div>
+        <div class="control-item">
+            <label>🔄 水平旋转角 <span id="azimuthVal">0°</span></label>
+            <input type="range" id="azimuthSlider" min="0" max="360" step="1" value="0">
+        </div>
+        <div class="control-item">
+            <label>↕️ 垂直俯仰角 <span id="elevationVal">0°</span></label>
+            <input type="range" id="elevationSlider" min="-80" max="80" step="1" value="0">
+        </div>
+        <div class="subnote">
+            🧊 双面渲染 | 上下盘无死角 | 柱面独立半径
+        </div>
+    </div>
+    <div class="note">
+        🎯 固定摄像机 | 圆柱体自身旋转 | 所有面均可见
+    </div>
+
+    <script>
+        (function() {
+            // ---------- WebGL 核心 ----------
+            const canvas = document.getElementById('webglCanvas');
+            let gl;
+            let program;
+            let buffers = {};
+            let currentVertexCount = 0;
+            let texture;
+            
+            // 几何参数
+            let cylinderRadius = 1.0;      // 柱面半径 (范围0.1~1.0)
+            const discRadius = 1.0;         // 所有圆盘半径固定为1.0 (上下圆盘+中间圆盘)
+            const cylinderHeight = 2.0;
+            const halfHeight = 1.0;
+            const segments = 64;            // 高分段保证平滑
+            
+            // 中间圆盘位置 (-1 ~ 1)
+            let midY = 0.0;
+            
+            // 物体自身旋转角度 (度)
+            let azimuthDeg = 0;     // 绕Y轴水平旋转
+            let elevationDeg = 0;   // 绕X轴垂直旋转
+            
+            // ---------- 固定摄像机参数 (透视正常，物体居中) ----------
+            const cameraPosition = [0, 1.6, 6.2];
+            const cameraTarget = [0, 0, 0];
+            const cameraUp = [0, 1, 0];
+            
+            // UI 元素
+            const radiusSlider = document.getElementById('radiusSlider');
+            const radiusVal = document.getElementById('radiusVal');
+            const midSlider = document.getElementById('midSlider');
+            const midYVal = document.getElementById('midYVal');
+            const azimuthSlider = document.getElementById('azimuthSlider');
+            const azimuthVal = document.getElementById('azimuthVal');
+            const elevationSlider = document.getElementById('elevationSlider');
+            const elevationVal = document.getElementById('elevationVal');
+            
+            // ---------- 辅助数学 ----------
+            function normalize(v) {
+                const len = Math.hypot(v[0], v[1], v[2]);
+                if (len < 1e-6) return [0,0,0];
+                return [v[0]/len, v[1]/len, v[2]/len];
+            }
+            function cross(a, b) {
+                return [
+                    a[1]*b[2] - a[2]*b[1],
+                    a[2]*b[0] - a[0]*b[2],
+                    a[0]*b[1] - a[1]*b[0]
+                ];
+            }
+            function dot(a, b) {
+                return a[0]*b[0] + a[1]*b[1] + a[2]*b[2];
+            }
+            function subtractVectors(a,b) { return [a[0]-b[0], a[1]-b[1], a[2]-b[2]]; }
+            
+            // 视图矩阵 (列主序)
+            function createViewMatrix(eye, target, up) {
+                const z = normalize(subtractVectors(eye, target));
+                const x = normalize(cross(up, z));
+                const y = normalize(cross(z, x));
+                return [
+                    x[0], x[1], x[2], 0,
+                    y[0], y[1], y[2], 0,
+                    z[0], z[1], z[2], 0,
+                    -dot(x, eye), -dot(y, eye), -dot(z, eye), 1
+                ];
+            }
+            
+            // 透视投影矩阵
+            function createProjectionMatrix(aspect, fovDeg = 48, near = 0.3, far = 20.0) {
+                const f = 1.0 / Math.tan(fovDeg * Math.PI / 360);
+                const rangeInv = 1.0 / (near - far);
+                return [
+                    f / aspect, 0, 0, 0,
+                    0, f, 0, 0,
+                    0, 0, (far + near) * rangeInv, -1,
+                    0, 0, 2 * far * near * rangeInv, 0
+                ];
+            }
+            
+            // 物体旋转矩阵 (先Y轴水平，再X轴垂直)
+            function createModelRotationMatrix(azimuthDeg, elevationDeg) {
+                const azRad = azimuthDeg * Math.PI / 180;
+                const elRad = elevationDeg * Math.PI / 180;
+                const cosAz = Math.cos(azRad);
+                const sinAz = Math.sin(azRad);
+                const cosEl = Math.cos(elRad);
+                const sinEl = Math.sin(elRad);
+                
+                const ry = [
+                    cosAz,  0,  sinAz, 0,
+                    0,      1,  0,     0,
+                    -sinAz, 0,  cosAz, 0,
+                    0,      0,  0,     1
+                ];
+                const rx = [
+                    1, 0,      0,       0,
+                    0, cosEl, -sinEl,   0,
+                    0, sinEl,  cosEl,   0,
+                    0, 0,      0,       1
+                ];
+                function mulMat4(a, b) {
+                    const res = new Array(16);
+                    for (let i = 0; i < 4; i++) {
+                        for (let j = 0; j < 4; j++) {
+                            res[j*4+i] = 0;
+                            for (let k = 0; k < 4; k++) {
+                                res[j*4+i] += a[k*4+i] * b[j*4+k];
+                            }
+                        }
+                    }
+                    return res;
+                }
+                return mulMat4(rx, ry);
+            }
+            
+            // ---------- 核心几何生成: 柱面半径独立，所有圆盘双面渲染 (上下表面均存在) ----------
+            // 修正了侧面索引顺序确保正面朝向外部，上下圆盘添加双面，中间圆盘原有双面保留
+            function generateFullGeometry(cylinderR, discR, height, seg, midYPos) {
+                const positions = [];
+                const normals = [];
+                const uvs = [];
+                const indices = [];
+                const halfH = height / 2;
+                
+                // 辅助函数: 添加双面圆盘 (同时添加上表面和下表面，法线相反)
+                // 参数: yCenter, radius, 是否添加上表面(true)和下表面(true) 默认两个都加
+                function addDoubleSidedDisc(yCenter, radius, addTop=true, addBottom=true) {
+                    // 上表面 (法线 +Y)
+                    if (addTop) {
+                        const centerIdxTop = positions.length / 3;
+                        positions.push(0, yCenter, 0);
+                        normals.push(0, 1, 0);
+                        uvs.push(0.5, 0.5);
+                        const edgeStartTop = positions.length / 3;
+                        for (let i = 0; i <= seg; i++) {
+                            const theta = (i / seg) * Math.PI * 2;
+                            const x = radius * Math.cos(theta);
+                            const z = radius * Math.sin(theta);
+                            positions.push(x, yCenter, z);
+                            normals.push(0, 1, 0);
+                            const u = (x / radius + 1) / 2;
+                            const v = (z / radius + 1) / 2;
+                            uvs.push(u, v);
+                        }
+                        for (let i = 0; i < seg; i++) {
+                            indices.push(centerIdxTop, edgeStartTop + i, edgeStartTop + i + 1);
+                        }
+                    }
+                    // 下表面 (法线 -Y)
+                    if (addBottom) {
+                        const centerIdxBottom = positions.length / 3;
+                        positions.push(0, yCenter, 0);
+                        normals.push(0, -1, 0);
+                        uvs.push(0.5, 0.5);
+                        const edgeStartBottom = positions.length / 3;
+                        for (let i = 0; i <= seg; i++) {
+                            const theta = (i / seg) * Math.PI * 2;
+                            const x = radius * Math.cos(theta);
+                            const z = radius * Math.sin(theta);
+                            positions.push(x, yCenter, z);
+                            normals.push(0, -1, 0);
+                            const u = (x / radius + 1) / 2;
+                            const v = (z / radius + 1) / 2;
+                            uvs.push(u, v);
+                        }
+                        // 下表面三角形顺序相反以保证正面朝下
+                        for (let i = 0; i < seg; i++) {
+                            indices.push(centerIdxBottom, edgeStartBottom + i + 1, edgeStartBottom + i);
+                        }
+                    }
+                }
+                
+                // 1. 圆柱侧面 (使用 cylinderR 半径，修正索引顺序确保正面朝外)
+                const sideStartIdx = positions.length / 3;
+                // 存储每层顶点索引以便构建四边形
+                const topIndices = [];
+                const bottomIndices = [];
+                for (let i = 0; i <= seg; i++) {
+                    const theta = (i / seg) * Math.PI * 2;
+                    const x = cylinderR * Math.cos(theta);
+                    const z = cylinderR * Math.sin(theta);
+                    const u = i / seg;
+                    const nx = Math.cos(theta);
+                    const nz = Math.sin(theta);
+                    // 上边缘顶点
+                    positions.push(x, halfH, z);
+                    normals.push(nx, 0, nz);
+                    uvs.push(u, 1.0);
+                    topIndices.push(positions.length/3 - 1);
+                    // 下边缘顶点
+                    positions.push(x, -halfH, z);
+                    normals.push(nx, 0, nz);
+                    uvs.push(u, 0.0);
+                    bottomIndices.push(positions.length/3 - 1);
+                }
+                // 构建侧面索引 (每个四边形拆分成两个逆时针三角形，保证从外部看正面)
+                for (let i = 0; i < seg; i++) {
+                    const tl = topIndices[i];      // 上左
+                    const tr = topIndices[i+1];    // 上右
+                    const bl = bottomIndices[i];   // 下左
+                    const br = bottomIndices[i+1]; // 下右
+                    // 三角形1: tl -> tr -> bl  (逆时针从外部看)
+                    indices.push(tl, tr, bl);
+                    // 三角形2: tr -> br -> bl
+                    indices.push(tr, br, bl);
+                }
+                
+                // 2. 上圆盘: 双面渲染 (原有上表面+下表面，确保俯视仰视均可见)
+                addDoubleSidedDisc(halfH, discR, true, true);
+                
+                // 3. 下圆盘: 双面渲染
+                addDoubleSidedDisc(-halfH, discR, true, true);
+                
+                // 4. 中间可移动圆盘: 双面渲染 (位置 clamped)
+                let clampedMid = midYPos;
+                if (clampedMid > halfH) clampedMid = halfH;
+                if (clampedMid < -halfH) clampedMid = -halfH;
+                addDoubleSidedDisc(clampedMid, discR, true, true);
+                
+                return {
+                    positions: new Float32Array(positions),
+                    normals: new Float32Array(normals),
+                    uvs: new Float32Array(uvs),
+                    indices: new Uint16Array(indices),
+                    vertexCount: indices.length
+                };
+            }
+            
+            // ---------- 生成华丽纹理 (增强视觉效果) ----------
+            function createHighQualityTexture(gl) {
+                const texCanvas = document.createElement('canvas');
+                texCanvas.width = 512;
+                texCanvas.height = 512;
+                const ctx = texCanvas.getContext('2d');
+                // 金属红铜基底
+                ctx.fillStyle = '#b5452c';
+                ctx.fillRect(0, 0, 512, 512);
+                // 金色条纹
+                ctx.fillStyle = '#f3bc6c';
+                for (let i = 0; i < 512; i += 54) {
+                    ctx.fillRect(i, 0, 28, 512);
+                }
+                ctx.fillStyle = '#e0984a';
+                for (let i = 28; i < 512; i += 54) {
+                    ctx.fillRect(i, 0, 16, 512);
+                }
+                // 装饰点阵
+                ctx.fillStyle = '#ffffff';
+                for (let k = 0; k < 600; k++) {
+                    ctx.fillRect(Math.random() * 512, Math.random() * 512, 2, 2);
+                }
+                // 边缘高光
+                ctx.strokeStyle = '#ffd58c';
+                ctx.lineWidth = 6;
+                ctx.strokeRect(8, 8, 496, 496);
+                // 增加细微网格
+                ctx.beginPath();
+                ctx.strokeStyle = '#ffaa6644';
+                for (let i = 0; i < 512; i += 64) {
+                    ctx.moveTo(i, 0);
+                    ctx.lineTo(i, 512);
+                    ctx.moveTo(0, i);
+                    ctx.lineTo(512, i);
+                    ctx.stroke();
+                }
+                
+                const texture = gl.createTexture();
+                gl.bindTexture(gl.TEXTURE_2D, texture);
+                gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT);
+                gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
+                gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
+                gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+                gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, texCanvas);
+                gl.generateMipmap(gl.TEXTURE_2D);
+                return texture;
+            }
+            
+            // ---------- 更新几何体到GPU ----------
+            function updateGeometry() {
+                if (!gl || !program) return;
+                const newGeo = generateFullGeometry(cylinderRadius, discRadius, cylinderHeight, segments, midY);
+                currentVertexCount = newGeo.vertexCount;
+                
+                gl.bindBuffer(gl.ARRAY_BUFFER, buffers.position);
+                gl.bufferData(gl.ARRAY_BUFFER, newGeo.positions, gl.STATIC_DRAW);
+                
+                gl.bindBuffer(gl.ARRAY_BUFFER, buffers.normal);
+                gl.bufferData(gl.ARRAY_BUFFER, newGeo.normals, gl.STATIC_DRAW);
+                
+                gl.bindBuffer(gl.ARRAY_BUFFER, buffers.uv);
+                gl.bufferData(gl.ARRAY_BUFFER, newGeo.uvs, gl.STATIC_DRAW);
+                
+                gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffers.indices);
+                gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, newGeo.indices, gl.STATIC_DRAW);
+            }
+            
+            // ---------- 着色器 (纹理映射 + 基础光照可选, 这里只用纹理保证鲜艳) ----------
+            function initShaders(gl) {
+                const vsSource = `
+                    attribute vec3 aPosition;
+                    attribute vec2 aUV;
+                    uniform mat4 uModelMatrix;
+                    uniform mat4 uViewMatrix;
+                    uniform mat4 uProjectionMatrix;
+                    varying vec2 vUV;
+                    void main() {
+                        vec4 worldPos = uModelMatrix * vec4(aPosition, 1.0);
+                        gl_Position = uProjectionMatrix * uViewMatrix * worldPos;
+                        vUV = aUV;
+                    }
+                `;
+                const fsSource = `
+                    precision mediump float;
+                    varying vec2 vUV;
+                    uniform sampler2D uTexture;
+                    void main() {
+                        vec4 texColor = texture2D(uTexture, vUV);
+                        // 轻微增加对比度
+                        gl_FragColor = texColor;
+                    }
+                `;
+                function createShader(type, src) {
+                    const shader = gl.createShader(type);
+                    gl.shaderSource(shader, src);
+                    gl.compileShader(shader);
+                    if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+                        console.error(gl.getShaderInfoLog(shader));
+                        return null;
+                    }
+                    return shader;
+                }
+                const vs = createShader(gl.VERTEX_SHADER, vsSource);
+                const fs = createShader(gl.FRAGMENT_SHADER, fsSource);
+                const prog = gl.createProgram();
+                gl.attachShader(prog, vs);
+                gl.attachShader(prog, fs);
+                gl.linkProgram(prog);
+                if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) {
+                    console.error(gl.getProgramInfoLog(prog));
+                    return null;
+                }
+                return prog;
+            }
+            
+            function initBuffers() {
+                buffers.position = gl.createBuffer();
+                buffers.normal = gl.createBuffer();
+                buffers.uv = gl.createBuffer();
+                buffers.indices = gl.createBuffer();
+            }
+            
+            function setupAttributes() {
+                const posLoc = gl.getAttribLocation(program, 'aPosition');
+                const uvLoc = gl.getAttribLocation(program, 'aUV');
+                
+                gl.bindBuffer(gl.ARRAY_BUFFER, buffers.position);
+                gl.vertexAttribPointer(posLoc, 3, gl.FLOAT, false, 0, 0);
+                gl.enableVertexAttribArray(posLoc);
+                
+                gl.bindBuffer(gl.ARRAY_BUFFER, buffers.uv);
+                gl.vertexAttribPointer(uvLoc, 2, gl.FLOAT, false, 0, 0);
+                gl.enableVertexAttribArray(uvLoc);
+                
+                gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffers.indices);
+            }
+            
+            // ---------- 渲染循环 ----------
+            let animationId = null;
+            function render() {
+                if (!gl || !program) return;
+                
+                gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+                gl.useProgram(program);
+                
+                gl.activeTexture(gl.TEXTURE0);
+                gl.bindTexture(gl.TEXTURE_2D, texture);
+                gl.uniform1i(gl.getUniformLocation(program, 'uTexture'), 0);
+                
+                const modelMatrix = createModelRotationMatrix(azimuthDeg, elevationDeg);
+                const viewMatrix = createViewMatrix(cameraPosition, cameraTarget, cameraUp);
+                const aspect = gl.canvas.width / gl.canvas.height;
+                const projectionMatrix = createProjectionMatrix(aspect, 48, 0.3, 18.0);
+                
+                const uModel = gl.getUniformLocation(program, 'uModelMatrix');
+                const uView = gl.getUniformLocation(program, 'uViewMatrix');
+                const uProj = gl.getUniformLocation(program, 'uProjectionMatrix');
+                gl.uniformMatrix4fv(uModel, false, modelMatrix);
+                gl.uniformMatrix4fv(uView, false, viewMatrix);
+                gl.uniformMatrix4fv(uProj, false, projectionMatrix);
+                
+                gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffers.indices);
+                gl.drawElements(gl.TRIANGLES, currentVertexCount, gl.UNSIGNED_SHORT, 0);
+                
+                animationId = requestAnimationFrame(render);
+            }
+            
+            function resizeCanvas() {
+                const width = window.innerWidth;
+                const height = window.innerHeight;
+                canvas.width = width;
+                canvas.height = height;
+                gl.viewport(0, 0, width, height);
+            }
+            
+            // ---------- 事件绑定 ----------
+            function bindEvents() {
+                radiusSlider.addEventListener('input', (e) => {
+                    cylinderRadius = parseFloat(e.target.value);
+                    radiusVal.innerText = cylinderRadius.toFixed(2);
+                    updateGeometry();
+                });
+                midSlider.addEventListener('input', (e) => {
+                    let val = parseFloat(e.target.value);
+                    val = Math.min(1.0, Math.max(-1.0, val));
+                    midY = val;
+                    midYVal.innerText = midY.toFixed(2);
+                    updateGeometry();
+                });
+                azimuthSlider.addEventListener('input', (e) => {
+                    azimuthDeg = parseInt(e.target.value);
+                    azimuthVal.innerText = azimuthDeg + "°";
+                });
+                elevationSlider.addEventListener('input', (e) => {
+                    elevationDeg = parseInt(e.target.value);
+                    elevationVal.innerText = elevationDeg + "°";
+                });
+            }
+            
+            // ---------- WebGL 初始化 ----------
+            function initWebGL() {
+                try {
+                    gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+                    if (!gl) throw new Error("不支持WebGL");
+                    gl.enable(gl.DEPTH_TEST);
+                    gl.depthFunc(gl.LEQUAL);
+                    // 启用背面剔除，但由于我们所有面都做了双面几何体，所以正确方向的面会被显示
+                    // 注意: 圆柱侧面已修正为逆时针正面，圆盘双面均有正确朝向，无需关闭剔除
+                    gl.enable(gl.CULL_FACE);
+                    gl.frontFace(gl.CCW);
+                    gl.clearColor(0.05, 0.07, 0.12, 1.0);
+                } catch(e) {
+                    alert("WebGL初始化失败: " + e.message);
+                    return false;
+                }
+                return true;
+            }
+            
+            function main() {
+                if (!initWebGL()) return;
+                
+                program = initShaders(gl);
+                if (!program) {
+                    alert("着色器加载失败");
+                    return;
+                }
+                texture = createHighQualityTexture(gl);
+                initBuffers();
+                
+                // 初始几何体
+                const initialGeo = generateFullGeometry(cylinderRadius, discRadius, cylinderHeight, segments, midY);
+                currentVertexCount = initialGeo.vertexCount;
+                gl.bindBuffer(gl.ARRAY_BUFFER, buffers.position);
+                gl.bufferData(gl.ARRAY_BUFFER, initialGeo.positions, gl.STATIC_DRAW);
+                gl.bindBuffer(gl.ARRAY_BUFFER, buffers.normal);
+                gl.bufferData(gl.ARRAY_BUFFER, initialGeo.normals, gl.STATIC_DRAW);
+                gl.bindBuffer(gl.ARRAY_BUFFER, buffers.uv);
+                gl.bufferData(gl.ARRAY_BUFFER, initialGeo.uvs, gl.STATIC_DRAW);
+                gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffers.indices);
+                gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, initialGeo.indices, gl.STATIC_DRAW);
+                
+                setupAttributes();
+                resizeCanvas();
+                window.addEventListener('resize', () => resizeCanvas());
+                bindEvents();
+                render();
+            }
+            
+            main();
+        })();
+    </script>
+</body>
+</html>

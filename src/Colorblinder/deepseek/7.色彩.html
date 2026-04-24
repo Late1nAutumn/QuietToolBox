@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>色彩指示器圆柱体 | 顶面颜色随中盘 | 亮度反转 | 全视角俯仰角</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: #0a0a1a;
+            overflow: hidden;
+            font-family: 'Segoe UI', 'Poppins', sans-serif;
+        }
+        canvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+        .controls-panel {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(20, 20, 32, 0.88);
+            backdrop-filter: blur(12px);
+            border-radius: 24px;
+            padding: 20px 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            border: 1px solid rgba(255, 140, 80, 0.45);
+            box-shadow: 0 8px 28px rgba(0,0,0,0.6);
+            z-index: 100;
+            min-width: 180px;
+            pointer-events: auto;
+            font-weight: 500;
+        }
+        .control-item {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .control-item label {
+            font-size: 13px;
+            letter-spacing: 1px;
+            color: #ffd8b0;
+            display: flex;
+            justify-content: space-between;
+            font-weight: 600;
+        }
+        .control-item span {
+            color: #ffaa66;
+            background: #00000066;
+            padding: 2px 8px;
+            border-radius: 20px;
+            font-size: 12px;
+        }
+        input {
+            cursor: pointer;
+            background: #2c2c3a;
+            height: 5px;
+            border-radius: 5px;
+            accent-color: #ff884d;
+        }
+        input[type="range"] {
+            width: 100%;
+        }
+        .divider {
+            height: 1px;
+            background: rgba(255,140,80,0.3);
+            margin: 4px 0;
+        }
+        .title {
+            text-align: center;
+            font-size: 14px;
+            color: #ffaa77;
+            margin-bottom: 8px;
+            font-weight: bold;
+            border-bottom: 1px solid #ff884d66;
+            padding-bottom: 6px;
+        }
+        .note {
+            position: absolute;
+            bottom: 16px;
+            right: 16px;
+            background: rgba(0,0,0,0.55);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            color: #ccc;
+            font-family: monospace;
+            pointer-events: none;
+            z-index: 100;
+        }
+        .subnote {
+            font-size: 10px;
+            text-align: center;
+            color: #aaa;
+            margin-top: 8px;
+        }
+        @media (max-width: 600px) {
+            .controls-panel { padding: 14px; min-width: 150px; gap: 18px; }
+            .control-item label { font-size: 11px; }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="webglCanvas"></canvas>
+    <div class="controls-panel">
+        <div class="title">🎨 色彩指示器 (顶面随中盘)</div>
+        <div class="control-item">
+            <label>📐 柱面半径 <span id="radiusVal">0.10</span></label>
+            <input type="range" id="radiusSlider" min="0.1" max="1.0" step="0.01" value="0.1">
+            <div style="font-size:10px; color:#bbb;">上圆盘半径同步 | 饱和度随半径变化</div>
+        </div>
+        <div class="control-item">
+            <label>🟤 中间圆盘Y轴 <span id="midYVal">0.00</span></label>
+            <input type="range" id="midSlider" min="-1.0" max="1.0" step="0.01" value="0.0">
+            <div style="font-size:10px; color:#bbb;">顶面颜色跟随中盘亮度 | 亮度反转下白上黑</div>
+        </div>
+        <div class="divider"></div>
+        <div class="control-item">
+            <label>🔄 水平旋转角 <span id="azimuthVal">0°</span></label>
+            <input type="range" id="azimuthSlider" min="0" max="360" step="1" value="0">
+        </div>
+        <div class="control-item">
+            <label>↕️ 垂直俯仰角 <span id="elevationVal">0°</span></label>
+            <!-- 关键修改: 俯仰角范围从原来的0~90扩展为 -90° ~ +90° ，实现完整上下翻转视角 -->
+            <input type="range" id="elevationSlider" min="-90" max="90" step="1" value="0">
+            <div style="font-size:10px; color:#ddd;">范围 -90° ~ +90° | 负值仰视，正值俯视</div>
+        </div>
+        <div class="subnote">
+            ⬇️ 亮度反转: 下白上黑 | 顶面颜色 = 中盘颜色(亮度随中盘Y)
+        </div>
+    </div>
+    <div class="note">
+        🌈 HSV动态着色 | 圆柱自由旋转 | 上圆盘亮度由中盘高度决定
+    </div>
+
+    <script>
+        (function() {
+            // ---------- WebGL 核心 ----------
+            const canvas = document.getElementById('webglCanvas');
+            let gl;
+            let program;
+            let buffers = {};
+            let currentVertexCount = 0;
+            
+            // 几何参数
+            let cylinderRadius = 0.1;      // 上圆盘半径（可调）
+            const discRadius = 1.0;         // 下圆盘和中圆盘半径固定为1.0
+            const cylinderHeight = 2.0;
+            const halfHeight = 1.0;
+            const segments = 72;
+            
+            // 中间圆盘位置 (-1 ~ 1)
+            let midY = 0.0;
+            
+            // 物体自身旋转角度 (度)
+            let azimuthDeg = 0;
+            let elevationDeg = 0;           // 范围已调整为 -90 ~ +90，支持仰视和俯视效果
+            
+            // 固定摄像机参数
+            const cameraPosition = [0, 1.6, 6.2];
+            const cameraTarget = [0, 0, 0];
+            const cameraUp = [0, 1, 0];
+            
+            // 色彩映射参数
+            const MAX_RADIUS = 1.0;
+            const MIN_RADIUS = 0.1;
+            
+            // UI 元素
+            const radiusSlider = document.getElementById('radiusSlider');
+            const radiusVal = document.getElementById('radiusVal');
+            const midSlider = document.getElementById('midSlider');
+            const midYVal = document.getElementById('midYVal');
+            const azimuthSlider = document.getElementById('azimuthSlider');
+            const azimuthVal = document.getElementById('azimuthVal');
+            const elevationSlider = document.getElementById('elevationSlider');
+            const elevationVal = document.getElementById('elevationVal');
+            
+            // ---------- 辅助数学 ----------
+            function normalize(v) {
+                const len = Math.hypot(v[0], v[1], v[2]);
+                if (len < 1e-6) return [0,0,0];
+                return [v[0]/len, v[1]/len, v[2]/len];
+            }
+            function cross(a, b) {
+                return [
+                    a[1]*b[2] - a[2]*b[1],
+                    a[2]*b[0] - a[0]*b[2],
+                    a[0]*b[1] - a[1]*b[0]
+                ];
+            }
+            function dot(a, b) {
+                return a[0]*b[0] + a[1]*b[1] + a[2]*b[2];
+            }
+            function subtractVectors(a,b) { return [a[0]-b[0], a[1]-b[1], a[2]-b[2]]; }
+            
+            function createViewMatrix(eye, target, up) {
+                const z = normalize(subtractVectors(eye, target));
+                const x = normalize(cross(up, z));
+                const y = normalize(cross(z, x));
+                return [
+                    x[0], x[1], x[2], 0,
+                    y[0], y[1], y[2], 0,
+                    z[0], z[1], z[2], 0,
+                    -dot(x, eye), -dot(y, eye), -dot(z, eye), 1
+                ];
+            }
+            
+            function createProjectionMatrix(aspect, fovDeg = 48, near = 0.3, far = 20.0) {
+                const f = 1.0 / Math.tan(fovDeg * Math.PI / 360);
+                const rangeInv = 1.0 / (near - far);
+                return [
+                    f / aspect, 0, 0, 0,
+                    0, f, 0, 0,
+                    0, 0, (far + near) * rangeInv, -1,
+                    0, 0, 2 * far * near * rangeInv, 0
+                ];
+            }
+            
+            // 构建模型旋转矩阵：先绕Y轴(水平旋转)，再绕X轴(垂直俯仰角，支持正负角度)
+            function createModelRotationMatrix(azimuthDeg, elevationDeg) {
+                const azRad = azimuthDeg * Math.PI / 180;
+                const elRad = elevationDeg * Math.PI / 180;
+                const cosAz = Math.cos(azRad);
+                const sinAz = Math.sin(azRad);
+                const cosEl = Math.cos(elRad);
+                const sinEl = Math.sin(elRad);
+                
+                // 绕Y轴旋转矩阵
+                const ry = [
+                    cosAz,  0,  sinAz, 0,
+                    0,      1,  0,     0,
+                    -sinAz, 0,  cosAz, 0,
+                    0,      0,  0,     1
+                ];
+                // 绕X轴旋转矩阵 (支持负角度，实现上下完整翻转)
+                const rx = [
+                    1, 0,      0,       0,
+                    0, cosEl, -sinEl,   0,
+                    0, sinEl,  cosEl,   0,
+                    0, 0,      0,       1
+                ];
+                function mulMat4(a, b) {
+                    const res = new Array(16);
+                    for (let i = 0; i < 4; i++) {
+                        for (let j = 0; j < 4; j++) {
+                            res[j*4+i] = 0;
+                            for (let k = 0; k < 4; k++) {
+                                res[j*4+i] += a[k*4+i] * b[j*4+k];
+                            }
+                        }
+                    }
+                    return res;
+                }
+                // 先绕Y再绕X (顺序: 先水平再俯仰，符合直觉)
+                return mulMat4(rx, ry);
+            }
+            
+            // ---------- 几何生成: 上圆盘半径 = cylinderRadius, 下/中圆盘半径 = 1.0 ----------
+            function generateFullGeometry(cylinderR, discR, height, seg, midYPos) {
+                const positions = [];
+                const normals = [];
+                const uvs = [];
+                const indices = [];
+                const halfH = height / 2;
+                
+                // 添加双面圆盘 (上下两个面，保证背面剔除正确)
+                function addDoubleSidedDisc(yCenter, radius) {
+                    // 上表面 (法线向上)
+                    const centerIdxTop = positions.length / 3;
+                    positions.push(0, yCenter, 0);
+                    normals.push(0, 1, 0);
+                    uvs.push(0.5, 0.5);
+                    const edgeStartTop = positions.length / 3;
+                    for (let i = 0; i <= seg; i++) {
+                        const theta = (i / seg) * Math.PI * 2;
+                        const x = radius * Math.cos(theta);
+                        const z = radius * Math.sin(theta);
+                        positions.push(x, yCenter, z);
+                        normals.push(0, 1, 0);
+                        uvs.push(0, 0);
+                    }
+                    for (let i = 0; i < seg; i++) {
+                        indices.push(centerIdxTop, edgeStartTop + i, edgeStartTop + i + 1);
+                    }
+                    // 下表面 (法线向下)
+                    const centerIdxBottom = positions.length / 3;
+                    positions.push(0, yCenter, 0);
+                    normals.push(0, -1, 0);
+                    uvs.push(0.5, 0.5);
+                    const edgeStartBottom = positions.length / 3;
+                    for (let i = 0; i <= seg; i++) {
+                        const theta = (i / seg) * Math.PI * 2;
+                        const x = radius * Math.cos(theta);
+                        const z = radius * Math.sin(theta);
+                        positions.push(x, yCenter, z);
+                        normals.push(0, -1, 0);
+                        uvs.push(0, 0);
+                    }
+                    for (let i = 0; i < seg; i++) {
+                        indices.push(centerIdxBottom, edgeStartBottom + i + 1, edgeStartBottom + i);
+                    }
+                }
+                
+                // 圆柱侧面 (基于当前上圆盘半径 cylinderR)
+                const sideStartIdx = positions.length / 3;
+                const topIndices = [];
+                const bottomIndices = [];
+                for (let i = 0; i <= seg; i++) {
+                    const theta = (i / seg) * Math.PI * 2;
+                    const x = cylinderR * Math.cos(theta);
+                    const z = cylinderR * Math.sin(theta);
+                    const nx = Math.cos(theta);
+                    const nz = Math.sin(theta);
+                    // 顶部边缘
+                    positions.push(x, halfH, z);
+                    normals.push(nx, 0, nz);
+                    uvs.push(0, 0);
+                    topIndices.push(positions.length/3 - 1);
+                    // 底部边缘
+                    positions.push(x, -halfH, z);
+                    normals.push(nx, 0, nz);
+                    uvs.push(0, 0);
+                    bottomIndices.push(positions.length/3 - 1);
+                }
+                for (let i = 0; i < seg; i++) {
+                    const tl = topIndices[i];
+                    const tr = topIndices[i+1];
+                    const bl = bottomIndices[i];
+                    const br = bottomIndices[i+1];
+                    indices.push(tl, tr, bl);
+                    indices.push(tr, br, bl);
+                }
+                
+                // 上圆盘 (半径 cylinderR，位于顶部 y = halfH)
+                addDoubleSidedDisc(halfH, cylinderR);
+                // 下圆盘 (半径 discR，位于底部 y = -halfH)
+                addDoubleSidedDisc(-halfH, discR);
+                // 中间圆盘 (半径 discR，位置由 midYPos 决定)
+                let clampedMid = Math.min(halfH, Math.max(-halfH, midYPos));
+                addDoubleSidedDisc(clampedMid, discR);
+                
+                return {
+                    positions: new Float32Array(positions),
+                    normals: new Float32Array(normals),
+                    indices: new Uint16Array(indices),
+                    vertexCount: indices.length
+                };
+            }
+            
+            function updateGeometry() {
+                if (!gl || !program) return;
+                const newGeo = generateFullGeometry(cylinderRadius, discRadius, cylinderHeight, segments, midY);
+                currentVertexCount = newGeo.vertexCount;
+                gl.bindBuffer(gl.ARRAY_BUFFER, buffers.position);
+                gl.bufferData(gl.ARRAY_BUFFER, newGeo.positions, gl.STATIC_DRAW);
+                gl.bindBuffer(gl.ARRAY_BUFFER, buffers.normal);
+                gl.bufferData(gl.ARRAY_BUFFER, newGeo.normals, gl.STATIC_DRAW);
+                gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffers.indices);
+                gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, newGeo.indices, gl.STATIC_DRAW);
+            }
+            
+            // ---------- 着色器: 顶面颜色由中盘高度决定亮度，饱和度随半径变化 ----------
+            function initShaders(gl) {
+                const vsSource = `
+                    attribute vec3 aPosition;
+                    uniform mat4 uModelMatrix;
+                    uniform mat4 uViewMatrix;
+                    uniform mat4 uProjectionMatrix;
+                    varying vec3 vLocalPos;
+                    void main() {
+                        vLocalPos = aPosition;
+                        vec4 worldPos = uModelMatrix * vec4(aPosition, 1.0);
+                        gl_Position = uProjectionMatrix * uViewMatrix * worldPos;
+                    }
+                `;
+                
+                const fsSource = `
+                    precision mediump float;
+                    varying vec3 vLocalPos;
+                    uniform float u_minRadius;
+                    uniform float u_maxRadius;
+                    uniform float u_midY;           // 中圆盘Y坐标，用于顶面颜色亮度
+                    
+                    vec3 hsv2rgb(vec3 c) {
+                        vec4 K = vec4(1.0, 2.0 / 3.0, 1.0 / 3.0, 3.0);
+                        vec3 p = abs(fract(c.xxx + K.xyz) * 6.0 - K.www);
+                        return c.z * mix(K.xxx, clamp(p - K.xxx, 0.0, 1.0), c.y);
+                    }
+                    
+                    void main() {
+                        float x = vLocalPos.x;
+                        float y = vLocalPos.y;
+                        float z = vLocalPos.z;
+                        
+                        float r = length(vec2(x, z));
+                        float angle = atan(z, x);
+                        float hue = angle / (2.0 * 3.1415926);
+                        if (hue < 0.0) hue += 1.0;
+                        
+                        // 亮度计算: 基础规则是亮度反转 (下白上黑)
+                        float lightness;
+                        // 判断是否为顶面 (局部坐标 y 接近 +1.0，即上圆盘区域)
+                        bool isTopDisc = (y > 0.99);
+                        if (isTopDisc) {
+                            // 顶面颜色使用中圆盘的亮度: 亮度由中圆盘高度决定 (同样应用反转公式)
+                            // 中圆盘高度为 u_midY，反转亮度 = (1.0 - u_midY) / 2.0
+                            lightness = (1.0 - u_midY) / 2.0;
+                        } else {
+                            // 其他区域（侧面、下圆盘、中圆盘）使用自身高度反转
+                            lightness = (1.0 - y) / 2.0;
+                        }
+                        lightness = clamp(lightness, 0.0, 1.0);
+                        
+                        // 饱和度随半径线性变化 (半径越小饱和度越低)
+                        float saturation = (r - u_minRadius) / (u_maxRadius - u_minRadius);
+                        saturation = clamp(saturation, 0.0, 1.0);
+                        
+                        vec3 hsv = vec3(hue, saturation, lightness);
+                        vec3 rgb = hsv2rgb(hsv);
+                        gl_FragColor = vec4(rgb, 1.0);
+                    }
+                `;
+                
+                function createShader(type, src) {
+                    const shader = gl.createShader(type);
+                    gl.shaderSource(shader, src);
+                    gl.compileShader(shader);
+                    if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+                        console.error(gl.getShaderInfoLog(shader));
+                        return null;
+                    }
+                    return shader;
+                }
+                const vs = createShader(gl.VERTEX_SHADER, vsSource);
+                const fs = createShader(gl.FRAGMENT_SHADER, fsSource);
+                const prog = gl.createProgram();
+                gl.attachShader(prog, vs);
+                gl.attachShader(prog, fs);
+                gl.linkProgram(prog);
+                if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) {
+                    console.error(gl.getProgramInfoLog(prog));
+                    return null;
+                }
+                return prog;
+            }
+            
+            function initBuffers() {
+                buffers.position = gl.createBuffer();
+                buffers.normal = gl.createBuffer();
+                buffers.indices = gl.createBuffer();
+            }
+            
+            function setupAttributes() {
+                const posLoc = gl.getAttribLocation(program, 'aPosition');
+                gl.bindBuffer(gl.ARRAY_BUFFER, buffers.position);
+                gl.vertexAttribPointer(posLoc, 3, gl.FLOAT, false, 0, 0);
+                gl.enableVertexAttribArray(posLoc);
+                gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffers.indices);
+            }
+            
+            let animationId = null;
+            function render() {
+                if (!gl || !program) return;
+                
+                gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+                gl.useProgram(program);
+                
+                // 传递uniform
+                const minRadiusLoc = gl.getUniformLocation(program, 'u_minRadius');
+                const maxRadiusLoc = gl.getUniformLocation(program, 'u_maxRadius');
+                const midYLoc = gl.getUniformLocation(program, 'u_midY');
+                gl.uniform1f(minRadiusLoc, MIN_RADIUS);
+                gl.uniform1f(maxRadiusLoc, MAX_RADIUS);
+                gl.uniform1f(midYLoc, midY);
+                
+                // 模型矩阵 (支持-90°~90°完整俯仰角)
+                const modelMatrix = createModelRotationMatrix(azimuthDeg, elevationDeg);
+                const viewMatrix = createViewMatrix(cameraPosition, cameraTarget, cameraUp);
+                const aspect = gl.canvas.width / gl.canvas.height;
+                const projectionMatrix = createProjectionMatrix(aspect, 48, 0.3, 18.0);
+                
+                const uModel = gl.getUniformLocation(program, 'uModelMatrix');
+                const uView = gl.getUniformLocation(program, 'uViewMatrix');
+                const uProj = gl.getUniformLocation(program, 'uProjectionMatrix');
+                gl.uniformMatrix4fv(uModel, false, modelMatrix);
+                gl.uniformMatrix4fv(uView, false, viewMatrix);
+                gl.uniformMatrix4fv(uProj, false, projectionMatrix);
+                
+                gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffers.indices);
+                gl.drawElements(gl.TRIANGLES, currentVertexCount, gl.UNSIGNED_SHORT, 0);
+                
+                animationId = requestAnimationFrame(render);
+            }
+            
+            function resizeCanvas() {
+                const width = window.innerWidth;
+                const height = window.innerHeight;
+                canvas.width = width;
+                canvas.height = height;
+                gl.viewport(0, 0, width, height);
+            }
+            
+            function bindEvents() {
+                radiusSlider.addEventListener('input', (e) => {
+                    cylinderRadius = parseFloat(e.target.value);
+                    radiusVal.innerText = cylinderRadius.toFixed(2);
+                    updateGeometry();
+                });
+                midSlider.addEventListener('input', (e) => {
+                    let val = parseFloat(e.target.value);
+                    val = Math.min(1.0, Math.max(-1.0, val));
+                    midY = val;
+                    midYVal.innerText = midY.toFixed(2);
+                    // 中盘位置变化，几何体需重建（位置改变）
+                    updateGeometry();
+                });
+                azimuthSlider.addEventListener('input', (e) => {
+                    azimuthDeg = parseInt(e.target.value);
+                    azimuthVal.innerText = azimuthDeg + "°";
+                });
+                // 俯仰角滑块范围已改为 -90 到 90，支持负数仰角效果
+                elevationSlider.addEventListener('input', (e) => {
+                    elevationDeg = parseInt(e.target.value);
+                    elevationVal.innerText = elevationDeg + "°";
+                });
+            }
+            
+            function initWebGL() {
+                try {
+                    gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+                    if (!gl) throw new Error("不支持WebGL");
+                    gl.enable(gl.DEPTH_TEST);
+                    gl.depthFunc(gl.LEQUAL);
+                    gl.enable(gl.CULL_FACE);
+                    gl.frontFace(gl.CCW);
+                    gl.clearColor(0.05, 0.07, 0.12, 1.0);
+                } catch(e) {
+                    alert("WebGL初始化失败: " + e.message);
+                    return false;
+                }
+                return true;
+            }
+            
+            function main() {
+                if (!initWebGL()) return;
+                
+                program = initShaders(gl);
+                if (!program) {
+                    alert("着色器加载失败");
+                    return;
+                }
+                initBuffers();
+                
+                const initialGeo = generateFullGeometry(cylinderRadius, discRadius, cylinderHeight, segments, midY);
+                currentVertexCount = initialGeo.vertexCount;
+                gl.bindBuffer(gl.ARRAY_BUFFER, buffers.position);
+                gl.bufferData(gl.ARRAY_BUFFER, initialGeo.positions, gl.STATIC_DRAW);
+                gl.bindBuffer(gl.ARRAY_BUFFER, buffers.normal);
+                gl.bufferData(gl.ARRAY_BUFFER, initialGeo.normals, gl.STATIC_DRAW);
+                gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffers.indices);
+                gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, initialGeo.indices, gl.STATIC_DRAW);
+                
+                setupAttributes();
+                resizeCanvas();
+                window.addEventListener('resize', () => resizeCanvas());
+                bindEvents();
+                render();
+            }
+            
+            main();
+        })();
+    </script>
+</body>
+</html>

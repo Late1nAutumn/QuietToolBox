@@ -13,6 +13,7 @@ import NikkiKiwi from "./NikkiWiki/NikkiKiwi.jsx";
 import Sketcher from "./Sketcher/Sketcher.jsx";
 import Steamster from "./Steamster/Steamster.jsx";
 import GrainBrain from "./GrainBrain/GrainBrain.jsx";
+import Colorblinder from "./Colorblinder/Colorblinder.jsx";
 import Dashboard from "./Dashboard/Dashboard.jsx";
 import { ERROR_PAGE_TYPE } from "./utils/enums.js";
 
@@ -35,6 +36,7 @@ const App = () => {
             <Route path="/sketcher/*" element={<Sketcher />} />
             <Route path="/steamster/*" element={<Steamster />} />
             <Route path="/granary/*" element={<GrainBrain />} />
+            <Route path="/color/*" element={<Colorblinder />} />
             <Route
               path="/mobile"
               element={<Error pageType={ERROR_PAGE_TYPE.MOBILE} />}

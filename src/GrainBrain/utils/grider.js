@@ -42,7 +42,7 @@ export default class Grider {
   moveNewObject(x, y) {
     this.newObject.coord = { x, y };
     this.invalidCoords = this.newObjectCollisionCheck();
-    return this.mapAtlasDataToDisplayable(this.newObject);
+    return this.#mapAtlasDataToDisplayable(this.newObject);
   }
   newObjectCollisionCheck() {
     let rects = [];
@@ -174,14 +174,14 @@ export default class Grider {
   getVisibleObjectList(innerWidth, innerHeight) {
     let vision = [];
     Object.values(this.atlas).map((obj) => {
-      vision.push(this.mapAtlasDataToDisplayable(obj));
+      vision.push(this.#mapAtlasDataToDisplayable(obj));
     });
     return vision;
   }
   // #endregion
 
   // #region private
-  mapAtlasDataToDisplayable({ uuid, kind, coord, mods }) {
+  #mapAtlasDataToDisplayable({ uuid, kind, coord, mods }) {
     let zoom = this.camera.zoom;
     let position = {
       left: coord.x * zoom - this.camera.x,

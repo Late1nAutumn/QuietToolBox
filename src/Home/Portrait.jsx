@@ -47,10 +47,9 @@ export default function Portrait({
       glabellaY = (378 / PORTRAIT_SIZE.HEIGHT) * containerHeight + containerY;
 
     let calculate = (dx, dy, eyeX, eyeY) => {
-      let distance = Math.sqrt(dx * dx + dy * dy);
+      let distance = Math.hypot(dx, dy);
       // 25% of screen diagonal
-      let distanceLimit =
-        Math.sqrt(screenWidth * screenWidth + screenHeight * screenHeight) / 4;
+      let distanceLimit = Math.hypot(screenWidth, screenHeight) / 4;
       let ratio = 10 / Math.max(distance, distanceLimit);
       return { x: eyeX + dx * ratio, y: eyeY + dy * ratio };
     };

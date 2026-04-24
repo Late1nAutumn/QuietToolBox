@@ -13,13 +13,13 @@ import { exportSvg, pathToPoints, pointsToPathD } from "../utils";
 import { copyToClipboard } from "../../utils/functions";
 
 import ModalPathDeleteConfirm from "./ModalPathDeleteConfirm";
-import { EyeSlash } from "../../svg/EyeSlash";
-import { Eye } from "../../svg/Eye";
-import { Edit } from "../../svg/Edit";
-import { ArrowUp } from "../../svg/ArrowUp";
-import { ArrowDown } from "../../svg/ArrowDown";
-import { Trash } from "../../svg/Trash";
-import { Copy } from "../../svg/Copy";
+import { EyeSlash } from "../../components/svg/EyeSlash";
+import { Eye } from "../../components/svg/Eye";
+import { Edit } from "../../components/svg/Edit";
+import { ArrowUp } from "../../components/svg/ArrowUp";
+import { ArrowDown } from "../../components/svg/ArrowDown";
+import { Trash } from "../../components/svg/Trash";
+import { Copy } from "../../components/svg/Copy";
 
 export default function PathManager({
   keyEventCallback,

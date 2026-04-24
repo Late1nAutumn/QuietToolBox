@@ -161,8 +161,8 @@ export default function GrainBrain() {
   };
 
   useEffect(() => {
-    document.title = APPS[APP.GRAIN_GRAIN].text;
-    setFavicon(APPS[APP.GRAIN_GRAIN].favicon);
+    document.title = APPS[APP.GRAIN_BRAIN].text;
+    setFavicon(APPS[APP.GRAIN_BRAIN].favicon);
 
     autoCamera();
     // updateObjectList();

@@ -1,0 +1,110 @@
+.colorblinder-controller {
+  position: absolute;
+  left: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(20, 20, 32, 0.88);
+  border-radius: 24px;
+  padding-bottom: 20px;
+  border: 1px solid rgba(255, 140, 80, 0.45);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.6);
+  z-index: 100;
+  overflow: hidden;
+}
+.colorblinder-controller-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 300px;
+  max-height: calc(100vh - 70px);
+  height: 100%;
+  overflow-y: auto;
+  pointer-events: auto;
+  font-weight: 500;
+  padding: 0 18px;
+}
+
+.colorblinder-controller-tabs {
+  display: flex;
+  border-bottom: 1px solid #ff884d;
+}
+.colorblinder-controller-switch-box {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin: 16px 0 4px 0;
+}
+.colorblinder-controller-mode-button,
+.colorblinder-controller-lightness-button {
+  background: rgba(0, 0, 0, 0.5);
+  font-size: 13px;
+  font-weight: bold;
+  cursor: pointer;
+  text-align: center;
+  flex: 1;
+}
+.colorblinder-controller-mode-button {
+  padding: 9px 12px;
+  color: #ffccaa;
+}
+.colorblinder-controller-lightness-button {
+  padding: 6px 12px;
+  border-radius: 40px;
+  border: 1px solid #88aaff;
+  color: #aaccff;
+}
+.colorblinder-controller-mode-button.active {
+  background: #ff884d;
+  color: #1a1a2a;
+}
+.colorblinder-controller-lightness-button.active {
+  background: #88aaff;
+  color: #1a1a2a;
+}
+.colorblinder-controller-item {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.colorblinder-controller-item label {
+  font-size: 13px;
+  letter-spacing: 1px;
+  color: #ffd8b0;
+  display: flex;
+  justify-content: space-between;
+  font-weight: 600;
+}
+.colorblinder-controller-item label span {
+  display: flex;
+  align-items: center;
+}
+.colorblinder-controller-item svg {
+  fill: #ffd8b0;
+  height: 19px;
+}
+.colorblinder-controller-item svg:last-child {
+  margin: -14px 0 0 -2px;
+  height: 14px;
+}
+.colorblinder-controller input[type="range"] {
+  width: 100%;
+  cursor: pointer;
+  accent-color: #ff884d;
+}
+.colorblinder-controller-divider {
+  height: 1px;
+  background: rgba(255, 140, 80, 0.3);
+  margin: 4px 0;
+}
+
+.colorblinder-controller h4 {
+  margin: 0;
+  color: white;
+}
+
+@media (max-width: 700px) {
+  .colorblinder-controller-wrapper {
+    min-width: 220px;
+  }
+}

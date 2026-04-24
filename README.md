@@ -13,6 +13,12 @@ A collection of my tools as a static page
 - Webpack
 - Nodemon
 
+## Note for creating project
+- APPS information in constants.js
+- set document.title & setFavicon (128x128) in useEffect
+- README.md
+- Nexus icon
+
 ## To Improve
 - Better way of caulculating app img size when resizing
 

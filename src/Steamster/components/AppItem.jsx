@@ -13,10 +13,10 @@ import { TOOLTIP_CONTEXT, TRANSLATE_COLLECTION } from "../translation/context";
 import { toISODate } from "../../utils/functions";
 import { achievementPortion, categoryMapper, playLength } from "../utils";
 
-import { Star } from "../../svg/Star";
-import { StarHalf } from "../../svg/StarHalf";
-import { StarHollow } from "../../svg/StarHollow";
-import { StarHollowHalf } from "../../svg/StarHollowHalf";
+import { Star } from "../../components/svg/Star";
+import { StarHalf } from "../../components/svg/StarHalf";
+import { StarHollow } from "../../components/svg/StarHollow";
+import { StarHollowHalf } from "../../components/svg/StarHollowHalf";
 
 export default function AppItem({ data, referrer, sortMode }) {
   const {

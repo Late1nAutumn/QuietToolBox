@@ -4,8 +4,8 @@ import { useGlobal } from "../../context/GlobalContext";
 
 import { DIRECTION } from "../../utils/enums";
 
-import { Languages } from "../../svg/Languages";
-import { NexusIcon } from "../../svg/NexusIcon";
+import { Languages } from "../../components/svg/Languages";
+import { NexusIcon } from "../../components/svg/NexusIcon";
 
 export default function NexusButton({ menuDirection, onHoming }) {
   const navigate = useNavigate();
