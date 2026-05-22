@@ -104,7 +104,7 @@ export default function Sketcher() {
     if (editorIndex === EDITOR_INDEX.IDLE) return;
     let { x, y } = cursorCoord;
     let temp = paths.slice();
-    // TODO: l or L
+    // TODO: l or L. For now it always uses absolute path
     let point = {};
     switch (pathCommand) {
       case LINE_COMMAND.LINE_TO_ABSOLUTE:

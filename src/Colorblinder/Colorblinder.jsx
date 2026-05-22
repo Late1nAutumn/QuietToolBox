@@ -14,9 +14,9 @@ import {
   INTERFACE_MODE,
   MIN_RADIUS,
 } from "./constants";
-import Palette from "./conponents/Palette";
-import Roster from "./conponents/Roster";
-import Controller from "./conponents/Controller";
+import Palette from "./components/Palette";
+import Roster from "./components/Roster";
+import Controller from "./components/Controller";
 import NexusButton from "../Home/NexusButton/NexusButton";
 import { DIRECTION } from "../utils/enums";
 import { APP, APPS } from "../utils/constants";

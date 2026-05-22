@@ -14,8 +14,6 @@ export default function NexusButton({ menuDirection, onHoming }) {
 
   const [menuOpen, setMenuOpen] = useState(false);
 
-  useEffect(() => {}, []);
-
   const onNexusButtonClick = () => {
     let navigating = true;
     if (onHoming) navigating = onHoming();
