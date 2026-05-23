@@ -1,3 +1,4 @@
+import "./roster.css";
 import React, { useEffect, useRef, useState } from "react";
 import { rgbtoHexText, textToRGB } from "../util";
 import { translator } from "../translation/translator";

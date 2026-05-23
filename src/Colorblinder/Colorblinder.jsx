@@ -1,3 +1,4 @@
+import "./main.css";
 import React, { useState, useEffect, useRef } from "react";
 import { GL } from "./graphics";
 import {

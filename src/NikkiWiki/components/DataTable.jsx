@@ -1,3 +1,4 @@
+import "./data.css";
 import React from "react";
 import { useGlobal } from "../../context/GlobalContext";
 

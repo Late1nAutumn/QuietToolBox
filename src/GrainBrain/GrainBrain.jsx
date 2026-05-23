@@ -1,3 +1,4 @@
+import "./main.css";
 import React, { useEffect, useRef, useState } from "react";
 
 import Grider from "./utils/grider";

@@ -1,3 +1,4 @@
+import "./filter.css";
 import React, { useState } from "react";
 import { useGlobal } from "../../context/GlobalContext";
 

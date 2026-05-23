@@ -1,3 +1,4 @@
+import "./palette.css";
 import React, { useEffect, useRef, useState } from "react";
 import { GL } from "../graphics";
 import { rgbtoHexText, textToRGB } from "../util";

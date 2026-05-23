@@ -1,3 +1,4 @@
+import "./tools.css";
 import React, { useEffect, useRef } from "react";
 
 import { translator } from "../translation/translator";

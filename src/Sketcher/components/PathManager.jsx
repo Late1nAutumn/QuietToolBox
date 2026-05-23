@@ -1,3 +1,4 @@
+import "./pathManager.css";
 import React, { useEffect, useRef, useState } from "react";
 
 import { EDITOR_INDEX, NOTIFICATION_TYPE } from "../enum";
