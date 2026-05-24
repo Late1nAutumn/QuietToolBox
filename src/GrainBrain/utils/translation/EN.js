@@ -121,6 +121,8 @@ export const EN_PACK = {
     [NOTIFICATION_CONTEXT.SAVE_SAVE]: "Pattern saved!",
     [NOTIFICATION_CONTEXT.SAVE_OVERWRITE]: "Pattern overwritten!",
     [NOTIFICATION_CONTEXT.LOAD_SAVE]: "Pattern loaded!",
+    [NOTIFICATION_CONTEXT.SAVE_QUOTA_EXCEEDED]:
+      "Storage full, please clean some patterns",
 
     [NOTIFICATION_CONTEXT.BUILD_GRANARY_LIMIT]: "Granary count exceeded!",
     [NOTIFICATION_CONTEXT.BUILD_INVALID_POSITION]: "Invalid building position",

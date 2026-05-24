@@ -106,7 +106,7 @@ try {
 }
 
 console.log(JSON.stringify(data));
-let save = JSON.parse(localStorage.getItem("crawl"));
+let save = JSON.parse(localStorage.getItem("crawl")) ?? [];
 save.push(data);
 console.log(`[CRAWLER]: ${save.length} records`);
 if (completionCheck !== 5)

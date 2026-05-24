@@ -98,10 +98,21 @@ export default function MainTools({
               }
               let savePack =
                 LOCALSTORAGE[STORE.GRAIN_BRAIN].getSaveList() || {};
-              LOCALSTORAGE[STORE.GRAIN_BRAIN].saveProgess(
+              let saveResult = LOCALSTORAGE[STORE.GRAIN_BRAIN].saveProgress(
                 gridRef.current.atlas,
                 saveName
               );
+              if (!saveResult.ok) {
+                newNotification(
+                  translator(
+                    NOTIFICATION_CONTEXT.SAVE_QUOTA_EXCEEDED,
+                    lang,
+                    TRANSLATION_COLLECTION.NOTIFICATION
+                  ),
+                  NOTIFICATION_TYPE.ERROR
+                );
+                return;
+              }
               if (savePack[saveName])
                 newNotification(
                   translator(

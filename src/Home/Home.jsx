@@ -1,5 +1,5 @@
 import "./main.css";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { useGlobal } from "../context/GlobalContext";
 
@@ -33,6 +33,11 @@ export default function Home({ scrollY, setScrollY }) {
   const [appImgGrids, setAppImgGrids] = useState([]);
   const [userFocusedWindow, setUserFocusedWindow] = useState(false);
 
+  const portraitSkipped = useMemo(
+    () => LOCALSTORAGE[STORE.MAIN].getPortraitSkipped(),
+    []
+  );
+
   const APP_LIST = Object.values(APPS);
 
   const onScroll = () => {
@@ -46,8 +51,6 @@ export default function Home({ scrollY, setScrollY }) {
   useEffect(() => {
     document.title = HOME_TITLE;
     setFavicon(HOME_FAVICON);
-
-    LOCALSTORAGE.initStore(STORE.MAIN);
 
     onUserFocus();
     document.addEventListener("visibilitychange", onUserFocus);
@@ -148,11 +151,11 @@ export default function Home({ scrollY, setScrollY }) {
           {animationEnded && <Chatbox dialogCallbackRef={dialogCallbackRef} />}
           {userFocusedWindow && (
             <Portrait
-              skipped={LOCALSTORAGE[STORE.MAIN].getIsPortraitSkipped()}
+              skipped={portraitSkipped}
               active={true}
               onAnimationEnd={() => {
                 setAnimationEnded(true);
-                LOCALSTORAGE[STORE.MAIN].setSkipPortrait();
+                LOCALSTORAGE[STORE.MAIN].markPortraitSkipped();
               }}
             />
           )}
