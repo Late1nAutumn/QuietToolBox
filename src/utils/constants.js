@@ -17,12 +17,13 @@ export const IDLE_TIMEOUT = {
 // #region app list
 // defined here instead of enum to avoid looping import
 export const APP = {
-  STEAMSTER: 1,
-  GRAIN_BRAIN: 2,
-  COLORBLINDER: 3,
-  NIKKI_KIWI: 4,
-  SKETCHER: 5,
-  DASHBOARD: 6,
+  GRAIN_BRAIN: 1,
+  COLORBLINDER: 2,
+  OAK_HEART:3,
+  STEAMSTER: 4,
+  NIKKI_KIWI: 5,
+  SKETCHER: 6,
+  DASHBOARD: 7,
 };
 
 export const HOME_TITLE = "Nexus";
@@ -77,6 +78,16 @@ export const APPS = {
     intro: {
       [LANG.EN]: "This helps me draw SVG paths out of images",
       [LANG.CN]: "我需要画svg的时候就会用这个",
+    },
+  },
+  [APP.OAK_HEART]: {
+    favicon: "/asset/favicon/oakHeart.png",
+    text: "Heart of the Oak",
+    link: "/oak",
+    cover: "/asset/cover/oakHeart.png",
+    intro: {
+      [LANG.EN]: "A space to inspect JSON structures or generate them",
+      [LANG.CN]: "此工具用于观察或构筑JSON结构",
     },
   },
   [APP.DASHBOARD]: {

@@ -11,6 +11,8 @@
 //   - STORE.MAIN        — top-level shell state (e.g. portrait animation flag)
 //   - STORE.GRAIN_BRAIN — GrainBrain app: auto-save (single atlas) + manual
 //                         saves (map of name -> atlas)
+//   - STORE.OAK_HEART   — OakHeart JSON tree editor: theme preference and the
+//                         current JSON document (auto-saved on edits)
 //
 // Returns from public API:
 //   - Getters return the stored value or `null` (never throw on missing key /
@@ -24,7 +26,15 @@
 //   On read, a version mismatch routes the object through `migrate()` before
 //   the requested field is extracted. `migrate()` is currently an identity —
 //   add per-version transforms here when the on-disk shape changes.
-// ============================================================================
+//
+// ┌─────────────────────────────────────────────────────────────────────────┐
+// │ FOR FUTURE EDITORS (HUMAN OR AI):                                       │
+// │   When you add / remove / rename a STORE or FIELD or change persistence │
+// │   semantics, UPDATE this header comment in the same change. The list of │
+// │   stores above and the per-store doc comments next to LOCALSTORAGE      │
+// │   methods are the contract — keep them honest. Drift between docs and  │
+// │   code here has bitten us before.                                       │
+// └─────────────────────────────────────────────────────────────────────────┘
 
 import { AOE_VERSION } from "../GrainBrain/utils/aoe4/data";
 
@@ -35,6 +45,7 @@ const SCHEMA_VERSION = AOE_VERSION;
 export const STORE = {
   MAIN: "mainStore",
   GRAIN_BRAIN: "granaryStore",
+  OAK_HEART: "oakStore",
 };
 
 export const FIELD = {
@@ -43,6 +54,9 @@ export const FIELD = {
   // granary
   AUTO_SAVE: "autoSave",
   MANUAL_SAVE: "manualSave",
+  // oak
+  THEME: "theme",
+  JSON_DOC: "jsonDoc",
 };
 
 // Add per-version transforms here. Receives the parsed store object and its
@@ -126,5 +140,17 @@ export const LOCALSTORAGE = {
       delete savePack[name];
       return write(STORE.GRAIN_BRAIN, FIELD.MANUAL_SAVE, savePack);
     },
+  },
+
+  [STORE.OAK_HEART]: {
+    // null → caller should fall back to system preference
+    getTheme: () => read(STORE.OAK_HEART, FIELD.THEME) || null,
+    setTheme: (theme) => write(STORE.OAK_HEART, FIELD.THEME, theme),
+
+    // Current JSON document. null → caller falls back to sample.
+    // Size scales with user content, so writes can return quota errors;
+    // callers should treat persistence as best-effort.
+    getJsonDoc: () => read(STORE.OAK_HEART, FIELD.JSON_DOC),
+    setJsonDoc: (doc) => write(STORE.OAK_HEART, FIELD.JSON_DOC, doc),
   },
 };

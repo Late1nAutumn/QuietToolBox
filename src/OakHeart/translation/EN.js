@@ -1,0 +1,92 @@
+import {
+  TRANSLATE_COLLECTION,
+  TOOLBAR_CONTEXT,
+  SIDEBAR_CONTEXT,
+  NODE_CONTEXT,
+  MODAL_CONTEXT,
+  NOTICE_CONTEXT,
+} from "./context.js";
+
+const { TOOLBAR, SIDEBAR, NODE, MODAL, NOTICE } = TRANSLATE_COLLECTION;
+
+export const EN_PACK = {
+  [TOOLBAR]: {
+    [TOOLBAR_CONTEXT.TITLE]: "Heart of the Oak",
+    [TOOLBAR_CONTEXT.HINT_PAN]: "Right-drag pan",
+    [TOOLBAR_CONTEXT.HINT_ZOOM]: "Scroll zoom",
+    [TOOLBAR_CONTEXT.HINT_DRAG]: "Left-drag nodes",
+    [TOOLBAR_CONTEXT.BUTTON_AUTO_LAYOUT]: "Auto layout",
+    [TOOLBAR_CONTEXT.BUTTON_COLLAPSE_ALL]: "Collapse all",
+    [TOOLBAR_CONTEXT.BUTTON_EXPAND_ALL]: "Expand all",
+    [TOOLBAR_CONTEXT.TOGGLE_TO_LIGHT]: "Switch to light theme",
+    [TOOLBAR_CONTEXT.TOGGLE_TO_DARK]: "Switch to dark theme",
+    [TOOLBAR_CONTEXT.DRAG_WITH_CHILDREN]: "Drag with children",
+    [TOOLBAR_CONTEXT.AUTO_LAYOUT_ON_EXPAND]: "Auto-layout on expand",
+    [TOOLBAR_CONTEXT.BUTTON_RESET]: "Reset",
+    [TOOLBAR_CONTEXT.BUTTON_RESET_TIP]: "Unlock all, re-collapse to default, and re-layout",
+  },
+  [SIDEBAR]: {
+    [SIDEBAR_CONTEXT.TITLE]: "JSON",
+    [SIDEBAR_CONTEXT.STATUS_SYNCED]: "Synced",
+    [SIDEBAR_CONTEXT.STATUS_EDITING]: "Editing",
+    [SIDEBAR_CONTEXT.STATUS_INVALID]: "Invalid",
+    [SIDEBAR_CONTEXT.PLACEHOLDER]: "Type or paste JSON…",
+    [SIDEBAR_CONTEXT.TIP_COLLAPSE]: "Hide sidebar",
+    [SIDEBAR_CONTEXT.TIP_EXPAND]: "Show sidebar",
+    [SIDEBAR_CONTEXT.COUNT_TOTAL]: "Total Nodes: ",
+    [SIDEBAR_CONTEXT.COUNT_HIDDEN]: "Hidden: ",
+  },
+  [NODE]: {
+    [NODE_CONTEXT.TIP_RENAME]: "Rename key",
+    [NODE_CONTEXT.TIP_EDIT]: "Edit value",
+    [NODE_CONTEXT.TIP_ADD]: "Add child",
+    [NODE_CONTEXT.TIP_DELETE]: "Delete",
+    [NODE_CONTEXT.TIP_COLLAPSE]: "Collapse",
+    [NODE_CONTEXT.TIP_EXPAND]: "Expand",
+    [NODE_CONTEXT.TIP_LOCK]: "Lock position",
+    [NODE_CONTEXT.TIP_UNLOCK]: "Unlock position",
+    [NODE_CONTEXT.PLACEHOLDER_HIDDEN]: "hidden",
+    [NODE_CONTEXT.ITEM_SINGULAR]: "item",
+    [NODE_CONTEXT.ITEM_PLURAL]: "items",
+  },
+  [MODAL]: {
+    [MODAL_CONTEXT.BUTTON_SAVE]: "Save",
+    [MODAL_CONTEXT.BUTTON_CANCEL]: "Cancel",
+    [MODAL_CONTEXT.BUTTON_DELETE]: "Delete",
+    [MODAL_CONTEXT.BUTTON_ADD]: "Add",
+
+    [MODAL_CONTEXT.EDIT_TITLE]: "Edit value",
+    [MODAL_CONTEXT.EDIT_KEY_PREFIX]: "Key: ",
+    [MODAL_CONTEXT.EDIT_LABEL_TYPE]: "Type",
+    [MODAL_CONTEXT.EDIT_LABEL_VALUE]: "Value",
+    [MODAL_CONTEXT.EDIT_ERR_BOOLEAN]: 'Value must be "true" or "false"',
+    [MODAL_CONTEXT.EDIT_ERR_NUMBER]: "Not a valid number",
+
+    [MODAL_CONTEXT.RENAME_TITLE]: "Rename key",
+    [MODAL_CONTEXT.RENAME_LABEL]: "New name",
+    [MODAL_CONTEXT.RENAME_ERR_EMPTY]: "Key cannot be empty",
+
+    [MODAL_CONTEXT.ADD_TITLE]: "Add child",
+    [MODAL_CONTEXT.ADD_PREFIX]: "Adding to ",
+    [MODAL_CONTEXT.ADD_OBJECT_SUFFIX]: "",
+    [MODAL_CONTEXT.ADD_ARRAY_SUFFIX]: " (next index)",
+    [MODAL_CONTEXT.ADD_LABEL_KEY]: "Key",
+    [MODAL_CONTEXT.ADD_LABEL_TYPE]: "Type",
+    [MODAL_CONTEXT.ADD_ERR_KEY]: "Key is required",
+
+    [MODAL_CONTEXT.DELETE_TITLE]: "Delete node?",
+    [MODAL_CONTEXT.DELETE_AND]: " and ",
+    [MODAL_CONTEXT.DELETE_DESC_SINGULAR]: "descendant",
+    [MODAL_CONTEXT.DELETE_DESC_PLURAL]: "descendants",
+
+    [MODAL_CONTEXT.TYPE_OBJECT]: "object",
+    [MODAL_CONTEXT.TYPE_ARRAY]: "array",
+    [MODAL_CONTEXT.TYPE_STRING]: "string",
+    [MODAL_CONTEXT.TYPE_NUMBER]: "number",
+    [MODAL_CONTEXT.TYPE_BOOLEAN]: "boolean",
+    [MODAL_CONTEXT.TYPE_NULL]: "null",
+  },
+  [NOTICE]: {
+    [NOTICE_CONTEXT.RELAX_DISABLED]: "Tree is too large — auto push-apart is disabled. Drag nodes to resolve overlaps.",
+  },
+};

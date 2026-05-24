@@ -1,0 +1,96 @@
+import {
+  TRANSLATE_COLLECTION,
+  TOOLBAR_CONTEXT,
+  SIDEBAR_CONTEXT,
+  NODE_CONTEXT,
+  MODAL_CONTEXT,
+  NOTICE_CONTEXT,
+} from "./context.js";
+
+const { TOOLBAR, SIDEBAR, NODE, MODAL, NOTICE } = TRANSLATE_COLLECTION;
+
+// Note: type labels (object/array/string/number/boolean/null) are
+// intentionally left in English everywhere — they read as type names,
+// not translatable words. CN strings here compose around them.
+
+export const CN_PACK = {
+  [TOOLBAR]: {
+    [TOOLBAR_CONTEXT.TITLE]: "橡树之心",
+    [TOOLBAR_CONTEXT.HINT_PAN]: "右键拖动平移",
+    [TOOLBAR_CONTEXT.HINT_ZOOM]: "滚轮缩放",
+    [TOOLBAR_CONTEXT.HINT_DRAG]: "左键拖动节点",
+    [TOOLBAR_CONTEXT.BUTTON_AUTO_LAYOUT]: "自动布局",
+    [TOOLBAR_CONTEXT.BUTTON_COLLAPSE_ALL]: "全部折叠",
+    [TOOLBAR_CONTEXT.BUTTON_EXPAND_ALL]: "全部展开",
+    [TOOLBAR_CONTEXT.TOGGLE_TO_LIGHT]: "切换到亮色主题",
+    [TOOLBAR_CONTEXT.TOGGLE_TO_DARK]: "切换到暗色主题",
+    [TOOLBAR_CONTEXT.DRAG_WITH_CHILDREN]: "拖动时带上子节点",
+    [TOOLBAR_CONTEXT.AUTO_LAYOUT_ON_EXPAND]: "展开时自动布局",
+    [TOOLBAR_CONTEXT.BUTTON_RESET]: "复位",
+    [TOOLBAR_CONTEXT.BUTTON_RESET_TIP]: "解锁所有节点，按默认上限重新折叠并自动排列",
+  },
+  [SIDEBAR]: {
+    [SIDEBAR_CONTEXT.TITLE]: "JSON",
+    [SIDEBAR_CONTEXT.STATUS_SYNCED]: "已同步",
+    [SIDEBAR_CONTEXT.STATUS_EDITING]: "编辑中",
+    [SIDEBAR_CONTEXT.STATUS_INVALID]: "无效",
+    [SIDEBAR_CONTEXT.PLACEHOLDER]: "在此输入或粘贴 JSON…",
+    [SIDEBAR_CONTEXT.TIP_COLLAPSE]: "收起边栏",
+    [SIDEBAR_CONTEXT.TIP_EXPAND]: "展开边栏",
+    [SIDEBAR_CONTEXT.COUNT_TOTAL]: "节点数：",
+    [SIDEBAR_CONTEXT.COUNT_HIDDEN]: "已隐藏：",
+  },
+  [NODE]: {
+    [NODE_CONTEXT.TIP_RENAME]: "重命名键",
+    [NODE_CONTEXT.TIP_EDIT]: "编辑值",
+    [NODE_CONTEXT.TIP_ADD]: "添加子节点",
+    [NODE_CONTEXT.TIP_DELETE]: "删除",
+    [NODE_CONTEXT.TIP_COLLAPSE]: "折叠",
+    [NODE_CONTEXT.TIP_EXPAND]: "展开",
+    [NODE_CONTEXT.TIP_LOCK]: "锁定位置",
+    [NODE_CONTEXT.TIP_UNLOCK]: "解除锁定",
+    [NODE_CONTEXT.PLACEHOLDER_HIDDEN]: "项已隐藏",
+    [NODE_CONTEXT.ITEM_SINGULAR]: "项",
+    [NODE_CONTEXT.ITEM_PLURAL]: "项",
+  },
+  [MODAL]: {
+    [MODAL_CONTEXT.BUTTON_SAVE]: "保存",
+    [MODAL_CONTEXT.BUTTON_CANCEL]: "取消",
+    [MODAL_CONTEXT.BUTTON_DELETE]: "删除",
+    [MODAL_CONTEXT.BUTTON_ADD]: "添加",
+
+    [MODAL_CONTEXT.EDIT_TITLE]: "编辑值",
+    [MODAL_CONTEXT.EDIT_KEY_PREFIX]: "键：",
+    [MODAL_CONTEXT.EDIT_LABEL_TYPE]: "类型",
+    [MODAL_CONTEXT.EDIT_LABEL_VALUE]: "值",
+    [MODAL_CONTEXT.EDIT_ERR_BOOLEAN]: '值必须为 "true" 或 "false"',
+    [MODAL_CONTEXT.EDIT_ERR_NUMBER]: "不是有效的数字",
+
+    [MODAL_CONTEXT.RENAME_TITLE]: "重命名键",
+    [MODAL_CONTEXT.RENAME_LABEL]: "新名称",
+    [MODAL_CONTEXT.RENAME_ERR_EMPTY]: "键不能为空",
+
+    [MODAL_CONTEXT.ADD_TITLE]: "添加子节点",
+    [MODAL_CONTEXT.ADD_PREFIX]: "向 ",
+    [MODAL_CONTEXT.ADD_OBJECT_SUFFIX]: " 添加",
+    [MODAL_CONTEXT.ADD_ARRAY_SUFFIX]: " 添加（下一个索引）",
+    [MODAL_CONTEXT.ADD_LABEL_KEY]: "键",
+    [MODAL_CONTEXT.ADD_LABEL_TYPE]: "类型",
+    [MODAL_CONTEXT.ADD_ERR_KEY]: "必须填写键",
+
+    [MODAL_CONTEXT.DELETE_TITLE]: "删除该节点？",
+    [MODAL_CONTEXT.DELETE_AND]: " 及其 ",
+    [MODAL_CONTEXT.DELETE_DESC_SINGULAR]: "个后代",
+    [MODAL_CONTEXT.DELETE_DESC_PLURAL]: "个后代",
+
+    [MODAL_CONTEXT.TYPE_OBJECT]: "对象",
+    [MODAL_CONTEXT.TYPE_ARRAY]: "数组",
+    [MODAL_CONTEXT.TYPE_STRING]: "字符串",
+    [MODAL_CONTEXT.TYPE_NUMBER]: "数字",
+    [MODAL_CONTEXT.TYPE_BOOLEAN]: "布尔值",
+    [MODAL_CONTEXT.TYPE_NULL]: "空值",
+  },
+  [NOTICE]: {
+    [NOTICE_CONTEXT.RELAX_DISABLED]: "节点数过多，自动避让已禁用。请手动拖动以分开重叠节点。",
+  },
+};

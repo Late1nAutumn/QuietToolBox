@@ -1,4 +1,5 @@
 // libs
+import "./main.css";
 import React, { StrictMode, useState } from "react";
 import { createRoot } from "react-dom/client";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
@@ -14,6 +15,7 @@ import Sketcher from "./Sketcher/Sketcher.jsx";
 import Steamster from "./Steamster/Steamster.jsx";
 import GrainBrain from "./GrainBrain/GrainBrain.jsx";
 import Colorblinder from "./Colorblinder/Colorblinder.jsx";
+import OakHeart from "./OakHeart/OakHeart.jsx";
 import Dashboard from "./Dashboard/Dashboard.jsx";
 import { ERROR_PAGE_TYPE } from "./utils/enums.js";
 
@@ -37,6 +39,7 @@ const App = () => {
             <Route path="/steamster/*" element={<Steamster />} />
             <Route path="/granary/*" element={<GrainBrain />} />
             <Route path="/color/*" element={<Colorblinder />} />
+            <Route path="/oak/*" element={<OakHeart />} />
             <Route
               path="/mobile"
               element={<Error pageType={ERROR_PAGE_TYPE.MOBILE} />}

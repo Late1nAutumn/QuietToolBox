@@ -1,0 +1,7 @@
+import React from "react";
+
+export const Plus = () => (
+  <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+    <path d="M 7 2 H 9 V 7 H 14 V 9 H 9 V 14 H 7 V 9 H 2 V 7 H 7 Z" />
+  </svg>
+);

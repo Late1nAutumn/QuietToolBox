@@ -1,0 +1,80 @@
+/* ─────────────────────────────────────────────
+   Isles — module styles.
+
+   Public CSS variables — defaults are supplied inline via var(name, fallback)
+   so an ancestor override always wins (do NOT set defaults on .isles-root
+   itself; that would beat any ancestor's value due to cascade specificity):
+     --isles-bg                Canvas background
+     --isles-grid-color        Fine grid line color
+     --isles-grid-accent-color Accent grid line color
+     --isles-selection-color   Selection outline / rubber-band border
+     --isles-selection-fill    Rubber-band fill
+     --isles-edge-color        Connection-line stroke
+
+   Public classes (safe to target from outside):
+     .isles-root           Canvas root container
+     .isles-item           Single element wrapper
+     .isles-item--selected Modifier when selected
+   ───────────────────────────────────────────── */
+
+.isles-root {
+  position: relative;
+  overflow: hidden;
+  user-select: none;
+  -webkit-user-select: none;
+  background: var(--isles-bg, #fafafa);
+}
+
+.isles-world {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 0;
+  height: 0;
+  transform-origin: 0 0;
+  pointer-events: none;
+}
+
+.isles-item {
+  position: absolute;
+  box-sizing: border-box;
+  pointer-events: auto;
+  user-select: none;
+  border-radius: inherit;
+  outline-offset: 2px;
+  cursor: grab;
+}
+
+.isles-item--selected {
+  cursor: move;
+  outline: 2px solid var(--isles-selection-color, #4a90e2);
+}
+
+.isles-selection-rect {
+  position: absolute;
+  box-sizing: border-box;
+  pointer-events: none;
+  border: 1.5px solid var(--isles-selection-color, #4a90e2);
+  background-color: var(--isles-selection-fill, rgba(74, 144, 226, 0.08));
+  z-index: 9999;
+}
+
+.isles-grid-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Edges are painted ABOVE all cards (.isles-world is z-index:auto, so any
+   value > 0 wins) but BELOW the rubber-band selection rect (z-index:9999). */
+.isles-edge-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 100;
+}

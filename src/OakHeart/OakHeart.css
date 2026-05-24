@@ -1,0 +1,747 @@
+/* ─────────────────────────────────────────────
+   OakHeart — JSON tree editor styles.
+
+   Theme model:
+     - .oak--dark / .oak--light each define a complete set of vars,
+       including node card colors (--oak-node-*) and type accents
+       (--oak-t-*). Two themes => two distinct palettes.
+     - Light: bright cards, deep-on-light type colors.
+     - Dark: dimmed cards (not pure white), bright type colors.
+   ───────────────────────────────────────────── */
+
+/* ── Light theme ──────────────────────────────────────────────────── */
+.oak--light {
+  /* Surfaces */
+  --oak-bg: #f7f7f9;
+  --oak-panel: #ffffff;
+  --oak-text: #222;
+  --oak-text-dim: #666;
+  --oak-text-muted: #888;
+  --oak-divider: #e0e0e0;
+  --oak-button-bg: #ffffff;
+  --oak-button-bg-hover: #f0f0f0;
+  --oak-button-border: #ccc;
+  --oak-input-bg: #ffffff;
+  --oak-input-border: #ccc;
+  --oak-danger: #c0392b;
+  --oak-error: #d83b3b;
+
+  /* Card chrome */
+  --oak-node-bg: #ffffff;
+  --oak-node-text: #1f2024;
+  --oak-node-text-dim: #555;
+  --oak-node-text-muted: #999;
+  --oak-node-border: #d6d6dc;
+  --oak-node-divider: #ececf0;
+  --oak-node-btn-bg: #fafafa;
+  --oak-node-btn-bg-hover: #ececf0;
+  --oak-node-btn-border: #d0d0d6;
+  --oak-node-strip-bg: #f2f2f5;
+  --oak-node-strip-bg-hover: #e0e0e6;
+  --oak-node-primary: #4a90e2;
+  --oak-node-primary-bg-hover: #e8f1fb;
+  --oak-node-danger: #c0392b;
+  --oak-node-danger-bg-hover: #fbe9e7;
+  --oak-node-shadow: 0 2px 6px rgba(0, 0, 0, 0.10);
+
+  /* Type accents (deep text on light bg) */
+  --oak-t-object: #2a6dbf;
+  --oak-t-array: #6c3a8c;
+  --oak-t-string: #1e8a4f;
+  --oak-t-number: #b56b0c;
+  --oak-t-boolean: #927000;
+  --oak-t-null: #6b7280;
+  --oak-t-object-bg: #e8f1fb;
+  --oak-t-array-bg: #f1e8f7;
+  --oak-t-string-bg: #e8f7ee;
+  --oak-t-number-bg: #fdf1e0;
+  --oak-t-boolean-bg: #fdf6db;
+  --oak-t-null-bg: #ececec;
+
+  /* Isles canvas */
+  --isles-bg: #f7f7f9;
+  --isles-grid-color: #e6e6ec;
+  --isles-grid-accent-color: #d0d0d8;
+  --isles-selection-color: #4a90e2;
+  --isles-selection-fill: rgba(74, 144, 226, 0.10);
+  --isles-edge-color: #b8b8c4;
+}
+
+/* ── Dark theme ───────────────────────────────────────────────────── */
+.oak--dark {
+  /* Surfaces */
+  --oak-bg: #1a1d23;
+  --oak-panel: #21252c;
+  --oak-text: #e6e6ec;
+  --oak-text-dim: #b6bac2;
+  --oak-text-muted: #7a8089;
+  --oak-divider: #2a2f38;
+  --oak-button-bg: #2a2f38;
+  --oak-button-bg-hover: #353945;
+  --oak-button-border: #3a3f48;
+  --oak-input-bg: #1a1d23;
+  --oak-input-border: #3a3f48;
+  --oak-danger: #ff7b72;
+  --oak-error: #ff6b6b;
+
+  /* Card chrome (less bright than pure white) */
+  --oak-node-bg: #2a2e36;
+  --oak-node-text: #e6e6ec;
+  --oak-node-text-dim: #b6bac2;
+  --oak-node-text-muted: #7a8089;
+  --oak-node-border: #3a3f48;
+  --oak-node-divider: #353945;
+  --oak-node-btn-bg: #353945;
+  --oak-node-btn-bg-hover: #424653;
+  --oak-node-btn-border: #4a4f5a;
+  --oak-node-strip-bg: #353945;
+  --oak-node-strip-bg-hover: #424653;
+  --oak-node-primary: #6cb4ff;
+  --oak-node-primary-bg-hover: rgba(94, 170, 255, 0.18);
+  --oak-node-danger: #ff7b72;
+  --oak-node-danger-bg-hover: rgba(255, 123, 114, 0.15);
+  --oak-node-shadow: 0 2px 8px rgba(0, 0, 0, 0.45);
+
+  /* Type accents (bright text on dim translucent bg) */
+  --oak-t-object: #6cb4ff;
+  --oak-t-array: #d29bff;
+  --oak-t-string: #8ff299;
+  --oak-t-number: #ffb978;
+  --oak-t-boolean: #fce04a;
+  --oak-t-null: #b8bcc4;
+  --oak-t-object-bg: rgba(94, 170, 255, 0.18);
+  --oak-t-array-bg: rgba(192, 132, 252, 0.20);
+  --oak-t-string-bg: rgba(126, 231, 135, 0.18);
+  --oak-t-number-bg: rgba(255, 166, 87, 0.18);
+  --oak-t-boolean-bg: rgba(245, 215, 110, 0.18);
+  --oak-t-null-bg: rgba(184, 188, 196, 0.15);
+
+  /* Isles canvas */
+  --isles-bg: #1a1d23;
+  --isles-grid-color: #25282f;
+  --isles-grid-accent-color: #353945;
+  --isles-selection-color: #6cb4ff;
+  --isles-selection-fill: rgba(108, 180, 255, 0.15);
+  --isles-edge-color: #4a4f5a;
+}
+
+/* ── Layout ───────────────────────────────────────────────────────── */
+.oak {
+  display: flex;
+  flex-direction: column;
+  width: 100vw;
+  height: 100vh;
+  background: var(--oak-bg);
+  color: var(--oak-text);
+}
+
+.oak__toolbar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 16px;
+  background: var(--oak-panel);
+  border-bottom: 1px solid var(--oak-divider);
+  font-family: sans-serif;
+  font-size: 13px;
+  color: var(--oak-text-dim);
+  flex-shrink: 0;
+  z-index: 10;
+}
+.oak__title {
+  color: var(--oak-text);
+  font-size: 15px;
+  font-weight: 600;
+}
+
+/* NexusButton wrapper — fix the parent height so the icon (which uses
+   height: 100% from Home/main.css) renders at the toolbar's intended
+   size, and theme its fill to follow the current text color. */
+.oak__nexus {
+  height: 24px;
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+.oak .nexusButton-icon svg { fill: var(--oak-text); transition: fill 0.15s; }
+.oak .nexusButton-icon:hover svg { fill: var(--oak-text-dim); }
+.oak .nexusButton-menu-button svg { fill: var(--oak-text); transition: fill 0.15s; }
+.oak .nexusButton-menu-button:hover svg { fill: var(--oak-text-dim); }
+.oak__divider { opacity: 0.4; }
+.oak__spacer { flex: 1; }
+
+.oak__button {
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--oak-button-border);
+  background: var(--oak-button-bg);
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 13px;
+  color: var(--oak-text);
+}
+.oak__button:hover { background: var(--oak-button-bg-hover); }
+
+.oak__checkbox {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  color: var(--oak-text-dim);
+  user-select: none;
+}
+.oak__checkbox input {
+  cursor: pointer;
+  margin: 0;
+  accent-color: var(--isles-selection-color);
+}
+.oak__checkbox:hover { color: var(--oak-text); }
+
+.oak__theme-toggle {
+  width: 32px;
+  height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border-radius: 6px;
+  border: 1px solid var(--oak-button-border);
+  background: var(--oak-button-bg);
+  cursor: pointer;
+  font-size: 16px;
+  color: var(--oak-text);
+}
+.oak__theme-toggle:hover { background: var(--oak-button-bg-hover); }
+
+.oak__body {
+  flex: 1;
+  display: flex;
+  min-height: 0;
+}
+
+.oak__canvas-wrap {
+  flex: 1;
+  position: relative;
+  min-width: 0;
+}
+.oak__canvas { width: 100%; height: 100%; }
+
+
+/* Replace Isles' rectangular outline with a radius-following box-shadow
+   on .oak-node. Reason: the card has an asymmetric drop shadow which
+   makes the outline appear offset to the upper-left of the visual
+   center. A box-shadow ring on the card itself sits flush with the
+   rounded edge and matches the perceived shape exactly. */
+.oak .isles-item { border-radius: 8px; }
+.oak .isles-item--selected { outline: none; }
+.oak .isles-item--selected .oak-node {
+  box-shadow:
+    0 0 0 2px var(--isles-selection-color),
+    var(--oak-node-shadow);
+}
+
+/* ── Sidebar ──────────────────────────────────────────────────────── */
+.oak__sidebar {
+  width: 360px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  background: var(--oak-panel);
+  border-left: 1px solid var(--oak-divider);
+  font-family: sans-serif;
+  color: var(--oak-text);
+  min-height: 0;
+  transition: width 0.2s ease;
+}
+.oak__sidebar--collapsed {
+  width: 22px;
+}
+.oak__sidebar-tab {
+  flex: 1;
+  width: 100%;
+  border: none;
+  background: var(--oak-panel);
+  color: var(--oak-text-dim);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+.oak__sidebar-tab:hover {
+  background: var(--oak-button-bg-hover);
+  color: var(--oak-text);
+}
+.oak__sidebar-tab-icon {
+  display: inline-flex;
+  width: 5px;
+  height: 16px;
+}
+.oak__sidebar-tab-icon svg {
+  width: 100%;
+  height: 100%;
+  fill: currentColor;
+}
+.oak__sidebar-tab-icon--left { transform: scaleX(-1); }
+
+.oak__sidebar-collapse-btn {
+  width: 22px;
+  height: 22px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  color: var(--oak-text-dim);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border-radius: 3px;
+  flex-shrink: 0;
+}
+.oak__sidebar-collapse-btn:hover {
+  background: var(--oak-button-bg-hover);
+  color: var(--oak-text);
+}
+.oak__sidebar-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--oak-divider);
+}
+.oak__sidebar-title {
+  font-size: 13px;
+  font-weight: 600;
+  flex: 1;
+  color: var(--oak-text);
+}
+
+/* Amber warning indicator next to the sync pill — surfaced when an
+   auto-feature is currently disabled (e.g. relaxCollisions skipped
+   for tree size). Tooltip via native `title` attribute. */
+.oak__sidebar-warn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  color: var(--oak-t-number);
+  cursor: help;
+  flex-shrink: 0;
+}
+.oak__sidebar-warn svg {
+  width: 14px;
+  height: 14px;
+  fill: currentColor;
+  display: block;
+}
+
+.oak__status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 9px;
+  font-size: 11px;
+  font-weight: 600;
+  border-radius: 10px;
+  background: var(--oak-button-bg);
+  border: 1px solid var(--oak-button-border);
+  color: var(--oak-text);
+  font-family: sans-serif;
+}
+.oak__status-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--oak-text-muted);
+  flex-shrink: 0;
+}
+.oak__status-pill--ok    .oak__status-dot { background: #2ecc71; }
+.oak__status-pill--dirty .oak__status-dot { background: #f5b945; }
+.oak__status-pill--err   .oak__status-dot { background: #e74c3c; }
+
+.oak__sidebar-error {
+  padding: 8px 14px;
+  font-size: 11px;
+  color: var(--oak-error);
+  font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace;
+  background: rgba(231, 76, 60, 0.08);
+  border-bottom: 1px solid var(--oak-divider);
+  line-height: 1.4;
+  word-break: break-word;
+}
+
+.oak__textarea-wrap {
+  flex: 1;
+  padding: 12px 14px;
+  min-height: 0;
+  display: flex;
+}
+.oak__textarea {
+  flex: 1;
+  width: 100%;
+  resize: none;
+  border: 1px solid var(--oak-input-border);
+  border-radius: 6px;
+  outline: none;
+  padding: 10px 12px;
+  background: var(--oak-input-bg);
+  color: var(--oak-text);
+  font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace;
+  font-size: 12px;
+  line-height: 1.5;
+  box-sizing: border-box;
+  transition: border-color 0.15s;
+}
+.oak__textarea:focus { border-color: var(--isles-selection-color); }
+
+/* Bottom counts strip: total nodes + hidden nodes. Dim, monospace
+   so digits don't shift width as counts change. */
+.oak__sidebar-counts {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border-top: 1px solid var(--oak-divider);
+  font-size: 11px;
+  color: var(--oak-text-dim);
+  font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace;
+  flex-shrink: 0;
+}
+.oak__sidebar-counts-sep {
+  opacity: 0.4;
+}
+
+/* Scrollbar — same shape pattern as GrainBrain (thin + rounded thumb)
+   but themed via Oak's text-muted color so it sits well on both light
+   and dark backgrounds. Targets all scrollable descendants of .oak. */
+.oak ::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+.oak ::-webkit-scrollbar-thumb {
+  background-color: var(--oak-text-muted);
+  border-radius: 6px;
+}
+.oak ::-webkit-scrollbar-thumb:hover {
+  background-color: var(--oak-text-dim);
+}
+.oak ::-webkit-scrollbar-track {
+  background: transparent;
+}
+/* Firefox fallback */
+.oak {
+  scrollbar-width: thin;
+  scrollbar-color: var(--oak-text-muted) transparent;
+}
+
+/* ── Node card ────────────────────────────────────────────────────── */
+.oak-node {
+  width: 100%;
+  height: 100%;
+  border-radius: 8px;
+  background: var(--oak-node-bg);
+  border: 1px solid var(--oak-node-border);
+  border-left: 6px solid var(--oak-t-null);
+  display: flex;
+  flex-direction: row;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 12px;
+  color: var(--oak-node-text);
+  box-shadow: var(--oak-node-shadow);
+  overflow: hidden;
+  pointer-events: none; /* let .isles-item own the drag */
+}
+.oak-node--object  { border-left-color: var(--oak-t-object); }
+.oak-node--array   { border-left-color: var(--oak-t-array); }
+.oak-node--string  { border-left-color: var(--oak-t-string); }
+.oak-node--number  { border-left-color: var(--oak-t-number); }
+.oak-node--boolean { border-left-color: var(--oak-t-boolean); }
+.oak-node--null    { border-left-color: var(--oak-t-null); }
+
+.oak-node__main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Row 1 — key */
+.oak-node__key {
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--oak-node-text);
+  font-size: 12px;
+  padding: 5px 8px;
+  border-bottom: 1px solid var(--oak-node-divider);
+}
+.oak-node--object  .oak-node__badge { background: var(--oak-t-object-bg);  color: var(--oak-t-object); }
+.oak-node--array   .oak-node__badge { background: var(--oak-t-array-bg);   color: var(--oak-t-array); }
+.oak-node--string  .oak-node__badge { background: var(--oak-t-string-bg);  color: var(--oak-t-string); }
+.oak-node--number  .oak-node__badge { background: var(--oak-t-number-bg);  color: var(--oak-t-number); }
+.oak-node--boolean .oak-node__badge { background: var(--oak-t-boolean-bg); color: var(--oak-t-boolean); }
+.oak-node--null    .oak-node__badge { background: var(--oak-t-null-bg);    color: var(--oak-t-null); }
+
+/* Row 2 — value (or "+N hidden" placeholder when collapsed).
+   NOTE: stays `display: block` (not flex) so text-overflow: ellipsis
+   actually engages on overflow. */
+.oak-node__value {
+  flex: 1;
+  font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace;
+  font-size: 11px;
+  color: var(--oak-node-text-dim);
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  padding: 5px 8px;
+  border-bottom: 1px solid var(--oak-node-divider);
+  line-height: 1.5;
+}
+.oak-node__value--hidden {
+  color: var(--oak-node-text-muted);
+  font-style: italic;
+}
+
+/* Row 3 — actions on the left, type badge on the right. */
+.oak-node__actionbar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 22px;
+  padding: 4px 8px;
+}
+.oak-node__actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex: 1;
+  min-width: 0;
+}
+.oak-node__badge {
+  font-size: 9px;
+  padding: 2px 6px;
+  border-radius: 3px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 700;
+  background: var(--oak-t-null-bg);
+  color: var(--oak-t-null);
+  flex-shrink: 0;
+}
+
+/* Icon-only buttons live in row-1 actions (Rename / Edit / + Child /
+   Delete). Hidden by default, revealed when the host .isles-item is
+   hovered, or always shown while the node is selected. */
+.oak-node__icon-btn {
+  pointer-events: auto;
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--oak-node-btn-bg);
+  border: 1px solid var(--oak-node-btn-border);
+  cursor: pointer;
+  color: var(--oak-node-text-dim);
+  padding: 0;
+  border-radius: 4px;
+  opacity: 0;
+  transition: opacity 0.12s ease, background 0.12s, border-color 0.12s, color 0.12s;
+}
+.oak .isles-item:hover .oak-node__icon-btn,
+.oak .isles-item--selected .oak-node__icon-btn {
+  opacity: 1;
+}
+.oak-node__icon-btn:hover {
+  background: var(--oak-node-btn-bg-hover);
+  color: var(--oak-node-text);
+  border-color: var(--oak-node-text-dim);
+}
+.oak-node__icon-btn--primary {
+  color: var(--oak-node-primary);
+  border-color: var(--oak-node-primary);
+}
+.oak-node__icon-btn--primary:hover {
+  background: var(--oak-node-primary-bg-hover);
+  color: var(--oak-node-primary);
+  border-color: var(--oak-node-primary);
+}
+.oak-node__icon-btn--danger {
+  color: var(--oak-node-danger);
+  border-color: var(--oak-node-danger);
+}
+
+/* Active state (e.g. locked). Stays visible regardless of card hover so
+   users can see at a glance which nodes are pinned. Uses the number-type
+   amber as the accent, which is distinct from primary blue & danger red. */
+.oak-node__icon-btn--active {
+  opacity: 1;
+  color: var(--oak-t-number);
+  border-color: var(--oak-t-number);
+  background: var(--oak-t-number-bg);
+}
+.oak-node__icon-btn--active:hover {
+  color: var(--oak-t-number);
+  border-color: var(--oak-t-number);
+  background: var(--oak-t-number-bg);
+  filter: brightness(1.08);
+}
+.oak-node__icon-btn--danger:hover {
+  background: var(--oak-node-danger-bg-hover);
+  color: var(--oak-node-danger);
+  border-color: var(--oak-node-danger);
+}
+.oak-node__icon-btn svg {
+  width: 12px;
+  height: 12px;
+  fill: currentColor;
+  display: block;
+}
+.oak-node__btn {
+  pointer-events: auto;
+  font-size: 10px;
+  padding: 3px 7px;
+  border: 1px solid var(--oak-node-btn-border);
+  border-radius: 3px;
+  background: var(--oak-node-btn-bg);
+  cursor: pointer;
+  color: var(--oak-node-text-dim);
+  font-family: inherit;
+}
+.oak-node__btn:hover { background: var(--oak-node-btn-bg-hover); color: var(--oak-node-text); }
+.oak-node__btn--primary {
+  border-color: var(--oak-node-primary);
+  color: var(--oak-node-primary);
+}
+.oak-node__btn--primary:hover {
+  background: var(--oak-node-primary-bg-hover);
+  color: var(--oak-node-primary);
+}
+.oak-node__btn--danger { color: var(--oak-node-danger); border-color: var(--oak-node-danger); }
+.oak-node__btn--danger:hover { background: var(--oak-node-danger-bg-hover); color: var(--oak-node-danger); }
+
+/* ── Right-side collapse strip ────────────────────────────────────── */
+.oak-node__collapse-strip {
+  pointer-events: auto;
+  flex-shrink: 0;
+  width: 18px;
+  border: none;
+  border-left: 1px solid var(--oak-node-divider);
+  background: var(--oak-node-strip-bg);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--oak-node-text-dim);
+  padding: 0;
+}
+.oak-node__collapse-strip:hover {
+  background: var(--oak-node-strip-bg-hover);
+  color: var(--oak-node-text);
+}
+.oak-node__chevron {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.25s ease;
+  width: 5px;
+  height: 16px;
+}
+.oak-node__chevron svg {
+  width: 100%;
+  height: 100%;
+  fill: currentColor;
+  display: block;
+}
+.oak-node__chevron--right { transform: scaleX(1); }
+.oak-node__chevron--left  { transform: scaleX(-1); }
+
+/* ── Modal content (host wrapper lives in src/components/Modal.jsx) ── */
+.oak-modal {
+  background: var(--oak-panel);
+  color: var(--oak-text);
+  border-radius: 10px;
+  padding: 20px;
+  min-width: 360px;
+  max-width: 520px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+.oak-modal__title {
+  font-size: 15px;
+  font-weight: 700;
+  margin: 0 0 4px 0;
+}
+.oak-modal__subtitle {
+  font-size: 12px;
+  color: var(--oak-text-dim);
+  margin-bottom: 14px;
+}
+.oak-modal__field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+.oak-modal__label {
+  font-size: 12px;
+  color: var(--oak-text-dim);
+  font-weight: 600;
+}
+.oak-modal__input,
+.oak-modal__select {
+  background: var(--oak-input-bg);
+  color: var(--oak-text);
+  border: 1px solid var(--oak-input-border);
+  border-radius: 5px;
+  padding: 7px 10px;
+  font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace;
+  font-size: 13px;
+  outline: none;
+  box-sizing: border-box;
+  width: 100%;
+}
+.oak-modal__input:focus,
+.oak-modal__select:focus {
+  border-color: var(--isles-selection-color);
+}
+.oak-modal__error {
+  font-size: 12px;
+  color: var(--oak-error);
+  margin-top: -4px;
+  margin-bottom: 10px;
+  min-height: 14px;
+}
+.oak-modal__buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 8px;
+}
+.oak-modal__btn {
+  padding: 6px 14px;
+  border-radius: 5px;
+  border: 1px solid var(--oak-button-border);
+  background: var(--oak-button-bg);
+  color: var(--oak-text);
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 13px;
+}
+.oak-modal__btn:hover { background: var(--oak-button-bg-hover); }
+.oak-modal__btn--primary {
+  background: var(--isles-selection-color);
+  border-color: var(--isles-selection-color);
+  color: #fff;
+}
+.oak-modal__btn--primary:hover { filter: brightness(1.1); }
+.oak-modal__btn--danger {
+  background: var(--oak-danger);
+  border-color: var(--oak-danger);
+  color: #fff;
+}
+.oak-modal__btn--danger:hover { filter: brightness(1.1); }
