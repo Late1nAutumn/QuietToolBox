@@ -42,3 +42,43 @@ body {
   align-items: center;
   justify-content: center;
 }
+
+.screen-warning {
+  max-width: 460px;
+  margin: 20px;
+  padding: 28px 32px;
+  background: #fdfdfd;
+  color: #1a1a1a;
+  border-radius: 12px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
+  font-family: sans-serif;
+}
+.screen-warning h2 {
+  margin: 0 0 14px 0;
+  font-size: 22px;
+  font-weight: 600;
+}
+.screen-warning p {
+  margin: 0 0 24px 0;
+  font-size: 14px;
+  line-height: 1.55;
+  color: #444;
+}
+.screen-warning-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+.screen-warning-actions button {
+  padding: 8px 22px;
+  border-radius: 6px;
+  border: 1px solid #1a1a1a;
+  background: #1a1a1a;
+  color: #fff;
+  font-size: 14px;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.screen-warning-actions button:hover {
+  background: #333;
+}

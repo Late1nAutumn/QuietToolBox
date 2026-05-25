@@ -38,10 +38,6 @@ export default function Error({ pageType }) {
       title = "404";
       message = "Page not found";
       break;
-    case ERROR_PAGE_TYPE.MOBILE:
-      title = "Sorry\n ";
-      message = "Mobile is not supported for now. Please visit through computer";
-      break;
   }
 
   return (

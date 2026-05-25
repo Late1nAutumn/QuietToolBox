@@ -63,6 +63,8 @@ import { ModalEditValue } from './components/ModalEditValue';
 import { ModalRenameKey } from './components/ModalRenameKey';
 import { ModalAddChild } from './components/ModalAddChild';
 import { ModalDeleteConfirm } from './components/ModalDeleteConfirm';
+import { APP, APPS } from '../utils/constants';
+import { setFavicon } from '../utils/functions';
 
 // ── Init/reset helpers ────────────────────────────────────────────────────
 
@@ -149,8 +151,11 @@ export default function OakHeart() {
     LOCALSTORAGE[STORE.OAK_HEART].setTheme(theme);
   }, [theme]);
 
-  // ── Initial camera centering (after Isles is mounted) ──
   useEffect(() => {
+    document.title = APPS[APP.OAK_HEART].text;
+    setFavicon(APPS[APP.OAK_HEART].favicon);
+
+    // ── Initial camera centering (after Isles is mounted) ──
     recenterCamera(islesRef, initialRef.current.nodes, initialRef.current.collapsed);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

@@ -20,5 +20,4 @@ export const DIRECTION = {
 
 export const ERROR_PAGE_TYPE = {
   NOT_FOUND: 404,
-  MOBILE: 4,
 };

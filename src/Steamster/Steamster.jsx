@@ -35,7 +35,7 @@ export default function Steamster() {
   const [loading, setLoading] = useState(LOAD_STATUS.LOADING);
 
   const [groupMode, setGroupMode] = useState(GROUP_MODE.APP_TYPE);
-  const [sortMode, setSortMode] = useState(SORT_MODE.MY_GAME_TIME);
+  const [sortMode, setSortMode] = useState(SORT_MODE.MY_RATING);
   const [hideNSFW, setHideNSFW] = useState(true);
   const [searchBarValue, setSearchBarValue] = useState("");
   const [searchWord, setSearchWord] = useState("");

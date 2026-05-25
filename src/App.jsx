@@ -10,6 +10,7 @@ import { GlobalProvider } from "./context/GlobalContext.jsx";
 import RootWrapper from "./RootWrapper.jsx";
 import Home from "./Home/Home.jsx";
 import Error from "./Home/Error.jsx";
+import ScreenWarningGate from "./components/ScreenWarningGate.jsx";
 import NikkiKiwi from "./NikkiWiki/NikkiKiwi.jsx";
 import Sketcher from "./Sketcher/Sketcher.jsx";
 import Steamster from "./Steamster/Steamster.jsx";
@@ -26,6 +27,7 @@ const App = () => {
   return (
     <GlobalProvider>
       <Router>
+        <ScreenWarningGate />
         <Routes>
           <Route path="/" element={<RootWrapper />}>
             <Route
@@ -40,10 +42,6 @@ const App = () => {
             <Route path="/granary/*" element={<GrainBrain />} />
             <Route path="/color/*" element={<Colorblinder />} />
             <Route path="/oak/*" element={<OakHeart />} />
-            <Route
-              path="/mobile"
-              element={<Error pageType={ERROR_PAGE_TYPE.MOBILE} />}
-            />
             <Route
               path="/*"
               element={<Error pageType={ERROR_PAGE_TYPE.NOT_FOUND} />}

@@ -11,7 +11,7 @@ export function ModalAddChild({ parentType, onSubmit, onCancel }) {
 
   const isObject = parentType === 'object';
   const [key, setKey] = useState('');
-  const [type, setType] = useState('string');
+  const [type, setType] = useState('object');
   const [error, setError] = useState('');
   const firstFieldRef = useRef(null);
 
