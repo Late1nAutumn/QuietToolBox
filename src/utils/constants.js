@@ -31,6 +31,7 @@ export const HOME_FAVICON = "/asset/favicon/nexus.png";
 
 export const APPS = {
   [APP.STEAMSTER]: {
+    aiProportion: 0,
     favicon: "/asset/favicon/steamster.png",
     text: "Steamster",
     link: "/steamster",
@@ -41,6 +42,7 @@ export const APPS = {
     },
   },
   [APP.GRAIN_BRAIN]: {
+    aiProportion: 0,
     favicon: "/asset/favicon/grainBrain.png",
     text: "Grain Brain",
     link: "/granary",
@@ -51,6 +53,7 @@ export const APPS = {
     },
   },
   [APP.COLORBLINDER]: {
+    aiProportion: 0.5,
     favicon: "/asset/favicon/colorblinder.png",
     text: "Colorblinder",
     link: "/color",
@@ -61,6 +64,7 @@ export const APPS = {
     },
   },
   [APP.NIKKI_KIWI]: {
+    aiProportion: 0,
     favicon: "/asset/favicon/nikkikiwi.png",
     text: "Nikki Kiwi",
     link: "/nikki",
@@ -71,6 +75,7 @@ export const APPS = {
     },
   },
   [APP.SKETCHER]: {
+    aiProportion: 0,
     favicon: "/asset/favicon/sketcher.png",
     text: "Sketcher",
     link: "/sketcher",
@@ -81,6 +86,7 @@ export const APPS = {
     },
   },
   [APP.OAK_HEART]: {
+    aiProportion: 0.9,
     favicon: "/asset/favicon/oakHeart.png",
     text: "Heart of the Oak",
     link: "/oak",
@@ -91,6 +97,7 @@ export const APPS = {
     },
   },
   [APP.DASHBOARD]: {
+    aiProportion: 0,
     favicon: "",
     text: "Dashboard",
     link: "/",

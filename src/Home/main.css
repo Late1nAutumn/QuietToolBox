@@ -114,6 +114,7 @@
 } */
 
 .home-content-app {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -127,9 +128,19 @@
     -3px 3px 15px rgba(255, 255, 255, 0.7),
     -3px -3px 15px rgba(255, 255, 255, 0.7);
 }
-
 .home-content-app img {
   width: 100%;
+}
+.home-content-app-ai-mark {
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
+  padding: 3px 5px;
+  border-radius: 30px;
+  font-weight: bold;
+  color: black;
+  background-color: #666;
+  mix-blend-mode: screen;
 }
 
 .home-content-bottomFrame {

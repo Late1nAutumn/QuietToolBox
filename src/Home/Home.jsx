@@ -35,7 +35,7 @@ export default function Home({ scrollY, setScrollY }) {
 
   const portraitSkipped = useMemo(
     () => LOCALSTORAGE[STORE.MAIN].getPortraitSkipped(),
-    []
+    [],
   );
 
   const APP_LIST = Object.values(APPS);
@@ -123,7 +123,7 @@ export default function Home({ scrollY, setScrollY }) {
             text: generalTranslator(
               CHAT_CONTEXT.LANG_SWITCH,
               lang,
-              TRANSLATION_COLLECTION.CHAT
+              TRANSLATION_COLLECTION.CHAT,
             ),
             speed: 30,
           },
@@ -170,14 +170,18 @@ export default function Home({ scrollY, setScrollY }) {
                       <div
                         className="home-content-app"
                         style={{
-                          width: `${Math.floor(size)}px`,
-                          height: `${Math.floor(size)}px`,
+                          zoom: size / APP_IMG_SIZE.MAX,
                         }}
                       >
                         {APP_LIST[i].cover ? (
-                          <img src={APP_LIST[i].cover} alt="app_cover"/>
+                          <img src={APP_LIST[i].cover} alt="app_cover" />
                         ) : (
                           APP_LIST[i].text
+                        )}
+                        {!!APP_LIST[i].aiProportion && (
+                          <div className="home-content-app-ai-mark">
+                            {APP_LIST[i].aiProportion * 100}% AI
+                          </div>
                         )}
                       </div>
                     </Link>
