@@ -1,14 +1,14 @@
-export const LAST_DATA_UPDATE = "2025-4-13";
+const LAST_DATA_UPDATE = "2025-4-13";
 
-export const ITEM_REFILL_AMOUNT = 18;
-export const ITEM_REFILL_TRIGGER = 1.5;
+const ITEM_REFILL_AMOUNT = 18;
+const ITEM_REFILL_TRIGGER = 1.5;
 
-export const SEARCH_DEBOUNCE_COOLDOWN = 500;
+const SEARCH_DEBOUNCE_COOLDOWN = 500;
 
 // #region steam
-export const MY_STEAM_ID = "76561198112898100";
+const MY_STEAM_ID = "76561198112898100";
 
-export const STEAM_LINKS = {
+const STEAM_LINKS = {
   appStorePage: (appid) => `https://store.steampowered.com/app/${appid}`,
   appStanding: (appid) =>
     `https://cdn.akamai.steamstatic.com/steam/apps/${appid}/library_600x900.jpg`,
@@ -27,3 +27,12 @@ export const STEAM_LINKS = {
     `http://api.steampowered.com/ISteamUserStats/GetPlayerAchievements/v0001/?appid=${appid}&key=${apiKey}&steamid=${userId}`,
 };
 // #endregion
+
+module.exports = {
+  LAST_DATA_UPDATE,
+  ITEM_REFILL_AMOUNT,
+  ITEM_REFILL_TRIGGER,
+  SEARCH_DEBOUNCE_COOLDOWN,
+  MY_STEAM_ID,
+  STEAM_LINKS,
+};
